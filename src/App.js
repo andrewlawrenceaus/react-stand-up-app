@@ -7,9 +7,12 @@ import Header from './components/header/Header';
 const App = () => {
 
     const defaultStandUps = new Map();
-    defaultStandUps.set('Billabong', ['Andrew L', 'Anthony'
+    defaultStandUps.set(
+        'Billabong', ['Andrew L', 'Anthony'
         , 'Evan', 'Jono', 'Kathleen', 'Kane', 'Sam', 'Nik', 'Tim', 'Nikunj',
-        'Andrew B', 'Tanvi', 'Grant', 'Sharon', 'David'])
+        'Andrew B', 'Tanvi', 'Grant', 'Sharon', 'David']);
+    defaultStandUps.set(
+        'Soledad', ['Sharon', 'Keerthi', 'Chris']);
 
     const [standUps, setStandUps] = useState(defaultStandUps);
     const [activeStandUp, setActiveStandUp] = useState('Billabong');

@@ -6,6 +6,7 @@ import Grid from '@mui/material/Grid';
 
 
 export default function ManageStandUp(props) {
+    console.log(props.standUps)
     const standUpCards = generateStandUpCards(props.standUps);
     return (
         <>
