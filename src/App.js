@@ -6,7 +6,7 @@ import Header from './components/header/Header';
 
 const App = () => {
     
-    const defaultStandUps = new Map;
+    const defaultStandUps = new Map();
     defaultStandUps.set('Billabong',['Andrew L','Anthony'
 ,'Evan','Jono','Kathleen','Kane','Sam','Nik','Tim','Nikunj',
 'Andrew B','Tanvi', 'Grant', 'Sharon','David'])
