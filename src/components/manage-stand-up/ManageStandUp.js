@@ -5,7 +5,15 @@ import Grid from "@mui/material/Grid";
 
 export default function ManageStandUp(props) {
   console.log(props.standUps);
-  const standUpCards = generateStandUpCards(props.standUps);
+  const deleteAttendeeHandler = (standUp, attendee) => {
+    let standUps = new Map(props.standUps)
+    // let updatedStandUp = standUps.get(standUp);
+    let updatedStandUp = standUps.get(standUp).filter(e => e !== attendee);
+    standUps.set(standUp, updatedStandUp);
+    props.setStandUps(standUps);
+  };
+
+  const standUpCards = generateStandUpCards(props.standUps, deleteAttendeeHandler);
   return (
     <Grid container spacing={2}>
       <Grid
@@ -29,7 +37,7 @@ export default function ManageStandUp(props) {
   );
 }
 
-function generateStandUpCards(standUps) {
+function generateStandUpCards(standUps, deleteAttendeeHandler) {
   let standUpCards = [];
   if (standUps) {
     standUps.forEach((attendees, standUpName) => {
@@ -38,6 +46,7 @@ function generateStandUpCards(standUps) {
           key={standUpName}
           standUpName={standUpName}
           attendees={attendees}
+          deleteAttendeeHandler={deleteAttendeeHandler}
         ></StandUpCard>
       );
     });

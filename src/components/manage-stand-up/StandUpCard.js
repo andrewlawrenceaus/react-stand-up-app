@@ -22,7 +22,13 @@ export default function StandUpCard(props) {
               <ListItem
                 key={attendee}
                 secondaryAction={
-                  <IconButton edge="end" aria-label="delete">
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() =>
+                      props.deleteAttendeeHandler(props.standUpName, attendee)
+                    }
+                  >
                     <DeleteIcon />
                   </IconButton>
                 }
