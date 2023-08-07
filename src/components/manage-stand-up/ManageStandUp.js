@@ -1,36 +1,47 @@
-import React from 'react';
-import Typography from '@mui/material/Typography';
-import StandUpCard from './StandUpCard';
-import Box from '@mui/material/Box';
-import Grid from '@mui/material/Grid';
-
+import React from "react";
+import Typography from "@mui/material/Typography";
+import StandUpCard from "./StandUpCard";
+import Grid from "@mui/material/Grid";
 
 export default function ManageStandUp(props) {
-    console.log(props.standUps)
-    const standUpCards = generateStandUpCards(props.standUps);
-    return (
-        <>
-            <Typography variant="h3" component="div" sx={{ flexGrow: 1 }}>
-                Manage Stand Ups
-            </Typography>
-            <Box sx={{ flexGrow: 1, maxWidth: 752 }}>
-                <Grid container spacing={2}>
-                    {standUpCards}
-                </Grid>
-            </Box>
-        </>
-    )
+  console.log(props.standUps);
+  const standUpCards = generateStandUpCards(props.standUps);
+  return (
+    <Grid container spacing={2}>
+      <Grid
+        item
+        xs={12}
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+      >
+        <Typography
+          align="center"
+          variant="h3"
+          component="div"
+          sx={{ flexGrow: 1 }}
+        >
+          Manage Stand Ups
+        </Typography>
+      </Grid>
+      {standUpCards}
+    </Grid>
+  );
 }
 
 function generateStandUpCards(standUps) {
-    let standUpCards = []
+  let standUpCards = [];
+  if (standUps) {
     standUps.forEach((attendees, standUpName) => {
-        standUpCards.push(<StandUpCard
-            key={standUpName}
-            standUpName={standUpName}
-            attendees={attendees}>
-        </StandUpCard>)
-    }
-    );
-    return standUpCards;
+      standUpCards.push(
+        <StandUpCard
+          key={standUpName}
+          standUpName={standUpName}
+          attendees={attendees}
+        ></StandUpCard>
+      );
+    });
+  }
+
+  return standUpCards;
 }

@@ -1,4 +1,4 @@
-import { React, useState } from "react";
+import { React, useEffect, useState } from "react";
 import ManageStandUp from "./components/manage-stand-up/ManageStandUp";
 import RunStandUp from "./components/run-stand-up/RunStandUp";
 import Header from "./components/header/Header";
@@ -9,29 +9,14 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 
 const App = () => {
-  const defaultStandUps = new Map();
-  defaultStandUps.set("Billabong", [
-    "Andrew L",
-    "Anthony",
-    "Evan",
-    "Jono",
-    "Kathleen",
-    "Kane",
-    "Sam",
-    "Nik",
-    "Tim",
-    "Nikunj",
-    "Andrew B",
-    "Tanvi",
-    "Grant",
-    "Sharon",
-    "David",
-  ]);
-  defaultStandUps.set("Soledad", ["Sharon", "Keerthi", "Chris"]);
-
-  const [standUps, setStandUps] = useState(defaultStandUps);
+  //TODO: replace with React Router
   const [activeStandUp, setActiveStandUp] = useState("Billabong");
   const [activePage, setActivePage] = useState("Manage Stand-Ups");
+
+  const [standUps, setStandUps] = useState();
+  useEffect(() => {
+    fetchStandUpData(setStandUps);
+  }, []);
 
   const pageButtonClickHandler = (page) => {
     setActivePage(page);
@@ -40,7 +25,7 @@ const App = () => {
   return (
     <div>
       <Header onPageButtonClick={pageButtonClickHandler}></Header>
-      <Container>
+      <Container sx={{ marginY: 3 }}>
         {activePage === "Manage Stand-Ups" ? (
           <ManageStandUp
             standUps={standUps}
@@ -59,3 +44,21 @@ const App = () => {
 };
 
 export default App;
+
+const fetchStandUpData = (setStandUps) => {
+  fetch("standUpData.json", {
+    headers: {
+      "Content-Type": "application/json",
+      Accept: "application/json",
+    },
+  })
+    .then((response) => {
+      console.log(response);
+      return response.json();
+    })
+    .then((standUpJson) => {
+      const standUpMap = new Map(Object.entries(standUpJson));
+      console.log(standUpMap);
+      setStandUps(standUpMap);
+    });
+};
