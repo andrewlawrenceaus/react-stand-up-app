@@ -1,8 +1,8 @@
-import { useRouteLoaderData } from 'react-router-dom';
+import { useLoaderData } from 'react-router-dom';
 import ManageStandUp from '../components/manage-stand-up/ManageStandUp';
 
 function ManageStandUpsPage() {
-  const standUps = useRouteLoaderData('root');
+  const standUps = useLoaderData();
 
   return <ManageStandUp standUps={standUps} />;
 }

@@ -4,7 +4,6 @@ import StandUpCard from "./StandUpCard";
 import Grid from "@mui/material/Grid";
 
 export default function ManageStandUp(props) {
-  console.log(props.standUps);
   const deleteAttendeeHandler = (standUp, attendee) => {
     let standUps = new Map(props.standUps)
     // let updatedStandUp = standUps.get(standUp);

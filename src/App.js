@@ -13,16 +13,16 @@ const router = createBrowserRouter([
     path: '/',
     id: 'root',
     element: <RootLayout />,
-    loader: loadStandUps,
     children: [
       {
-        index: true, 
-        id: 'manage-stand-ups',
-        element: <ManageStandUpsPage />
+        index: true,
+        element: <RunStandUpPage />,
+        loader: loadStandUps
       },
       {
-        path: 'stand-up',
-        element: <RunStandUpPage />
+        path: 'manage-stand-ups',
+        element: <ManageStandUpsPage />,
+        loader: loadStandUps
       }
     ]
   }
