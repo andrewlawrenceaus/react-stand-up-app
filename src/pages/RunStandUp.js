@@ -1,37 +1,60 @@
+import { useEffect } from 'react';
 import { useLoaderData, useSearchParams } from 'react-router-dom';
 import RunStandUp from '../components/run-stand-up/RunStandUp';
 import SelectStandUp from '../components/run-stand-up/SelectStandUp';
 
 function RunStandUpPage() {
   const standUps = useLoaderData();
-  const teams = Array.from( standUps.keys() );
+  const teams = Array.from(standUps.keys());
+  const defaultTeam = teams[0];
+  const [searchParams, setSearchParams] = useSearchParams();
 
-  const [searchParams] = useSearchParams();
-  const selectedTeam = searchParams.get('team');
-  console.log(selectedTeam);
-  let activeStandUp = setActiveStandUp(selectedTeam, standUps);
-  console.log(activeStandUp);
+  useEffect(() => {
+    if (searchParams.get('team') === null && defaultTeam) {
+      setSearchParams({ team: defaultTeam });
+    }
+  }, [searchParams, setSearchParams, defaultTeam]);
 
-  /*TODO: Add component for changing the active stand up, 
-  and use the useSearchParams hook to modify the query string*/
+  const generateRunStandUpComponent = () => {
+    const selectedTeam = searchParams.get('team');
+
+    //If no stand-ups have been created, prompt user to add one
+    if (teams && teams.length === 0) {
+      return (
+        <>
+          <h1>No Stand Ups Created</h1>
+          <p>Add new stand ups on the 'manage stand-ups' page</p>
+        </>
+      );
+    }
+
+    //If the selected stand up has no participants, prompt user to add them
+    if (!selectedTeam || selectedTeam.length === 0) {
+      return (
+        <>
+          <h1>No Participants</h1>
+          <p>
+            The {selectedTeam} team does not have any participants! Add them on
+            the 'manage stand-ups' page
+          </p>
+        </>
+      );
+    }
+
+    return (
+      <RunStandUp
+        team={selectedTeam}
+        participants={standUps.get(selectedTeam)}
+      />
+    );
+  };
 
   return (
     <>
       <SelectStandUp teams={teams} />
-      <RunStandUp team={activeStandUp[0]} participants={activeStandUp[1]} />
+      {generateRunStandUpComponent()}
     </>
   );
-}
-
-function setActiveStandUp(team, standUps) {
-  let activeStandUp = [];
-  console.log(standUps);
-  if (team && standUps.get(team)) {
-    activeStandUp = [team, standUps.get(team)];
-  } else {
-    activeStandUp = standUps.entries().next().value;
-  }
-  return activeStandUp;
 }
 
 export default RunStandUpPage;

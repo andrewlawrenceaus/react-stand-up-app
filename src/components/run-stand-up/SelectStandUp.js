@@ -4,8 +4,9 @@ import { useSearchParams } from 'react-router-dom';
 export default function SelectStandUp(props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTeam = searchParams.get('team');
-  const initialSelectValue = initialTeam ? initialTeam : '';
   const teams = props.teams;
+  const initialSelectValue = initialTeam ? initialTeam : teams[0];
+
 
   const standUpChangeHandler = (event) => {
     setSearchParams({team: `${event.target.value}` });
