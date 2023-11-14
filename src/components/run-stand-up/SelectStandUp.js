@@ -13,7 +13,7 @@ export default function SelectStandUp(props) {
   };
 
   return (
-    <FormControl fullWidth>
+    <FormControl fullWidth={false} margin='normal'>
       <InputLabel id="stand-up-select-label">Active Stand Up</InputLabel>
       <Select
         labelId="stand-up-select-label"
