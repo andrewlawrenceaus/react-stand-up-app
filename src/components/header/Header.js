@@ -17,14 +17,14 @@ export default function Header() {
           <Box sx={{ flexGrow: 1, display: 'flex' }}>
             <Button
               component={NavLink}
-              to={'/'}
+              to={'manage-stand-ups'}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Manage Stand-Ups
             </Button>
             <Button
               component={NavLink}
-              to={'stand-up'}
+              to={'/'}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Run Stand-Up

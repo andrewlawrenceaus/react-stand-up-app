@@ -15,7 +15,7 @@ function RootLayout() {
 export default RootLayout
 
 export async function loadStandUps() {
-    const response = await fetch('http://localhost:3000/standUpData.json', {
+    const response = await fetch('http://localhost:3002/standUpData.json', {
       headers: {
         'Content-Type': 'application/json',
         Accept: 'application/json',
