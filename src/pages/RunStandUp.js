@@ -1,12 +1,12 @@
 import { useEffect } from 'react';
 import { useLoaderData, useSearchParams } from 'react-router-dom';
 import RunStandUp from '../components/run-stand-up/RunStandUp';
-import SelectStandUp from '../components/run-stand-up/SelectStandUp';
+import SelectTeam from '../components/run-stand-up/SelectTeam';
 
 function RunStandUpPage() {
-  const standUps = useLoaderData();
-  const teams = Array.from(standUps.keys());
-  const defaultTeam = teams[0];
+  const teams = useLoaderData();
+  const teamNames = Array.from(teams.keys());
+  const defaultTeam = teamNames[0];
   const [searchParams, setSearchParams] = useSearchParams();
 
   useEffect(() => {
@@ -18,17 +18,17 @@ function RunStandUpPage() {
   const generateRunStandUpComponent = () => {
     const selectedTeam = searchParams.get('team');
 
-    //If no stand-ups have been created, prompt user to add one
-    if (teams && teams.length === 0) {
+    //If no teams have been created, prompt user to add one
+    if (teamNames && teamNames.length === 0) {
       return (
         <>
-          <h1>No Stand Ups Created</h1>
-          <p>Add new stand ups on the 'manage stand-ups' page</p>
+          <h1>No Teams Created</h1>
+          <p>Add new teams on the 'manage teams' page</p>
         </>
       );
     }
 
-    //If the selected stand up has no participants, prompt user to add them
+    //If the selected team has no participants, prompt user to add them
     if (!selectedTeam || selectedTeam.length === 0) {
       return (
         <>
@@ -44,14 +44,14 @@ function RunStandUpPage() {
     return (
       <RunStandUp
         team={selectedTeam}
-        participants={standUps.get(selectedTeam)}
+        participants={teams.get(selectedTeam)}
       />
     );
   };
 
   return (
     <>
-      <SelectStandUp teams={teams} />
+      <SelectTeam teams={teamNames} />
       {generateRunStandUpComponent()}
     </>
   );

@@ -10,7 +10,7 @@ import { Delete as DeleteIcon, Edit as EditIcon, Close as CloseIcon } from '@mui
 import { lightBlue } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
 
-export default function StandUpCard(props) {
+export default function TeamCard(props) {
   const [editMode, setEditMode] = useState(false);
 
   const editButtonHandler = () => {
@@ -46,17 +46,17 @@ export default function StandUpCard(props) {
         </div>
         <Divider />
         <List sx={{ bgcolor: lightBlue }}>
-          {props.attendees.map((attendee) => {
+          {props.participants.map((participant) => {
             return (
               <ListItem
-                key={attendee}
+                key={participant}
                 secondaryAction={
                   editMode && (
                     <IconButton
                       edge="end"
                       aria-label="delete"
                       onClick={() =>
-                        props.deleteAttendeeHandler(props.standUpName, attendee)
+                        props.deleteParticipantHandler(props.teamName, participant)
                       }
                     >
                       <DeleteIcon />
@@ -65,7 +65,7 @@ export default function StandUpCard(props) {
                 }
                 sx={{ bgcolor: lightBlue }}
               >
-                <ListItemText primary={attendee} />
+                <ListItemText primary={participant} />
               </ListItem>
             );
           })}
@@ -84,7 +84,7 @@ export default function StandUpCard(props) {
             </div>
             <Divider />
             <div>
-              <Button variant="outlined">Add Attendee</Button>
+              <Button variant="outlined">Add Participant</Button>
               <Button
                 variant="outlined"
                 color="error"

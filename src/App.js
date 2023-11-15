@@ -5,7 +5,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout, { loadStandUps } from "./pages/Root";
-import ManageStandUpsPage from "./pages/ManageStandUps";
+import ManageStandUpsPage from "./pages/ManageTeams";
 import RunStandUpPage from "./pages/RunStandUp";
 
 /*TODO: 
@@ -33,7 +33,7 @@ const router = createBrowserRouter([
         loader: loadStandUps
       },
       {
-        path: 'manage-stand-ups',
+        path: 'manage-teams',
         element: <ManageStandUpsPage />,
         loader: loadStandUps
       }
