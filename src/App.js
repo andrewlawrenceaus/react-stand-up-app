@@ -9,7 +9,7 @@ import ManageStandUpsPage from "./pages/ManageStandUps";
 import RunStandUpPage from "./pages/RunStandUp";
 
 /*TODO: 
-1. Add components for create new stand up, attending attendees, deleting stand up
+1. Add components for create new stand up, attending attendees, deleting stand up - DONE
 2. Add link to stand-up card to start the stand up
 3. Add route action to add and remove stand-ups and attendees
 4. Add database for stand-ups
