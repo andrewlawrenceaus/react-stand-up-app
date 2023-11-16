@@ -6,16 +6,41 @@ import ListItemText from '@mui/material/ListItemText';
 import IconButton from '@mui/material/IconButton';
 import Grid from '@mui/material/Grid';
 import { Box, Button, Divider, TextField } from '@mui/material';
-import { Delete as DeleteIcon, Edit as EditIcon, Close as CloseIcon } from '@mui/icons-material';
+import {
+  Delete as DeleteIcon,
+  Edit as EditIcon,
+  Close as CloseIcon,
+} from '@mui/icons-material';
 import { lightBlue } from '@mui/material/colors';
 import { Link } from 'react-router-dom';
+import useInput from '../../hooks/use-input';
 
 export default function TeamCard(props) {
   const [editMode, setEditMode] = useState(false);
 
+  const {
+    value: enteredName,
+    isValid: enteredNameIsValid,
+    hasError: nameInputHasError,
+    valueChangeHandler: nameChangeHandler,
+    inputBlurHandler: nameInputBlurHandler,
+    reset: resetNameInput,
+  } = useInput((value) => value.trim() !== '');
+
   const editButtonHandler = () => {
     setEditMode(!editMode);
   };
+
+  const addParticipantHandler = () => {
+    if (enteredNameIsValid && !nameInputHasError) {
+      props.addParticipant(props.teamName, enteredName);
+      resetNameInput();
+    }
+  };
+
+  const deleteTeamHandler = () => {
+    props.removeTeam(props.teamName)
+  }
 
   return (
     <Grid item xs={6}>
@@ -56,7 +81,10 @@ export default function TeamCard(props) {
                       edge="end"
                       aria-label="delete"
                       onClick={() =>
-                        props.deleteParticipantHandler(props.teamName, participant)
+                        props.removeParticipant(
+                          props.teamName,
+                          participant
+                        )
                       }
                     >
                       <DeleteIcon />
@@ -80,15 +108,21 @@ export default function TeamCard(props) {
                 variant="outlined"
                 color="primary"
                 focused
+                onChange={nameChangeHandler}
+                value={enteredName}
+                onBlur={nameInputBlurHandler}
               ></TextField>
             </div>
             <Divider />
             <div>
-              <Button variant="outlined">Add Participant</Button>
+              <Button variant="outlined" onClick={addParticipantHandler}>
+                Add Participant
+              </Button>
               <Button
                 variant="outlined"
                 color="error"
                 sx={{ float: 'inline-end' }}
+                onClick={deleteTeamHandler}
               >
                 Delete Team
               </Button>

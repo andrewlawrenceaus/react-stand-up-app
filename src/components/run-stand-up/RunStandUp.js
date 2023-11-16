@@ -1,6 +1,6 @@
 import { React, useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
-import AttendeeCard from './AttendeeCard';
+import ParticipantCard from './ParticipantCard';
 import StartStandUpCard from './StartStandUpCard';
 import StandUpCompleteCard from './StandUpCompleteCard';
 import { Grid } from '@mui/material';
@@ -73,11 +73,12 @@ export default function RunStandUp(props) {
               );
             case 'In Progress':
               return (
-                <AttendeeCard
+                <ParticipantCard
                   attendee={standUpParticipants[0]}
                   passDuckHandler={passDuckHandler}
-                  lateAttendeeHandler={lateParticipantHandler}
-                ></AttendeeCard>
+                  lateParticipantHandler={lateParticipantHandler}
+                  percentageComplete={(standUpParticipants.length / participants.length)}
+                ></ParticipantCard>
               );
             case 'Complete':
               return (

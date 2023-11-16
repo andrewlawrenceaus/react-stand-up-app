@@ -7,12 +7,15 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 import duck from '../../assets/duck.jpg'
 
-export default function AttendeeCard(props){
+export default function ParticipantCard(props){
+
+   const rotateValue = (`${360 * props.percentageComplete}deg`)
+   console.log(rotateValue);
 
     return (
         <Card sx={{ maxWidth: 345 }}>
         <CardMedia
-          sx={{ height: 300, objectFit: 'contain' }}
+          sx={{ height: 300, objectFit: 'contain', rotate: rotateValue}}
           image={duck}
           title="duck"
         />
@@ -23,7 +26,7 @@ export default function AttendeeCard(props){
         </CardContent>
         <CardActions>
           <Button size="small" onClick={props.passDuckHandler}>Pass the Duck</Button>
-          <Button size="small" onClick={props.lateAttendeeHandler}>Not Ready</Button>
+          <Button size="small" onClick={props.lateParticipantHandler}>Not Ready</Button>
         </CardActions>
       </Card>
     )
