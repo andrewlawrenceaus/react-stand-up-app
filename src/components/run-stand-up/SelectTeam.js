@@ -9,7 +9,7 @@ export default function SelectTeam(props) {
 
 
   const teamChangeHandler = (event) => {
-    setSearchParams({team: `${event.target.value}` });
+    setSearchParams({ team: `${event.target.value}` });
   };
 
   return (

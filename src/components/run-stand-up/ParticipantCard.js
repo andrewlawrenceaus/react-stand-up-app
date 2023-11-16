@@ -7,8 +7,8 @@ import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 
 import youngDuckling from '../../assets/young-duckling.jpg'
-import duckling from '../../assets/duckling.jpg' 
-import ducklingWalking from '../../assets/duckling-walking.jpg' 
+import duckling from '../../assets/duckling.jpg'
+import ducklingWalking from '../../assets/duckling-walking.jpg'
 import adultDuck from '../../assets/adult-duck.jpg'
 
 export default function ParticipantCard(props) {
@@ -36,15 +36,14 @@ export default function ParticipantCard(props) {
 
 }
 
-function setDuckImage(percentageComplete){
-  console.log(percentageComplete);
-  if (percentageComplete <= 0.25){
+function setDuckImage(percentageComplete) {
+  if (percentageComplete <= 0.25) {
     return youngDuckling;
   }
-  else if (percentageComplete <= 0.5){
+  else if (percentageComplete <= 0.5) {
     return duckling;
   }
-  else if (percentageComplete <= 0.75){
+  else if (percentageComplete <= 0.75) {
     return ducklingWalking;
   }
   else return adultDuck;

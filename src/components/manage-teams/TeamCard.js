@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
@@ -16,6 +16,14 @@ import { Link } from 'react-router-dom';
 import useInput from '../../hooks/use-input';
 
 export default function TeamCard(props) {
+  const {
+    teamName,
+    participants,
+    addParticipant,
+    removeParticipant,
+    removeTeam
+  } = props;
+
   const [editMode, setEditMode] = useState(false);
 
   const {
@@ -33,13 +41,20 @@ export default function TeamCard(props) {
 
   const addParticipantHandler = () => {
     if (enteredNameIsValid && !nameInputHasError) {
-      props.addParticipant(props.teamName, enteredName);
+      addParticipant(teamName, enteredName);
       resetNameInput();
     }
   };
 
+  const deleteParticipantHandler = (participant) => {
+    removeParticipant(
+      teamName,
+      participant
+    );
+  }
+
   const deleteTeamHandler = () => {
-    props.removeTeam(props.teamName)
+    removeTeam(teamName)
   }
 
   return (
@@ -59,10 +74,10 @@ export default function TeamCard(props) {
           variant="h6"
           component="div"
         >
-          {props.standUpName}
+          {teamName}
         </Typography>
         <div>
-          <Button component={Link} to={`/?team=${props.standUpName}`}>
+          <Button component={Link} to={`/?team=${teamName}`}>
             Start Stand-Up
           </Button>
           <Button sx={{ float: 'inline-end' }} onClick={editButtonHandler}>
@@ -71,7 +86,7 @@ export default function TeamCard(props) {
         </div>
         <Divider />
         <List sx={{ bgcolor: lightBlue }}>
-          {props.participants.map((participant) => {
+          {participants.map((participant) => {
             return (
               <ListItem
                 key={participant}
@@ -80,11 +95,7 @@ export default function TeamCard(props) {
                     <IconButton
                       edge="end"
                       aria-label="delete"
-                      onClick={() =>
-                        props.removeParticipant(
-                          props.teamName,
-                          participant
-                        )
+                      onClick={() => deleteParticipantHandler(participant)
                       }
                     >
                       <DeleteIcon />

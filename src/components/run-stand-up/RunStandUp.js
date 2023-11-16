@@ -1,9 +1,9 @@
-import { React, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Typography from '@mui/material/Typography';
 import ParticipantCard from './ParticipantCard';
 import StartStandUpCard from './StartStandUpCard';
 import StandUpCompleteCard from './StandUpCompleteCard';
-import { Grid } from '@mui/material';
+import { Box, Grid } from '@mui/material';
 
 export default function RunStandUp(props) {
   const participants = props.participants;
@@ -58,11 +58,10 @@ export default function RunStandUp(props) {
           component="div"
           sx={{ flexGrow: 1 }}
         >
-          Run {team} Stand Up
+          {team} Stand Up
         </Typography>
       </Grid>
-      <Grid item xs={4} />
-      <Grid item xs={4}>
+      <Grid item xs={12} align='center'>
         {(() => {
           switch (standUpStatus) {
             case 'Ready':
@@ -91,7 +90,6 @@ export default function RunStandUp(props) {
           }
         })()}
       </Grid>
-      <Grid item xs={4} />
     </Grid>
   );
 }

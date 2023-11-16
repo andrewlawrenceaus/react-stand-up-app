@@ -1,7 +1,8 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
 import Typography from '@mui/material/Typography';
 import TeamCard from './TeamCard';
 import Grid from '@mui/material/Grid';
+import AddTeam from './AddTeam';
 
 export default function ManageTeams(props) {
 
@@ -23,7 +24,7 @@ export default function ManageTeams(props) {
   };
 
   const addTeam = (team) => {
-    const newTeam = {[team]: []}
+    const newTeam = { [team]: [] }
     const updatedTeams = new Map(teams)
     updatedTeams.push(newTeam)
     setTeams(updatedTeams);
@@ -60,6 +61,9 @@ export default function ManageTeams(props) {
         </Typography>
       </Grid>
       {teamCards}
+      <Grid item xs={12} display='flex'>
+        <AddTeam addTeam={addTeam}/>
+      </Grid>
     </Grid>
   );
 }
