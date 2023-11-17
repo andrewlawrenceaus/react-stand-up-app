@@ -1,44 +1,32 @@
-import { useEffect } from 'react';
 import { useLoaderData, useSearchParams } from 'react-router-dom';
 import RunStandUp from '../components/run-stand-up/RunStandUp';
 import SelectTeam from '../components/run-stand-up/SelectTeam';
+import MessageCard from '../components/run-stand-up/MessageCard';
 
 function RunStandUpPage() {
   const teams = useLoaderData();
-  const teamNames = Object.keys(teams);
-  const defaultTeam = teamNames[0];
-  const [searchParams, setSearchParams] = useSearchParams();
-
-  useEffect(() => {
-    if (searchParams.get('team') === null && defaultTeam) {
-      setSearchParams({ team: defaultTeam });
-    }
-  }, [searchParams, setSearchParams, defaultTeam]);
+  const teamNames = teams ? Object.keys(teams) : null;
+  const [searchParams] = useSearchParams();
 
   const generateRunStandUpComponent = () => {
     const selectedTeam = searchParams.get('team');
 
     //If no teams have been created, prompt user to add one
-    if (teamNames && teamNames.length === 0) {
-      return (
-        <>
-          <h1>No Teams Created</h1>
-          <p>Add new teams on the 'manage teams' page</p>
-        </>
-      );
+    if (!teams) {
+      return <MessageCard title="No Teams Created!"
+        message="Add new teams on the 'manage teams' page" />
+    }
+
+    //Prompt user to select team if team search parameter not set
+    if (!selectedTeam) {
+      return <MessageCard title="Select Team" message="Select a team to start a stand-up!" />
     }
 
     //If the selected team has no participants, prompt user to add them
-    if (!selectedTeam || selectedTeam.length === 0) {
-      return (
-        <>
-          <h1>No Participants</h1>
-          <p>
-            The {selectedTeam} team does not have any participants! Add them on
-            the 'manage stand-ups' page
-          </p>
-        </>
-      );
+    if (!teams[selectedTeam] || teams[selectedTeam].length === 0) {
+      return <MessageCard title="No Participants!"
+        message={`The ${selectedTeam} team does not have any participants! Add them on
+        the 'manage stand-ups' page`} />
     }
 
     return (
@@ -51,7 +39,7 @@ function RunStandUpPage() {
 
   return (
     <>
-      <SelectTeam teams={teamNames} />
+      {teamNames && <SelectTeam teams={teamNames} />}
       {generateRunStandUpComponent()}
     </>
   );

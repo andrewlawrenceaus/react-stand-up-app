@@ -11,7 +11,6 @@ export default function ManageTeams(props) {
 
   const removeParticipant = async (team, participant) => {
     const updatedTeams = await updateTeam('remove-participant', teams, team, participant);
-    console.log(updatedTeams)
     setTeams(updatedTeams);
   };
 
@@ -69,18 +68,20 @@ function generateTeamCards(
   removeTeam
 ) {
   let teamCards = [];
-  for (const teamName of Object.keys(teams)) {
-    teamCards.push(
-      <TeamCard
-        key={teamName}
-        teamName={teamName}
-        participants={teams[teamName]}
-        removeParticipant={removeParticipant}
-        addParticipant={addParticipant}
-        removeTeam={removeTeam}
-      ></TeamCard>
-    );
-
+  if (teams){
+    for (const teamName of Object.keys(teams)) {
+      teamCards.push(
+        <TeamCard
+          key={teamName}
+          teamName={teamName}
+          participants={teams[teamName]}
+          removeParticipant={removeParticipant}
+          addParticipant={addParticipant}
+          removeTeam={removeTeam}
+        ></TeamCard>
+      );
+  
+    }
   }
   return teamCards;
 }
@@ -90,7 +91,12 @@ export async function updateTeam(action, teams, team, participant) {
 
   switch (action) {
     case 'add-participant': {
-      updatedTeams[team].push(participant);
+      if (updatedTeams[team]){
+        updatedTeams[team].push(participant);
+      } else {
+        updatedTeams[team] = [participant];
+      }
+      
       break;
     }
     case 'remove-participant': {
@@ -98,7 +104,7 @@ export async function updateTeam(action, teams, team, participant) {
       break;
     }
     case 'add-team': {
-      updatedTeams[team] = [];
+      updatedTeams[team] = false;
       break;
     }
     case 'remove-team': {

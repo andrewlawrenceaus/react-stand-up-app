@@ -5,7 +5,7 @@ export default function SelectTeam(props) {
   const [searchParams, setSearchParams] = useSearchParams();
   const initialTeam = searchParams.get('team');
   const teams = props.teams;
-  const initialSelectValue = initialTeam ? initialTeam : teams[0];
+  const initialSelectValue = initialTeam ? initialTeam : '';
 
 
   const teamChangeHandler = (event) => {
@@ -13,8 +13,8 @@ export default function SelectTeam(props) {
   };
 
   return (
-    <FormControl fullWidth={false} margin='normal'>
-      <InputLabel id="team-select-label">Active Team</InputLabel>
+    <FormControl fullWidth={false} margin='normal' sx={{ m: 1, minWidth: 150 }}>
+      <InputLabel id="team-select-label">Select Team</InputLabel>
       <Select
         labelId="team-select-label"
         id="team-select"

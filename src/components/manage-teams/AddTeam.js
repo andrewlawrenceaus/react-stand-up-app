@@ -5,7 +5,6 @@ export default function AddTeam(props) {
 
     const addTeam = props.addTeam
 
-
     const {
         value: enteredName,
         isValid: enteredNameIsValid,

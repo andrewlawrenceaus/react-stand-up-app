@@ -24,8 +24,6 @@ export default function TeamCard(props) {
     removeTeam
   } = props;
 
-  console.log('participants ' + participants)
-
   const [editMode, setEditMode] = useState(false);
 
   const {
