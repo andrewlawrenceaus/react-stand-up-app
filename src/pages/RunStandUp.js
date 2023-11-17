@@ -5,7 +5,7 @@ import SelectTeam from '../components/run-stand-up/SelectTeam';
 
 function RunStandUpPage() {
   const teams = useLoaderData();
-  const teamNames = Array.from(teams.keys());
+  const teamNames = Object.keys(teams);
   const defaultTeam = teamNames[0];
   const [searchParams, setSearchParams] = useSearchParams();
 
@@ -44,7 +44,7 @@ function RunStandUpPage() {
     return (
       <RunStandUp
         team={selectedTeam}
-        participants={teams.get(selectedTeam)}
+        participants={teams[selectedTeam]}
       />
     );
   };

@@ -24,6 +24,8 @@ export default function TeamCard(props) {
     removeTeam
   } = props;
 
+  console.log('participants ' + participants)
+
   const [editMode, setEditMode] = useState(false);
 
   const {
@@ -86,7 +88,7 @@ export default function TeamCard(props) {
         </div>
         <Divider />
         <List sx={{ bgcolor: lightBlue }}>
-          {participants.map((participant) => {
+          {participants && participants.map((participant) => {
             return (
               <ListItem
                 key={participant}

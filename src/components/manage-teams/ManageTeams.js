@@ -3,41 +3,36 @@ import Typography from '@mui/material/Typography';
 import TeamCard from './TeamCard';
 import Grid from '@mui/material/Grid';
 import AddTeam from './AddTeam';
+import { putTeams } from '../../utils/db-utils';
 
 export default function ManageTeams(props) {
 
   const [teams, setTeams] = useState(props.teams);
 
-
-  const deleteParticipant = (team, participant) => {
-    const updatedTeams = new Map(teams)
-    const updatedParticipants = teams.get(team).filter((e) => e !== participant);
-    updatedTeams.set(team, updatedParticipants);
-    setTeams(updatedTeams);
-  };
-
-  const addParticipant = (team, participant) => {
-    const updatedTeams = new Map(teams);
+  const removeParticipant = async (team, participant) => {
+    const updatedTeams = await updateTeam('remove-participant', teams, team, participant);
     console.log(updatedTeams)
-    updatedTeams.get(team).push(participant);
     setTeams(updatedTeams);
   };
 
-  const addTeam = (team) => {
-    const updatedTeams = new Map(teams)
-    updatedTeams.set(team, []);
+  const addParticipant = async (team, participant) => {
+    const updatedTeams = await updateTeam('add-participant', teams, team, participant);
+    setTeams(updatedTeams);
+  };
+
+  const addTeam = async (team) => {
+    const updatedTeams = await updateTeam('add-team', teams, team);
     setTeams(updatedTeams);
   }
 
-  const removeTeam = (team) => {
-    const updatedTeams = new Map(teams)
-    updatedTeams.delete(team);
+  const removeTeam = async (team) => {
+    const updatedTeams = await updateTeam('remove-team', teams, team);
     setTeams(updatedTeams);
   }
 
   const teamCards = generateTeamCards(
     teams,
-    deleteParticipant,
+    removeParticipant,
     addParticipant,
     removeTeam
   );
@@ -61,7 +56,7 @@ export default function ManageTeams(props) {
       </Grid>
       {teamCards}
       <Grid item xs={12} display='flex'>
-        <AddTeam addTeam={addTeam}/>
+        <AddTeam addTeam={addTeam} />
       </Grid>
     </Grid>
   );
@@ -74,20 +69,47 @@ function generateTeamCards(
   removeTeam
 ) {
   let teamCards = [];
-  if (teams) {
-    teams.forEach((participants, teamName) => {
-      teamCards.push(
-        <TeamCard
-          key={teamName}
-          teamName={teamName}
-          participants={participants}
-          removeParticipant={removeParticipant}
-          addParticipant={addParticipant}
-          removeTeam={removeTeam}
-        ></TeamCard>
-      );
-    });
-  }
+  for (const teamName of Object.keys(teams)) {
+    teamCards.push(
+      <TeamCard
+        key={teamName}
+        teamName={teamName}
+        participants={teams[teamName]}
+        removeParticipant={removeParticipant}
+        addParticipant={addParticipant}
+        removeTeam={removeTeam}
+      ></TeamCard>
+    );
 
+  }
   return teamCards;
+}
+
+export async function updateTeam(action, teams, team, participant) {
+  const updatedTeams = { ...teams };
+
+  switch (action) {
+    case 'add-participant': {
+      updatedTeams[team].push(participant);
+      break;
+    }
+    case 'remove-participant': {
+      updatedTeams[team] = updatedTeams[team].filter((e) => e !== participant);
+      break;
+    }
+    case 'add-team': {
+      updatedTeams[team] = [];
+      break;
+    }
+    case 'remove-team': {
+      delete updatedTeams[team];
+      break;
+    }
+    default: {
+      console.warn('Unsupported action passed to updateTeam function');
+      return;
+    }
+  }
+  putTeams(updatedTeams);
+  return updatedTeams;
 }

@@ -1,5 +1,6 @@
 import { Outlet, json } from 'react-router-dom';
 import Header from '../components/header/Header';
+import { getTeams } from '../utils/db-utils';
 
 function RootLayout() {
   return (
@@ -15,17 +16,10 @@ function RootLayout() {
 export default RootLayout
 
 export async function loadStandUps() {
-  const response = await fetch('http://localhost:3000/standUpData.json', {
-    headers: {
-      'Content-Type': 'application/json',
-      Accept: 'application/json',
-    },
-  });
+  const response = await getTeams();
   if (!response.ok) {
     return json({ message: 'Could not fetch stand ups.' }, { status: 500 });
   } else {
-    const standUpJson = await response.json();
-    const standUpMap = new Map(Object.entries(standUpJson));
-    return standUpMap;
+    return await response.json();
   }
 }

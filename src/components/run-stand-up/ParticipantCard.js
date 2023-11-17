@@ -17,7 +17,7 @@ export default function ParticipantCard(props) {
   const duckImage = setDuckImage(1 - props.percentageComplete);
 
   return (
-    <Card sx={{maxWidth:350}}>
+    <Card sx={{ maxWidth: 350 }}>
       <CardMedia
         sx={{ height: 500, objectFit: 'contain' }}
         image={duckImage}
