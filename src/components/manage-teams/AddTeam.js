@@ -52,11 +52,12 @@ export default function AddTeam(props) {
                             onChange={nameChangeHandler}
                             value={enteredName}
                             onBlur={nameInputBlurHandler}
+                            sx={{m: 1}}
                         ></TextField>
                     </div>
                     <Divider />
                     <div>
-                        <Button variant="outlined" onClick={addTeamHandler}>
+                        <Button variant="outlined" onClick={addTeamHandler} sx={{m: 1}}>
                             Add Team
                         </Button>
                     </div>

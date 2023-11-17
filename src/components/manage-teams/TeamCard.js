@@ -122,17 +122,18 @@ export default function TeamCard(props) {
                 onChange={nameChangeHandler}
                 value={enteredName}
                 onBlur={nameInputBlurHandler}
+                sx={{m: 1}}
               ></TextField>
             </div>
             <Divider />
             <div>
-              <Button variant="outlined" onClick={addParticipantHandler}>
+              <Button variant="outlined" onClick={addParticipantHandler} sx={{m: 1}}>
                 Add Participant
               </Button>
               <Button
                 variant="outlined"
                 color="error"
-                sx={{ float: 'inline-end' }}
+                sx={{ float: 'inline-end', m:1}}
                 onClick={deleteTeamHandler}
               >
                 Delete Team
