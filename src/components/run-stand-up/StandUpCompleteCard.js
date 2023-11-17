@@ -9,7 +9,7 @@ import finishedDuck from '../../assets/sunset-ducks.jpg'
 export default function StandUpCompleteCard(props) {
 
   return (
-    <Card>
+    <Card sx={{ maxWidth: 500 }}>
       <CardMedia
         sx={{ height: 500, objectFit: 'contain' }}
         image={finishedDuck}

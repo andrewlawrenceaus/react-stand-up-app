@@ -9,7 +9,7 @@ import startDuck from '../../assets/duck-eggs.jpg'
 export default function StartStandUpCard(props) {
 
   return (
-    <Card sx={{ maxWidth: 345 }}>
+    <Card sx={{ maxWidth: 350 }}>
       <CardMedia
         sx={{ height: 500, objectFit: 'contain' }}
         image={startDuck}

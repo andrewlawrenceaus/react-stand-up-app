@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import ParticipantCard from './ParticipantCard';
 import StartStandUpCard from './StartStandUpCard';
 import StandUpCompleteCard from './StandUpCompleteCard';
-import { Box, Grid } from '@mui/material';
+import { Grid } from '@mui/material';
 
 export default function RunStandUp(props) {
   const participants = props.participants;

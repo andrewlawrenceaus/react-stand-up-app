@@ -24,9 +24,8 @@ export default function ManageTeams(props) {
   };
 
   const addTeam = (team) => {
-    const newTeam = { [team]: [] }
     const updatedTeams = new Map(teams)
-    updatedTeams.push(newTeam)
+    updatedTeams.set(team, []);
     setTeams(updatedTeams);
   }
 
