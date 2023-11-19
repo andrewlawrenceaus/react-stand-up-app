@@ -3,7 +3,7 @@ import Typography from '@mui/material/Typography';
 import TeamCard from './TeamCard';
 import Grid from '@mui/material/Grid';
 import AddTeam from './AddTeam';
-import { putTeams } from '../../utils/db-utils';
+import { writeTeams } from '../../utils/db-utils';
 
 export default function ManageTeams(props) {
 
@@ -116,6 +116,6 @@ export async function updateTeam(action, teams, team, participant) {
       return;
     }
   }
-  putTeams(updatedTeams);
+  writeTeams(updatedTeams);
   return updatedTeams;
 }

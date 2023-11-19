@@ -1,21 +1,21 @@
-const firebaseUrl = 'https://stand-up-duck-default-rtdb.firebaseio.com/teams.json';
+import { get, ref, set } from "firebase/database";
+import { db } from "./firebase";
 
-export async function putTeams(teams) {
-    await fetch(firebaseUrl, {
-        method: 'PUT',
-        body: JSON.stringify(teams),
-        headers: {
-            'Content-Type': 'application/json'
-        }
-    });
+
+export async function writeTeams(teams) {
+    const teamsRef = ref(db, 'teams/');
+    set(teamsRef, teams);
 }
 
 export async function getTeams() {
-    return await fetch(firebaseUrl, {
-        headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-        },
-    });
+    const teamsRef = ref(db, 'teams/');
+    let data = {};
+    await get(teamsRef).then((snapshot) => {
+        if (snapshot.exists()){
+            data = snapshot.val();
+        } else {
+            console.warn('No teams data available');
+        }
+    })
+    return data;
 }
-
