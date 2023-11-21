@@ -7,13 +7,12 @@ export default function SelectTeam(props) {
   const teams = props.teams;
   const initialSelectValue = initialTeam ? initialTeam : '';
 
-
   const teamChangeHandler = (event) => {
     setSearchParams({ team: `${event.target.value}` });
   };
 
   return (
-    <FormControl fullWidth={false} margin='normal' sx={{ m: 1, minWidth: 150 }}>
+    <FormControl fullWidth={false} margin="normal" sx={{ m: 1, minWidth: 150 }}>
       <InputLabel id="team-select-label">Select Team</InputLabel>
       <Select
         labelId="team-select-label"

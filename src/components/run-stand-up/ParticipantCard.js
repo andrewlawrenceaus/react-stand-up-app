@@ -6,14 +6,13 @@ import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
 
-import youngDuckling from '../../assets/young-duckling.jpg'
-import duckling from '../../assets/duckling.jpg'
-import ducklingWalking from '../../assets/duckling-walking.jpg'
-import youngDuck from '../../assets/young-duck.jpg'
-import adultDuck from '../../assets/adult-duck.jpg'
+import youngDuckling from '../../assets/young-duckling.jpg';
+import duckling from '../../assets/duckling.jpg';
+import ducklingWalking from '../../assets/duckling-walking.jpg';
+import youngDuck from '../../assets/young-duck.jpg';
+import adultDuck from '../../assets/adult-duck.jpg';
 
 export default function ParticipantCard(props) {
-
   const duckImage = setDuckImage(1 - props.percentageComplete);
 
   return (
@@ -29,26 +28,25 @@ export default function ParticipantCard(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={props.passDuckHandler}>Pass the Duck</Button>
-        <Button size="small" onClick={props.lateParticipantHandler}>Not Ready</Button>
+        <Button size="small" onClick={props.passDuckHandler}>
+          Pass the Duck
+        </Button>
+        <Button size="small" onClick={props.lateParticipantHandler}>
+          Not Ready
+        </Button>
       </CardActions>
     </Card>
-  )
-
+  );
 }
 
 function setDuckImage(percentageComplete) {
   if (percentageComplete <= 0.2) {
     return youngDuckling;
-  }
-  else if (percentageComplete <= 0.4) {
+  } else if (percentageComplete <= 0.4) {
     return duckling;
-  }
-  else if (percentageComplete <= 0.6) {
+  } else if (percentageComplete <= 0.6) {
     return ducklingWalking;
-  }
-  else if (percentageComplete <= 0.8) {
-    return youngDuck
-  }
-  else return adultDuck;
+  } else if (percentageComplete <= 0.8) {
+    return youngDuck;
+  } else return adultDuck;
 }

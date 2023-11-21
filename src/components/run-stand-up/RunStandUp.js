@@ -61,7 +61,7 @@ export default function RunStandUp(props) {
           {team} Stand Up
         </Typography>
       </Grid>
-      <Grid item xs={12} align='center'>
+      <Grid item xs={12} align="center">
         {(() => {
           switch (standUpStatus) {
             case 'Ready':
@@ -76,7 +76,9 @@ export default function RunStandUp(props) {
                   attendee={standUpParticipants[0]}
                   passDuckHandler={passDuckHandler}
                   lateParticipantHandler={lateParticipantHandler}
-                  percentageComplete={(standUpParticipants.length / participants.length)}
+                  percentageComplete={
+                    standUpParticipants.length / participants.length
+                  }
                 ></ParticipantCard>
               );
             case 'Complete':

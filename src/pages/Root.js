@@ -13,7 +13,7 @@ function RootLayout() {
   );
 }
 
-export default RootLayout
+export default RootLayout;
 
 export async function loadStandUps() {
   return await getTeams();

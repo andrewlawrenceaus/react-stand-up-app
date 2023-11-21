@@ -4,10 +4,9 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
-import finishedDuck from '../../assets/sunset-ducks.jpg'
+import finishedDuck from '../../assets/sunset-ducks.jpg';
 
 export default function StandUpCompleteCard(props) {
-
   return (
     <Card sx={{ maxWidth: 500 }}>
       <CardMedia
@@ -21,9 +20,10 @@ export default function StandUpCompleteCard(props) {
         </Typography>
       </CardContent>
       <CardActions>
-        <Button size="small" onClick={props.resetStandUpHandler}>Reset Stand Up</Button>
+        <Button size="small" onClick={props.resetStandUpHandler}>
+          Reset Stand Up
+        </Button>
       </CardActions>
     </Card>
-  )
-
+  );
 }

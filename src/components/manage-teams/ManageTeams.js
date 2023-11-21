@@ -6,28 +6,37 @@ import AddTeam from './AddTeam';
 import { writeTeams } from '../../utils/db-utils';
 
 export default function ManageTeams(props) {
-
   const [teams, setTeams] = useState(props.teams);
 
   const removeParticipant = async (team, participant) => {
-    const updatedTeams = await updateTeam('remove-participant', teams, team, participant);
+    const updatedTeams = await updateTeam(
+      'remove-participant',
+      teams,
+      team,
+      participant
+    );
     setTeams(updatedTeams);
   };
 
   const addParticipant = async (team, participant) => {
-    const updatedTeams = await updateTeam('add-participant', teams, team, participant);
+    const updatedTeams = await updateTeam(
+      'add-participant',
+      teams,
+      team,
+      participant
+    );
     setTeams(updatedTeams);
   };
 
   const addTeam = async (team) => {
     const updatedTeams = await updateTeam('add-team', teams, team);
     setTeams(updatedTeams);
-  }
+  };
 
   const removeTeam = async (team) => {
     const updatedTeams = await updateTeam('remove-team', teams, team);
     setTeams(updatedTeams);
-  }
+  };
 
   const teamCards = generateTeamCards(
     teams,
@@ -41,20 +50,18 @@ export default function ManageTeams(props) {
         item
         xs={12}
         display="flex"
-        justifyContent="center"
-        alignItems="center"
       >
         <Typography
           align="center"
           variant="h3"
           component="div"
-          sx={{ flexGrow: 1 }}
+          sx={{ flexGrow: 1, mt: '1rem' }}
         >
           Manage Teams
         </Typography>
       </Grid>
       {teamCards}
-      <Grid item xs={12} display='flex'>
+      <Grid item xs={12} display="flex">
         <AddTeam addTeam={addTeam} />
       </Grid>
     </Grid>
@@ -68,7 +75,7 @@ function generateTeamCards(
   removeTeam
 ) {
   let teamCards = [];
-  if (teams){
+  if (teams) {
     for (const teamName of Object.keys(teams)) {
       teamCards.push(
         <TeamCard
@@ -80,7 +87,6 @@ function generateTeamCards(
           removeTeam={removeTeam}
         ></TeamCard>
       );
-  
     }
   }
   return teamCards;
@@ -91,12 +97,12 @@ export async function updateTeam(action, teams, team, participant) {
 
   switch (action) {
     case 'add-participant': {
-      if (updatedTeams[team]){
+      if (updatedTeams[team]) {
         updatedTeams[team].push(participant);
       } else {
         updatedTeams[team] = [participant];
       }
-      
+
       break;
     }
     case 'remove-participant': {

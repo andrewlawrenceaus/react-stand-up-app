@@ -58,19 +58,19 @@ export default function TeamCard(props) {
   }
 
   return (
-    <Grid item xs={6}>
+    <Grid item xs={6} align='center'>
       <Box
         sx={{
           width: '100%',
           maxWidth: 350,
-          border: '1px dashed',
-          bgcolor: 'lightgrey',
+          border: '1px solid',
           borderRadius: '16px',
           borderColor: 'black',
+          m: '1rem'
         }}
       >
         <Typography
-          sx={{ mt: 1, mb: 2, textAlign: 'center' }}
+          sx={{ mt: 1, mb: 2, textAlign: 'center'}}
           variant="h6"
           component="div"
         >
