@@ -29,6 +29,13 @@ export default function Header() {
             >
               Run Stand-Up
             </Button>
+            <Button
+              component={NavLink}
+              to={'auth'}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Authentication
+            </Button>
           </Box>
         </Toolbar>
       </AppBar>

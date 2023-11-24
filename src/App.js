@@ -8,6 +8,9 @@ import RootLayout, { loadStandUps } from './pages/Root';
 import ManageStandUpsPage from './pages/ManageTeams';
 import RunStandUpPage from './pages/RunStandUp';
 import ErrorPage from './pages/Error';
+import AuthenticationPage, {
+  action as authAction,
+} from './pages/Authentication';
 
 /*TODO: 
 1. Add components for create new stand up, attending attendees, deleting stand up - Done
@@ -38,6 +41,11 @@ const router = createBrowserRouter([
         path: 'manage-teams',
         element: <ManageStandUpsPage />,
         loader: loadStandUps,
+      },
+      {
+        path: 'auth',
+        element: <AuthenticationPage />,
+        action: authAction,
       },
     ],
   },
