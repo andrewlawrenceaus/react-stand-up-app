@@ -11,6 +11,7 @@ import ErrorPage from './pages/Error';
 import AuthenticationPage, {
   action as authAction,
 } from './pages/Authentication';
+import { AuthProvider } from './components/store/AuthProvider';
 
 /*TODO: 
 1. Add components for create new stand up, attending attendees, deleting stand up - Done
@@ -24,6 +25,7 @@ import AuthenticationPage, {
 9. Fix general styling
 10. Add unit tests
 11. Add dev and production configs
+12. Update teams state to subscribe for DB updates
 */
 const router = createBrowserRouter([
   {
@@ -52,5 +54,9 @@ const router = createBrowserRouter([
 ]);
 
 export default function App() {
-  return <RouterProvider router={router} />;
+  return (
+  <AuthProvider>
+      <RouterProvider router={router} />
+  </AuthProvider>
+  )
 }
