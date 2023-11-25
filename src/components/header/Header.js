@@ -23,37 +23,40 @@ export default function Header() {
     <Box sx={{ flexGrow: 1 }}>
       <AppBar position="static">
         <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Stand-Up
+          <Typography variant="h6" component="div" sx={{mr: 2}}>
+            Stand-Up Duck
           </Typography>
-          <Box sx={{ flexGrow: 1, display: 'flex' }}>
-            <Button
+          <Box sx={{ display: 'flex', flexGrow: 1 }}>
+            {authCtx.user && <Button
               component={NavLink}
               to={'manage-teams'}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Manage Teams
-            </Button>
-            <Button
+            </Button>}
+            {authCtx.user && <Button
               component={NavLink}
               to={'/'}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Run Stand-Up
-            </Button>
-            <Button
+            </Button>}
+          </Box>
+          <Box sx={{ display: 'flex' }}>
+            {!authCtx.user && <Button
               component={NavLink}
               to={'auth?mode=login'}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >
-              Authentication
-            </Button>
+              Login
+            </Button>}
             {authCtx.user && <Button
               sx={{ my: 2, color: 'white', display: 'block' }}
               onClick={handleLogout}
             >
               Log Out
-            </Button>}
+            </Button>
+            }
           </Box>
         </Toolbar>
       </AppBar>

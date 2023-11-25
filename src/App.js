@@ -18,7 +18,7 @@ import { AuthProvider } from './components/store/AuthProvider';
 2. Add link to stand-up card to start the stand up - Done
 3. Add route action to add and remove stand-ups and attendees - Done
 4. Add database for stand-ups - Done
-5. Add authentication
+5. Add authentication -Done
 6. Add error page - Done
 7. Improve handling of loading default stand-up - Done
 8. Add better styling for loading and no team/participants messages - Done

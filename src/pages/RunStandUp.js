@@ -5,14 +5,14 @@ import MessageCard from '../components/run-stand-up/MessageCard';
 
 function RunStandUpPage() {
   const teams = useLoaderData();
-  const teamNames = teams ? Object.keys(teams) : null;
+  const teamNames = (Object.keys(teams) > 0) ? Object.keys(teams) : null;
   const [searchParams] = useSearchParams();
 
   const generateRunStandUpComponent = () => {
     const selectedTeam = searchParams.get('team');
 
     //If no teams have been created, prompt user to add one
-    if (!teams) {
+    if (!teamNames) {
       return (
         <MessageCard
           title="No Teams Created!"

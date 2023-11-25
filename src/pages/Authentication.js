@@ -23,8 +23,7 @@ export async function action({ request }) {
 
     if (mode === 'signup') {
         try {
-            const user = await createUserWithEmailAndPassword(auth, authData.email, authData.password);
-            console.log(user);
+            await createUserWithEmailAndPassword(auth, authData.email, authData.password);
         } catch (error) {
             throw json({ message: error.message }, { status: 500 })
         }
@@ -32,16 +31,11 @@ export async function action({ request }) {
 
     if (mode === 'login') {
         try {
-            const user = await signInWithEmailAndPassword(auth, authData.email, authData.password);
-            console.log(user);
+            await signInWithEmailAndPassword(auth, authData.email, authData.password);
         } catch (error) {
             throw json({ message: error.message }, { status: 500 })
         }
     }
-
-
-
-    console.log(authData);
     return redirect('/');
 }
 
