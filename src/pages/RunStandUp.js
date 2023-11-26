@@ -5,7 +5,7 @@ import MessageCard from '../components/run-stand-up/MessageCard';
 
 function RunStandUpPage() {
   const teams = useLoaderData();
-  const teamNames = (Object.keys(teams) > 0) ? Object.keys(teams) : null;
+  const teamNames = (Object.keys(teams).length > 0) ? Object.keys(teams) : null;
   const [searchParams] = useSearchParams();
 
   const generateRunStandUpComponent = () => {
