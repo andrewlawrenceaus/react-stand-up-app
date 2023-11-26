@@ -2,9 +2,9 @@ import { get, ref, set } from 'firebase/database';
 import { auth, db } from './firebase';
 
 export async function writeTeams(teams) {
-    const uid = getUserUid();
+    const uid = await getUserUid();
     if (uid) {
-        const teamsRef = ref(db, `${uid}/teams`);
+        const teamsRef = ref(db, `users/${uid}/teams`);
         set(teamsRef, teams);
     } else {
         console.warn('Attempting to write team while not logged in!');
@@ -15,7 +15,7 @@ export async function getTeams() {
     let data = {};
     const uid = await getUserUid();
     if (uid) {
-        const teamsRef = ref(db, `${uid}/teams`);
+        const teamsRef = ref(db, `users/${uid}/teams`);
         await get(teamsRef).then((snapshot) => {
             if (snapshot.exists()) {
                 data = snapshot.val();
