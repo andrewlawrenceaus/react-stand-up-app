@@ -9,7 +9,10 @@ function RunStandUpPage() {
   const [searchParams] = useSearchParams();
 
   const generateRunStandUpComponent = () => {
-    const selectedTeam = searchParams.get('team');
+    let selectedTeam = searchParams.get('team');
+    if (!selectedTeam && teamNames.length > 0){
+      selectedTeam = teamNames[0];
+    }
 
     //If no teams have been created, prompt user to add one
     if (!teamNames) {
