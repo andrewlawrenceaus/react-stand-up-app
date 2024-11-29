@@ -1,0 +1,38 @@
+name: Deploy to Firebase Hosting
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # specify the Node.js version you're using
+
+      - name: Install dependencies
+        run: |
+          npm install
+
+      - name: Build the app
+        run: |
+          npm run build  # Make sure you have a build script in package.json
+
+      - name: Authenticate with Firebase
+        uses: wzieba/Firebase-Action@v2
+        with:
+          firebase_token: ${{ secrets.FIREBASE_AUTH_TOKEN }}
+
+      - name: Deploy to Firebase Hosting
+        run: |
+          firebase deploy --only hosting --token ${{ secrets.FIREBASE_AUTH_TOKEN }}
