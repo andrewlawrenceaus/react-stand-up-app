@@ -3,7 +3,6 @@ import Header from '../components/header/Header';
 import { getTeams } from '../utils/db-utils';
 import { useContext } from 'react';
 import { AuthContext } from '../components/store/AuthProvider';
-import { auth } from '../utils/firebase';
 
 function RootLayout() {
   const authCtx = useContext(AuthContext);
