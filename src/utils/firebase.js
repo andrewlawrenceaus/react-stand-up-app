@@ -1,7 +1,9 @@
 // Import the functions you need from the SDKs you need
 import { initializeApp } from 'firebase/app';
 import { getDatabase } from 'firebase/database';
-import { getAuth } from 'firebase/auth'
+import { getAuth } from 'firebase/auth';
+import { getStorage } from 'firebase/storage';
+
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -11,7 +13,7 @@ const firebaseConfig = {
   authDomain: 'stand-up-duck.firebaseapp.com',
   databaseURL: 'https://stand-up-duck-default-rtdb.firebaseio.com',
   projectId: 'stand-up-duck',
-  storageBucket: 'stand-up-duck.appspot.com',
+  storageBucket: 'stand-up-duck.firebasestorage.app',
   messagingSenderId: '428802696640',
   appId: '1:428802696640:web:c0fae1651ec9724e16d425',
 };
@@ -20,3 +22,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 export const db = getDatabase(app);
 export const auth = getAuth(app);
+export const storage = getStorage(app);
