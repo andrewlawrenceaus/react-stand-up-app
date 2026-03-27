@@ -8,8 +8,10 @@ scripts/flow/*/.flowconfig
 _SpecRunner.html
 __benchmarks__
 build/
+dist/
 remote-repo/
 coverage/
+.env.e2e
 .module-cache
 fixtures/dom/public/react-dom.js
 fixtures/dom/public/react.js
