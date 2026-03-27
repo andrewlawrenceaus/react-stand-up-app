@@ -12,6 +12,8 @@ dist/
 remote-repo/
 coverage/
 .env.e2e
+playwright-report/
+test-results/
 .module-cache
 fixtures/dom/public/react-dom.js
 fixtures/dom/public/react.js
