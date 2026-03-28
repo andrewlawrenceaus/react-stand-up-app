@@ -3,9 +3,12 @@
 // Polyfills needed by undici (which is loaded in setupTests.js).
 const { TextEncoder, TextDecoder } = require('util')
 const { ReadableStream, WritableStream, TransformStream } = require('stream/web')
+const { MessagePort, MessageChannel } = require('worker_threads')
 
 global.TextEncoder = TextEncoder
 global.TextDecoder = TextDecoder
 global.ReadableStream = ReadableStream
 global.WritableStream = WritableStream
 global.TransformStream = TransformStream
+global.MessagePort = MessagePort
+global.MessageChannel = MessageChannel
