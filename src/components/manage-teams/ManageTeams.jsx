@@ -7,6 +7,7 @@ import { writeTeams } from '../../utils/db-utils';
 
 export default function ManageTeams(props) {
   const [teams, setTeams] = useState(props.teams);
+  const participants = props.participants;
 
   const removeParticipant = async (team, participant) => {
     const updatedTeams = await updateTeam(
@@ -40,6 +41,7 @@ export default function ManageTeams(props) {
 
   const teamCards = generateTeamCards(
     teams,
+    participants,
     removeParticipant,
     addParticipant,
     removeTeam
@@ -70,6 +72,7 @@ export default function ManageTeams(props) {
 
 function generateTeamCards(
   teams,
+  allParticipants,
   removeParticipant,
   addParticipant,
   removeTeam
@@ -82,6 +85,7 @@ function generateTeamCards(
           key={teamName}
           teamName={teamName}
           participants={teams[teamName]}
+          allParticipants={allParticipants}
           removeParticipant={removeParticipant}
           addParticipant={addParticipant}
           removeTeam={removeTeam}

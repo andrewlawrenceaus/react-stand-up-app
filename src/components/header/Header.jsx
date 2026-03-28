@@ -36,6 +36,13 @@ export default function Header() {
             </Button>}
             {authCtx.user && <Button
               component={NavLink}
+              to={'participants'}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Participants
+            </Button>}
+            {authCtx.user && <Button
+              component={NavLink}
               to={'/'}
               sx={{ my: 2, color: 'white', display: 'block' }}
             >

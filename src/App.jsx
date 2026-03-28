@@ -11,6 +11,8 @@ import ErrorPage from './pages/Error';
 import AuthenticationPage, {
   action as authAction,
 } from './pages/Authentication';
+import ParticipantsPage from './pages/Participants';
+import { getTeamsAndParticipants } from './utils/db-utils';
 import { AuthProvider } from './components/store/AuthProvider';
 
 /*TODO: 
@@ -43,6 +45,11 @@ const router = createBrowserRouter([
         path: 'manage-teams',
         element: <ManageStandUpsPage />,
         loader: loadStandUps,
+      },
+      {
+        path: 'participants',
+        element: <ParticipantsPage />,
+        loader: async () => getTeamsAndParticipants(),
       },
       {
         path: 'auth',

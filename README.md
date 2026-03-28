@@ -89,6 +89,26 @@ npm run build
 npx firebase deploy
 ```
 
+### Firebase Storage rules
+
+Storage security rules are kept in [`storage.rules`](storage.rules) and referenced in [`firebase.json`](firebase.json). Deploy them with:
+
+```bash
+firebase deploy --only storage
+```
+
+This requires the Firebase CLI (`npm install -g firebase-tools`) and an authenticated session (`firebase login`). It must be run at least once on a fresh Firebase project before photo uploads will work, and again whenever `storage.rules` is changed.
+
+### CORS configuration
+
+CORS rules are kept in [`cors.json`](cors.json) and must be applied to the Storage bucket separately using the Google Cloud CLI:
+
+```bash
+gcloud storage buckets update gs://stand-up-duck.firebasestorage.app --cors-file=cors.json
+```
+
+This is required once on a fresh project, and again whenever `cors.json` is changed. Without it, photo uploads will be blocked by the browser.
+
 ---
 
 ## Project Structure

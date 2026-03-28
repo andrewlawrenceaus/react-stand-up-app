@@ -2,7 +2,11 @@ import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import RunStandUp from './RunStandUp'
 
-const participants = ['Alice', 'Bob', 'Charlie']
+const participants = [
+  { id: '1', name: 'Alice', photoUrl: '' },
+  { id: '2', name: 'Bob', photoUrl: '' },
+  { id: '3', name: 'Charlie', photoUrl: '' },
+]
 
 beforeEach(() => {
   // Make Math.random deterministic: always picks index 0

@@ -3,7 +3,7 @@ import userEvent from '@testing-library/user-event'
 import ParticipantCard from './ParticipantCard'
 
 const defaultProps = {
-  attendee: 'Alice',
+  attendee: { id: '1', name: 'Alice', photoUrl: '' },
   passDuckHandler: jest.fn(),
   lateParticipantHandler: jest.fn(),
   percentageComplete: 0.5,

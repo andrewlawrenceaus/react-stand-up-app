@@ -5,6 +5,8 @@ import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
 import Button from '@mui/material/Button';
+import Avatar from '@mui/material/Avatar';
+import InitialsAvatar from '../participants/InitialsAvatar';
 
 import youngDuckling from '../../assets/young-duckling.jpg';
 import duckling from '../../assets/duckling.jpg';
@@ -23,8 +25,12 @@ export default function ParticipantCard(props) {
         title="duck"
       />
       <CardContent>
+        {props.attendee.photoUrl
+          ? <Avatar src={props.attendee.photoUrl} sx={{ width: 56, height: 56, mx: 'auto', mb: 1 }} />
+          : <InitialsAvatar name={props.attendee.name} sx={{ width: 56, height: 56, mx: 'auto', mb: 1 }} />
+        }
         <Typography gutterBottom variant="h5" component="div">
-          {props.attendee}
+          {props.attendee.name}
         </Typography>
       </CardContent>
       <CardActions>

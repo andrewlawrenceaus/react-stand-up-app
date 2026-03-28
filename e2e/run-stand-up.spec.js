@@ -3,19 +3,29 @@ const { test } = require('./fixtures/auth.fixture')
 
 test.describe('Run Stand-Up', () => {
   const testTeamName = `StandUp E2E ${Date.now()}`
-  const participants = ['Alice', 'Bob', 'Charlie']
+  const participantNames = ['Alice', 'Bob', 'Charlie']
 
   test.beforeEach(async ({ authenticatedPage: page }) => {
-    // Create a team with participants for stand-up tests
+    // Create participants in the global pool first
+    await page.goto('/participants')
+    for (const name of participantNames) {
+      await page.getByLabel('Name').fill(name)
+      await page.getByRole('button', { name: /add participant/i }).click()
+      await expect(page.getByText(name)).toBeVisible()
+    }
+
+    // Create the team
     await page.goto('/manage-teams')
     await page.getByLabel('Team Name').fill(testTeamName)
     await page.getByRole('button', { name: /add team/i }).click()
 
+    // Enter edit mode and add each participant via Autocomplete
     const teamCard = page.locator('text=' + testTeamName).locator('../..')
     await teamCard.getByRole('button').filter({ hasNot: page.getByText('Stand-Up') }).last().click()
 
-    for (const name of participants) {
-      await page.getByLabel('Name', { exact: true }).fill(name)
+    for (const name of participantNames) {
+      await page.getByLabel('Add Participant').click()
+      await page.getByRole('option', { name }).click()
       await page.getByRole('button', { name: /add participant/i }).click()
     }
   })
@@ -47,7 +57,7 @@ test.describe('Run Stand-Up', () => {
     await expect(page.getByRole('button', { name: /pass the duck/i })).toBeVisible()
     // One of the participants should be shown
     const participantVisible = await Promise.any(
-      participants.map((name) => page.getByText(name).waitFor({ timeout: 3000 }))
+      participantNames.map((name) => page.getByText(name).waitFor({ timeout: 3000 }))
     ).then(() => true).catch(() => false)
     expect(participantVisible).toBe(true)
   })
@@ -58,7 +68,7 @@ test.describe('Run Stand-Up', () => {
 
     // Get first participant name
     let firstParticipant = null
-    for (const name of participants) {
+    for (const name of participantNames) {
       if (await page.getByText(name).isVisible()) {
         firstParticipant = name
         break
@@ -78,7 +88,7 @@ test.describe('Run Stand-Up', () => {
     await page.goto(`/?team=${encodeURIComponent(testTeamName)}`)
     await page.getByRole('button', { name: /start stand up/i }).click()
 
-    for (let i = 0; i < participants.length; i++) {
+    for (let i = 0; i < participantNames.length; i++) {
       await page.getByRole('button', { name: /pass the duck/i }).click()
     }
 
@@ -89,7 +99,7 @@ test.describe('Run Stand-Up', () => {
     await page.goto(`/?team=${encodeURIComponent(testTeamName)}`)
     await page.getByRole('button', { name: /start stand up/i }).click()
 
-    for (let i = 0; i < participants.length; i++) {
+    for (let i = 0; i < participantNames.length; i++) {
       await page.getByRole('button', { name: /pass the duck/i }).click()
     }
 

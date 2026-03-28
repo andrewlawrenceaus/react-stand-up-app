@@ -42,35 +42,49 @@ test.describe('Team Management', () => {
   })
 
   test('can add a participant to a team', async ({ authenticatedPage: page }) => {
+    // First create the participant in the global pool
+    await page.goto('/participants')
+    await page.getByLabel('Name').fill('Alice')
+    await page.getByRole('button', { name: /add participant/i }).click()
+    await expect(page.getByText('Alice')).toBeVisible()
+
+    // Create the team
     await page.goto('/manage-teams')
-    // Create a team first
     await page.getByLabel('Team Name').fill(testTeamName)
     await page.getByRole('button', { name: /add team/i }).click()
 
-    // Find the team card and enter edit mode
+    // Enter edit mode for the team
     const teamCard = page.locator('text=' + testTeamName).locator('../..')
     await teamCard.getByRole('button').filter({ hasNot: page.getByText('Stand-Up') }).last().click()
 
-    // Add a participant
-    await page.getByLabel('Name', { exact: true }).fill('Alice')
+    // Use the Autocomplete to select Alice
+    await page.getByLabel('Add Participant').click()
+    await page.getByRole('option', { name: 'Alice' }).click()
     await page.getByRole('button', { name: /add participant/i }).click()
     await expect(page.getByText('Alice')).toBeVisible()
   })
 
   test('can delete a participant from a team', async ({ authenticatedPage: page }) => {
+    // First create the participant in the global pool
+    await page.goto('/participants')
+    await page.getByLabel('Name').fill('Alice')
+    await page.getByRole('button', { name: /add participant/i }).click()
+    await expect(page.getByText('Alice')).toBeVisible()
+
+    // Create team and add participant via Autocomplete
     await page.goto('/manage-teams')
-    // Create team and add participant
     await page.getByLabel('Team Name').fill(testTeamName)
     await page.getByRole('button', { name: /add team/i }).click()
 
     const teamCard = page.locator('text=' + testTeamName).locator('../..')
     await teamCard.getByRole('button').filter({ hasNot: page.getByText('Stand-Up') }).last().click()
 
-    await page.getByLabel('Name', { exact: true }).fill('Alice')
+    await page.getByLabel('Add Participant').click()
+    await page.getByRole('option', { name: 'Alice' }).click()
     await page.getByRole('button', { name: /add participant/i }).click()
     await expect(page.getByText('Alice')).toBeVisible()
 
-    // Delete the participant
+    // Delete the participant from the team
     await page.getByRole('button', { name: /^delete$/i }).first().click()
     await expect(page.getByText('Alice')).not.toBeVisible()
   })
