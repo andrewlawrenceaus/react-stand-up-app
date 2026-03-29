@@ -8,16 +8,14 @@ test.describe('Team Management', () => {
   const testTeamName = `E2E Test Team ${Date.now()}`
 
   test.afterEach(async ({ authenticatedPage: page }) => {
-    // Clean up: delete any test teams created during the test
+    // Clean up: delete any test teams created during the test.
+    // Delete Team is only visible in edit mode, so open edit mode for each card first.
     await page.goto('/manage-teams')
-    const deleteButtons = page.getByRole('button', { name: /delete team/i })
-    const count = await deleteButtons.count()
-    for (let i = 0; i < count; i++) {
-      // Need to re-query after each deletion since DOM updates
-      const btn = page.getByRole('button', { name: /delete team/i }).first()
-      // Find and click the edit button for this team card first
-      // (Delete Team is only visible in edit mode)
-      if (await btn.isVisible()) await btn.click()
+    while (true) {
+      const editBtns = page.locator('.team-card__edit-btn')
+      if ((await editBtns.count()) === 0) break
+      await editBtns.first().click()
+      await page.getByRole('button', { name: /delete team/i }).first().click()
     }
   })
 
@@ -35,10 +33,7 @@ test.describe('Team Management', () => {
 
   test('empty team name is rejected', async ({ authenticatedPage: page }) => {
     await page.goto('/manage-teams')
-    const initialCards = await page.getByRole('heading', { level: 6 }).count()
-    await page.getByRole('button', { name: /add team/i }).click()
-    const afterCards = await page.getByRole('heading', { level: 6 }).count()
-    expect(afterCards).toBe(initialCards)
+    await expect(page.getByRole('button', { name: /add team/i })).toBeDisabled()
   })
 
   test('can add a participant to a team', async ({ authenticatedPage: page }) => {

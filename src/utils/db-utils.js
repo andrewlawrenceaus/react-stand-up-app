@@ -92,6 +92,10 @@ export async function migrateParticipantsIfNeeded(teams) {
 
     const updatedTeams = {};
     for (const [teamKey, teamArray] of Object.entries(teams)) {
+        if (!Array.isArray(teamArray)) {
+            updatedTeams[teamKey] = teamArray;
+            continue;
+        }
         updatedTeams[teamKey] = teamArray.map((value) => {
             if (typeof value !== 'string') return value;
             if (!nameToId[value]) {
@@ -102,6 +106,8 @@ export async function migrateParticipantsIfNeeded(teams) {
             return nameToId[value];
         });
     }
+
+    if (Object.keys(newParticipants).length === 0) return;
 
     await writeParticipants(newParticipants);
     await writeTeams(updatedTeams);
