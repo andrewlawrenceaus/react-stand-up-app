@@ -1,8 +1,7 @@
 import { useRef, useState } from 'react';
 import InitialsAvatar from './InitialsAvatar';
 import { uploadParticipantPhoto } from '../../utils/db-utils';
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+import { MAX_FILE_SIZE } from './constants';
 
 export default function ParticipantListItem({
   participant,
@@ -12,15 +11,18 @@ export default function ParticipantListItem({
   animationDelay = 0,
 }) {
   const [isUploading, setIsUploading] = useState(false);
+  const [fileSizeError, setFileSizeError] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleFileChange = async (event) => {
     const file = event.target.files[0];
     if (!file) return;
     if (file.size > MAX_FILE_SIZE) {
+      setFileSizeError(true);
       if (fileInputRef.current) fileInputRef.current.value = '';
       return;
     }
+    setFileSizeError(false);
     setIsUploading(true);
     try {
       const url = await uploadParticipantPhoto(participant.id, file);
@@ -85,6 +87,9 @@ export default function ParticipantListItem({
       </div>
 
       <span className="crew-card__name">{participant.name}</span>
+      {fileSizeError && (
+        <span className="add-form-size-error">Max 5 MB.</span>
+      )}
     </div>
   );
 }

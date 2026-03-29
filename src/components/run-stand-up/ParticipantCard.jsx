@@ -1,17 +1,4 @@
-const AVATAR_COLORS = [
-  '#C4637A', '#5E7B62', '#7B6EA0', '#5B86A0',
-  '#A07050', '#7A9088', '#A06070', '#4A7A6A',
-];
-
-function getAvatarColor(name) {
-  return AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
-}
-
-function getInitials(name) {
-  const words = name.trim().split(/\s+/);
-  if (words.length >= 2) return (words[0][0] + words[words.length - 1][0]).toUpperCase();
-  return words[0][0].toUpperCase();
-}
+import { getInitials, getColor as getAvatarColor } from '../participants/InitialsAvatar';
 
 export default function ParticipantCard({
   attendee,

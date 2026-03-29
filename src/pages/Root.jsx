@@ -32,8 +32,7 @@ export default RootLayout;
 
 export async function loadStandUps() {
   let { teams, participants } = await getTeamsAndParticipants();
-  await migrateParticipantsIfNeeded(teams);
-  // After migration, re-fetch to get updated data if migration ran
-  ({ teams, participants } = await getTeamsAndParticipants());
+  const migrated = await migrateParticipantsIfNeeded(teams);
+  if (migrated) ({ teams, participants } = await getTeamsAndParticipants());
   return { teams, participants };
 }

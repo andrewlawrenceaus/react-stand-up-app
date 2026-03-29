@@ -78,14 +78,14 @@ export async function uploadParticipantPhoto(participantId, file) {
 }
 
 export async function migrateParticipantsIfNeeded(teams) {
-    if (!teams || Object.keys(teams).length === 0) return;
+    if (!teams || Object.keys(teams).length === 0) return false;
 
     const uid = await getUserUid();
-    if (!uid) return;
+    if (!uid) return false;
 
     const participantsRef = ref(db, `users/${uid}/participants`);
     const snapshot = await get(participantsRef);
-    if (snapshot.exists()) return;
+    if (snapshot.exists()) return false;
 
     const newParticipants = {};
     const nameToId = {};
@@ -107,8 +107,9 @@ export async function migrateParticipantsIfNeeded(teams) {
         });
     }
 
-    if (Object.keys(newParticipants).length === 0) return;
+    if (Object.keys(newParticipants).length === 0) return false;
 
     await writeParticipants(newParticipants);
     await writeTeams(updatedTeams);
+    return true;
 }

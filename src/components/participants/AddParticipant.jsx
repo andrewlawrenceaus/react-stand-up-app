@@ -1,8 +1,7 @@
 import { useRef, useState } from 'react';
 import useInput from '../../hooks/use-input';
 import { uploadParticipantPhoto } from '../../utils/db-utils';
-
-const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5 MB
+import { MAX_FILE_SIZE } from './constants';
 
 export default function AddParticipant({ onAdd }) {
   const [selectedFile, setSelectedFile] = useState(null);

@@ -10,7 +10,7 @@ const COLORS = [
   '#4A7A6A', // pine
 ];
 
-function getInitials(name) {
+export function getInitials(name) {
   const words = name.trim().split(/\s+/);
   if (words.length >= 2) {
     return (words[0][0] + words[words.length - 1][0]).toUpperCase();
@@ -18,8 +18,9 @@ function getInitials(name) {
   return words[0][0].toUpperCase();
 }
 
-function getColor(name) {
-  return COLORS[name.charCodeAt(0) % COLORS.length];
+export function getColor(name) {
+  const hash = [...name].reduce((acc, ch) => acc * 31 + ch.charCodeAt(0), 0);
+  return COLORS[Math.abs(hash) % COLORS.length];
 }
 
 export default function InitialsAvatar({ name, sx }) {

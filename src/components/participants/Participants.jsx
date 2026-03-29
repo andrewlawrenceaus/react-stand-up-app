@@ -7,33 +7,29 @@ import './participants.css';
 export default function Participants({ initialParticipants }) {
   const [participants, setParticipants] = useState(initialParticipants || {});
 
-  const handleAdd = (participant) => {
+  const handleAdd = async (participant) => {
     const updatedParticipants = { ...participants, [participant.id]: participant };
     setParticipants(updatedParticipants);
-    writeParticipants(updatedParticipants);
+    await writeParticipants(updatedParticipants);
   };
 
-  const handleDelete = (participantId) => {
+  const handleDelete = async (participantId) => {
     const updatedParticipants = { ...participants };
     delete updatedParticipants[participantId];
     setParticipants(updatedParticipants);
-    writeParticipants(updatedParticipants);
+    await writeParticipants(updatedParticipants);
   };
 
-  const handlePhotoChange = (participantId, newPhotoUrl) => {
-    setParticipants((prev) => {
-      const updated = { ...prev, [participantId]: { ...prev[participantId], photoUrl: newPhotoUrl } };
-      writeParticipants(updated);
-      return updated;
-    });
+  const handlePhotoChange = async (participantId, newPhotoUrl) => {
+    const updated = { ...participants, [participantId]: { ...participants[participantId], photoUrl: newPhotoUrl } };
+    setParticipants(updated);
+    await writeParticipants(updated);
   };
 
-  const handlePhotoRemove = (participantId) => {
-    setParticipants((prev) => {
-      const updated = { ...prev, [participantId]: { ...prev[participantId], photoUrl: '' } };
-      writeParticipants(updated);
-      return updated;
-    });
+  const handlePhotoRemove = async (participantId) => {
+    const updated = { ...participants, [participantId]: { ...participants[participantId], photoUrl: '' } };
+    setParticipants(updated);
+    await writeParticipants(updated);
   };
 
   const participantList = Object.values(participants);
