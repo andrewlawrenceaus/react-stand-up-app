@@ -1,14 +1,7 @@
 import { useLoaderData } from 'react-router-dom';
-import Container from '@mui/material/Container';
 import Participants from '../components/participants/Participants';
 
-function ParticipantsPage() {
+export default function ParticipantsPage() {
   const { participants } = useLoaderData();
-  return (
-    <Container>
-      <Participants initialParticipants={participants} />
-    </Container>
-  );
+  return <Participants initialParticipants={participants} />;
 }
-
-export default ParticipantsPage;

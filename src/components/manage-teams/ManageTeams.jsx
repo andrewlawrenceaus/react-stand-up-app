@@ -1,31 +1,20 @@
 import { useState } from 'react';
-import Typography from '@mui/material/Typography';
 import TeamCard from './TeamCard';
-import Grid from '@mui/material/Grid';
 import AddTeam from './AddTeam';
 import { writeTeams } from '../../utils/db-utils';
+import './manage-teams.css';
 
 export default function ManageTeams(props) {
   const [teams, setTeams] = useState(props.teams);
   const participants = props.participants;
 
   const removeParticipant = async (team, participant) => {
-    const updatedTeams = await updateTeam(
-      'remove-participant',
-      teams,
-      team,
-      participant
-    );
+    const updatedTeams = await updateTeam('remove-participant', teams, team, participant);
     setTeams(updatedTeams);
   };
 
   const addParticipant = async (team, participant) => {
-    const updatedTeams = await updateTeam(
-      'add-participant',
-      teams,
-      team,
-      participant
-    );
+    const updatedTeams = await updateTeam('add-participant', teams, team, participant);
     setTeams(updatedTeams);
   };
 
@@ -39,61 +28,36 @@ export default function ManageTeams(props) {
     setTeams(updatedTeams);
   };
 
-  const teamCards = generateTeamCards(
-    teams,
-    participants,
-    removeParticipant,
-    addParticipant,
-    removeTeam
-  );
-  return (
-    <Grid container spacing={2}>
-      <Grid
-        item
-        xs={12}
-        display="flex"
-      >
-        <Typography
-          align="center"
-          variant="h3"
-          component="div"
-          sx={{ flexGrow: 1, mt: '1rem' }}
-        >
-          Manage Teams
-        </Typography>
-      </Grid>
-      {teamCards}
-      <Grid item xs={12} display="flex">
-        <AddTeam addTeam={addTeam} />
-      </Grid>
-    </Grid>
-  );
-}
+  const teamCount = Object.keys(teams || {}).length;
 
-function generateTeamCards(
-  teams,
-  allParticipants,
-  removeParticipant,
-  addParticipant,
-  removeTeam
-) {
-  let teamCards = [];
-  if (teams) {
-    for (const teamName of Object.keys(teams)) {
-      teamCards.push(
-        <TeamCard
-          key={teamName}
-          teamName={teamName}
-          participants={teams[teamName]}
-          allParticipants={allParticipants}
-          removeParticipant={removeParticipant}
-          addParticipant={addParticipant}
-          removeTeam={removeTeam}
-        ></TeamCard>
-      );
-    }
-  }
-  return teamCards;
+  return (
+    <div className="teams-page">
+      <div className="teams-page__inner">
+        <div className="teams-page__header">
+          <h1 className="teams-page__title">Manage Teams</h1>
+          <span className="teams-page__count">
+            {teamCount} {teamCount === 1 ? 'team' : 'teams'}
+          </span>
+        </div>
+
+        <div className="teams-grid">
+          {teams && Object.keys(teams).map((teamName, i) => (
+            <TeamCard
+              key={teamName}
+              teamName={teamName}
+              participants={teams[teamName]}
+              allParticipants={participants}
+              removeParticipant={removeParticipant}
+              addParticipant={addParticipant}
+              removeTeam={removeTeam}
+              animationDelay={i * 60}
+            />
+          ))}
+          <AddTeam addTeam={addTeam} />
+        </div>
+      </div>
+    </div>
+  );
 }
 
 export async function updateTeam(action, teams, team, participant) {
@@ -106,7 +70,6 @@ export async function updateTeam(action, teams, team, participant) {
       } else {
         updatedTeams[team] = [participant];
       }
-
       break;
     }
     case 'remove-participant': {

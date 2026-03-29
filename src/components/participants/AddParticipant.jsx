@@ -1,9 +1,4 @@
 import { useRef, useState } from 'react';
-import Box from '@mui/material/Box';
-import Button from '@mui/material/Button';
-import Divider from '@mui/material/Divider';
-import TextField from '@mui/material/TextField';
-import Typography from '@mui/material/Typography';
 import useInput from '../../hooks/use-input';
 import { uploadParticipantPhoto } from '../../utils/db-utils';
 
@@ -60,77 +55,59 @@ export default function AddParticipant({ onAdd }) {
   };
 
   return (
-    <Box
-      sx={{
-        width: '100%',
-        maxWidth: 400,
-        border: '1px solid',
-        borderRadius: '16px',
-        borderColor: 'black',
-      }}
-    >
-      <Typography
-        sx={{ mt: 1, mb: 2, textAlign: 'center' }}
-        variant="h6"
-        component="div"
-      >
-        Add New Participant
-      </Typography>
-      <Divider />
-      <div>
-        <div>
-          <TextField
-            id="participantName"
-            label="Name"
-            variant="outlined"
-            color="primary"
-            focused
-            onChange={nameChangeHandler}
-            value={enteredName}
-            onBlur={nameInputBlurHandler}
-            error={nameInputHasError}
-            helperText={nameInputHasError ? 'Name must not be empty.' : ''}
-            sx={{ m: 1 }}
-          />
-        </div>
-        <div>
-          <Button
-            component="label"
-            variant="outlined"
-            sx={{ m: 1 }}
-          >
-            Upload Photo
-            <input
-              ref={fileInputRef}
-              type="file"
-              accept="image/*"
-              hidden
-              onChange={fileChangeHandler}
-            />
-          </Button>
-          {selectedFile && (
-            <Typography component="span" sx={{ ml: 1 }}>
-              {selectedFile.name}
-            </Typography>
-          )}
-          {fileSizeError && (
-            <Typography color="error" variant="body2" sx={{ ml: 1 }}>
-              File must be 5 MB or less.
-            </Typography>
-          )}
-        </div>
-        <Divider />
-        <div>
-          <Button
-            variant="outlined"
-            onClick={addParticipantHandler}
-            disabled={isUploading || !enteredNameIsValid}
-            sx={{ m: 1 }}
-          >
-            {isUploading ? 'Uploading...' : 'Add Participant'}
-          </Button>
-        </div>
+    <div className="add-form-card">
+      <p className="add-form-card__title">New flock member</p>
+
+      <div className="add-form-field">
+        <label htmlFor="participantName" className="add-form-label">
+          Name
+        </label>
+        <input
+          id="participantName"
+          type="text"
+          placeholder="Full name"
+          value={enteredName}
+          onChange={nameChangeHandler}
+          onBlur={nameInputBlurHandler}
+          className={
+            nameInputHasError
+              ? 'add-form-input add-form-input--error'
+              : 'add-form-input'
+          }
+        />
+        {nameInputHasError && (
+          <span className="add-form-error">Name must not be empty.</span>
+        )}
       </div>
-    </Box>
+
+      <div className="add-form-actions">
+        <label className="add-form-upload-btn">
+          {selectedFile ? '↺ Change photo' : '+ Photo'}
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept="image/*"
+            hidden
+            onChange={fileChangeHandler}
+          />
+        </label>
+
+        {selectedFile && (
+          <span className="add-form-filename">{selectedFile.name}</span>
+        )}
+        {fileSizeError && (
+          <span className="add-form-size-error">Max 5 MB.</span>
+        )}
+
+        <button
+          className="add-form-submit"
+          onClick={addParticipantHandler}
+          disabled={isUploading || !enteredNameIsValid}
+          type="button"
+        >
+          {isUploading ? 'Uploading…' : 'Add Participant'}
+        </button>
+      </div>
+    </div>
   );
 }

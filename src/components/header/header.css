@@ -1,0 +1,104 @@
+/* =============================================
+   Stand-Up Duck — Header
+   Japanese Stationery / Washi + Sumi Ink
+   ============================================= */
+
+.site-header {
+  background: #FDFBF7;
+  border-bottom: 1px solid #E0D4C8;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  /* Thin sakura accent line along the very bottom */
+  box-shadow: 0 1px 0 0 #C4637A22;
+}
+
+.site-header__inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  height: 58px;
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+
+.site-header__logo {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: #1C1917;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+  flex-shrink: 0;
+  /* Small sakura dot before the name */
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.site-header__logo::before {
+  content: '';
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #C4637A;
+  flex-shrink: 0;
+}
+
+.site-header__nav {
+  display: flex;
+  gap: 0;
+  flex: 1;
+  min-width: 0;
+}
+
+.site-header__link {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: #9A918A;
+  text-decoration: none;
+  padding: 0.375rem 0.875rem;
+  letter-spacing: 0.06em;
+  border-bottom: 2px solid transparent;
+  transition: color 0.2s, border-color 0.2s;
+  white-space: nowrap;
+  margin-bottom: -1px; /* sit on the header border */
+}
+
+.site-header__link:hover {
+  color: #1C1917;
+}
+
+.site-header__link--active {
+  color: #C4637A;
+  border-bottom-color: #C4637A;
+}
+
+.site-header__actions {
+  margin-left: auto;
+  flex-shrink: 0;
+}
+
+.site-header__auth-btn {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+  background: transparent;
+  color: #9A918A;
+  border: 1px solid #D8CCBF;
+  border-radius: 2px;
+  padding: 0.3rem 0.875rem;
+  cursor: pointer;
+  text-decoration: none;
+  transition: color 0.2s, border-color 0.2s;
+  display: inline-block;
+}
+
+.site-header__auth-btn:hover {
+  color: #1C1917;
+  border-color: #9A918A;
+}

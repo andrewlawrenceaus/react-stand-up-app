@@ -1,29 +1,27 @@
-import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import finishedDuck from '../../assets/sunset-ducks.jpg';
 
-export default function StandUpCompleteCard(props) {
+export default function StandUpCompleteCard({ resetStandUpHandler }) {
   return (
-    <Card sx={{ maxWidth: 500 }}>
-      <CardMedia
-        sx={{ height: 500, objectFit: 'contain' }}
-        image={finishedDuck}
+    <div className="duck-card">
+      <img
+        src={finishedDuck}
         title="finished-duck"
+        alt="finished duck"
+        className="duck-card__photo"
       />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
-          Finished!
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" onClick={props.resetStandUpHandler}>
+      <div className="duck-card__content">
+        <p className="duck-card__name">Finished!</p>
+        <p className="duck-card__subtitle">Everyone has spoken</p>
+      </div>
+      <div className="duck-card__actions">
+        <button
+          className="duck-btn duck-btn--secondary"
+          onClick={resetStandUpHandler}
+          type="button"
+        >
           Reset Stand Up
-        </Button>
-      </CardActions>
-    </Card>
+        </button>
+      </div>
+    </div>
   );
 }

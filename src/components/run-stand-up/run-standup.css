@@ -1,0 +1,288 @@
+/* =============================================
+   Stand-Up Duck — Run Stand-Up
+   Japanese Stationery theme
+   ============================================= */
+
+/* ---------- Page shell ---------- */
+.standup-page {
+  padding: 3rem 2rem 5rem;
+}
+
+.standup-page__inner {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ---------- Team selector bar ---------- */
+.standup-selector {
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 1.5rem 2rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.standup-selector__label {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 400;
+  color: #A89F96;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+/* MUI Select overrides for washi theme */
+.standup-selector .MuiFormControl-root {
+  min-width: 160px;
+}
+
+.standup-selector .MuiOutlinedInput-root {
+  border-radius: 1px;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.85rem;
+  background: #FDFBF7;
+}
+
+.standup-selector .MuiOutlinedInput-notchedOutline {
+  border-color: #D8CCBF;
+}
+
+.standup-selector .MuiInputLabel-root {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.85rem;
+  line-height: 1.4375em;
+}
+
+/* ---------- Stand-up section header ---------- */
+.standup-header {
+  margin-bottom: 2rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid #D8CCBF;
+  position: relative;
+}
+
+.standup-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 48px;
+  height: 2px;
+  background: #C4637A;
+}
+
+.standup-header__title {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: clamp(1.5rem, 4vw, 2.25rem);
+  font-weight: 800;
+  color: #1C1917;
+  margin: 0;
+  letter-spacing: 0.01em;
+}
+
+/* ---------- Duck card (shared by Start, Participant, Complete) ---------- */
+.duck-card {
+  background: #FDFBF7;
+  border: 1px solid #D8CCBF;
+  overflow: hidden;
+  position: relative;
+  animation: card-fade-in 0.3s ease backwards;
+}
+
+/* Corner fold */
+.duck-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 20px 20px 0;
+  border-color: transparent #F5F0E8 transparent transparent;
+  box-shadow: -1px 1px 0 #D8CCBF;
+  z-index: 1;
+}
+
+@keyframes card-fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+.duck-card__photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid #EDE5D8;
+  filter: sepia(12%) saturate(90%);
+}
+
+.duck-card__content {
+  padding: 2rem 1.75rem 0.875rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.625rem;
+}
+
+.duck-card__avatar {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 3rem;
+  font-weight: 500;
+  color: #fff;
+  box-shadow: inset 0 2px 6px rgba(0,0,0,0.18);
+  flex-shrink: 0;
+}
+
+.duck-card__avatar-photo {
+  width: 140px;
+  height: 140px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #D8CCBF;
+  display: block;
+}
+
+.duck-card__name {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1C1917;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.duck-card__subtitle {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 300;
+  color: #9A918A;
+  letter-spacing: 0.04em;
+  text-align: center;
+}
+
+/* ---------- Progress dots ---------- */
+.duck-card__progress {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+  padding: 0.25rem 1.75rem;
+}
+
+.duck-card__progress-dot {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: #D8CCBF;
+}
+
+.duck-card__progress-dot--done {
+  background: #C4637A;
+}
+
+/* ---------- Action buttons ---------- */
+.duck-card__actions {
+  padding: 1rem 1.75rem 1.5rem;
+  display: flex;
+  gap: 0.625rem;
+  border-top: 1px solid #EDE5D8;
+}
+
+.duck-btn {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 400;
+  letter-spacing: 0.05em;
+  border-radius: 1px;
+  padding: 0.5rem 1.125rem;
+  cursor: pointer;
+  transition: background 0.15s, color 0.15s, border-color 0.15s;
+  white-space: nowrap;
+}
+
+.duck-btn--primary {
+  background: #C4637A;
+  color: #fff;
+  border: none;
+  flex: 1;
+}
+
+.duck-btn--primary:hover {
+  background: #A84F66;
+}
+
+.duck-btn--secondary {
+  background: transparent;
+  color: #9A918A;
+  border: 1px solid #D8CCBF;
+}
+
+.duck-btn--secondary:hover {
+  color: #1C1917;
+  border-color: #9A918A;
+}
+
+/* ---------- Message card ---------- */
+.message-card {
+  background: #FDFBF7;
+  border: 1px solid #D8CCBF;
+  overflow: hidden;
+  position: relative;
+  animation: card-fade-in 0.3s ease backwards;
+  max-width: 380px;
+  margin: 0 auto;
+}
+
+.message-card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 20px 20px 0;
+  border-color: transparent #F5F0E8 transparent transparent;
+  box-shadow: -1px 1px 0 #D8CCBF;
+  z-index: 1;
+}
+
+.message-card__photo {
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  object-fit: cover;
+  display: block;
+  border-bottom: 1px solid #EDE5D8;
+  filter: sepia(12%) saturate(90%);
+}
+
+.message-card__content {
+  padding: 1.5rem 1.75rem 1.75rem;
+}
+
+.message-card__title {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1C1917;
+  margin: 0 0 0.5rem;
+  letter-spacing: 0.02em;
+}
+
+.message-card__text {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  font-weight: 300;
+  color: #7A7468;
+  line-height: 1.6;
+  margin: 0;
+}

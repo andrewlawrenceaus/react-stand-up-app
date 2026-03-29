@@ -1,23 +1,13 @@
-import React from 'react';
-import Avatar from '@mui/material/Avatar';
-import red from '@mui/material/colors/red';
-import pink from '@mui/material/colors/pink';
-import purple from '@mui/material/colors/purple';
-import indigo from '@mui/material/colors/indigo';
-import blue from '@mui/material/colors/blue';
-import teal from '@mui/material/colors/teal';
-import green from '@mui/material/colors/green';
-import orange from '@mui/material/colors/orange';
-
+// Muted, ink-washed palette — desaturated to sit naturally on washi paper
 const COLORS = [
-  red[500],
-  pink[500],
-  purple[500],
-  indigo[500],
-  blue[500],
-  teal[500],
-  green[500],
-  orange[500],
+  '#C4637A', // sakura
+  '#5E7B62', // dried moss
+  '#7B6EA0', // wisteria
+  '#5B86A0', // indigo wash
+  '#A07050', // persimmon
+  '#7A9088', // celadon
+  '#A06070', // deep sakura
+  '#4A7A6A', // pine
 ];
 
 function getInitials(name) {
@@ -37,8 +27,13 @@ export default function InitialsAvatar({ name, sx }) {
   const color = getColor(name);
 
   return (
-    <Avatar sx={{ bgcolor: color, ...sx }}>
+    <div
+      className="initials-avatar"
+      style={{ backgroundColor: color, ...sx }}
+      role="img"
+      aria-label={name}
+    >
       {initials}
-    </Avatar>
+    </div>
   );
 }

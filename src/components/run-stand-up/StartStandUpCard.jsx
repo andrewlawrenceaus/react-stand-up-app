@@ -1,29 +1,26 @@
-import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import startDuck from '../../assets/duck-eggs.jpg';
 
-export default function StartStandUpCard(props) {
+export default function StartStandUpCard({ startStandUpHandler }) {
   return (
-    <Card sx={{ maxWidth: 350 }}>
-      <CardMedia
-        sx={{ height: 500, objectFit: 'contain' }}
-        image={startDuck}
+    <div className="duck-card">
+      <img
+        src={startDuck}
         title="start duck"
+        alt="start duck"
+        className="duck-card__photo"
       />
-      <CardContent>
-        <Typography gutterBottom variant="h5" component="div">
+      <div className="duck-card__content">
+        <p className="duck-card__subtitle">Ready when you are</p>
+      </div>
+      <div className="duck-card__actions">
+        <button
+          className="duck-btn duck-btn--primary"
+          onClick={startStandUpHandler}
+          type="button"
+        >
           Start Stand Up
-        </Typography>
-      </CardContent>
-      <CardActions>
-        <Button size="small" onClick={props.startStandUpHandler}>
-          Start Stand Up
-        </Button>
-      </CardActions>
-    </Card>
+        </button>
+      </div>
+    </div>
   );
 }
