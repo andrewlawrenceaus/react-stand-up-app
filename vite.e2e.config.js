@@ -28,6 +28,10 @@ export default defineConfig({
         find: 'firebase/database',
         replacement: path.resolve(mocks, 'firebase-database.js'),
       },
+      {
+        find: 'firebase/storage',
+        replacement: path.resolve(mocks, 'firebase-storage.js'),
+      },
     ],
   },
 })

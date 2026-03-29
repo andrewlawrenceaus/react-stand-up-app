@@ -1,16 +1,6 @@
-import {
-  Box,
-  Button,
-  Divider,
-  Grid,
-  TextField,
-  Typography,
-} from '@mui/material';
 import useInput from '../../hooks/use-input';
 
-export default function AddTeam(props) {
-  const addTeam = props.addTeam;
-
+export default function AddTeam({ addTeam }) {
   const {
     value: enteredName,
     isValid: enteredNameIsValid,
@@ -28,46 +18,32 @@ export default function AddTeam(props) {
   };
 
   return (
-    <Grid item xs={6} align="center">
-      <Box
-        sx={{
-          width: '100%',
-          maxWidth: 350,
-          border: '1px solid',
-          borderRadius: '16px',
-          borderColor: 'black',
-        }}
+    <div className="add-team-card">
+      <p className="add-team-card__title">New team</p>
+
+      <div className="add-team-field">
+        <label htmlFor="teamName" className="add-team-label">
+          Team Name
+        </label>
+        <input
+          id="teamName"
+          type="text"
+          placeholder="Team name"
+          value={enteredName}
+          onChange={nameChangeHandler}
+          onBlur={nameInputBlurHandler}
+          className="add-team-input"
+        />
+      </div>
+
+      <button
+        className="add-team-submit"
+        onClick={addTeamHandler}
+        disabled={!enteredNameIsValid}
+        type="button"
       >
-        <Typography
-          sx={{ mt: 1, mb: 2, textAlign: 'center' }}
-          variant="h6"
-          component="div"
-        >
-          Add New Team
-        </Typography>
-        <Divider />
-        <div>
-          <div>
-            <TextField
-              id="teamName"
-              label="Team Name"
-              variant="outlined"
-              color="primary"
-              focused
-              onChange={nameChangeHandler}
-              value={enteredName}
-              onBlur={nameInputBlurHandler}
-              sx={{ m: 1 }}
-            ></TextField>
-          </div>
-          <Divider />
-          <div>
-            <Button variant="outlined" onClick={addTeamHandler} sx={{ m: 1 }}>
-              Add Team
-            </Button>
-          </div>
-        </div>
-      </Box>
-    </Grid>
+        Add Team
+      </button>
+    </div>
   );
 }

@@ -1,32 +1,23 @@
-import Typography from '@mui/material/Typography';
-import Card from '@mui/material/Card';
-import CardContent from '@mui/material/CardContent';
-import CardMedia from '@mui/material/CardMedia';
 import messageDuck from '../../assets/message-duck.jpg';
-import { Grid } from '@mui/material';
+import './run-standup.css';
 
-export default function MessageCard(props) {
-  const { title, message } = props;
-
+export default function MessageCard({ title, message }) {
   return (
-    <Grid container sx={{ mt: 10 }}>
-      <Grid item xs={12} align="center">
-        <Card sx={{ maxWidth: 350 }}>
-          <CardMedia
-            sx={{ height: 500, objectFit: 'contain' }}
-            image={messageDuck}
+    <div className="standup-page">
+      <div className="standup-page__inner">
+        <div className="message-card">
+          <img
+            src={messageDuck}
             title="message duck"
+            alt="message duck"
+            className="message-card__photo"
           />
-          <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
-              {title}
-            </Typography>
-            <Typography gutterBottom variant="p" component="div">
-              {message}
-            </Typography>
-          </CardContent>
-        </Card>
-      </Grid>
-    </Grid>
+          <div className="message-card__content">
+            <h2 className="message-card__title">{title}</h2>
+            <p className="message-card__text">{message}</p>
+          </div>
+        </div>
+      </div>
+    </div>
   );
 }

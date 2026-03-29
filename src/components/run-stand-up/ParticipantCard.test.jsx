@@ -3,10 +3,9 @@ import userEvent from '@testing-library/user-event'
 import ParticipantCard from './ParticipantCard'
 
 const defaultProps = {
-  attendee: 'Alice',
+  attendee: { id: '1', name: 'Alice', photoUrl: '' },
   passDuckHandler: jest.fn(),
   lateParticipantHandler: jest.fn(),
-  percentageComplete: 0.5,
 }
 
 describe('ParticipantCard', () => {
@@ -43,18 +42,4 @@ describe('ParticipantCard', () => {
     expect(defaultProps.lateParticipantHandler).toHaveBeenCalledTimes(1)
   })
 
-  it('renders duck image with title "duck"', () => {
-    render(<ParticipantCard {...defaultProps} />)
-    expect(screen.getByTitle('duck')).toBeInTheDocument()
-  })
-
-  it('renders without crashing at percentageComplete 0', () => {
-    render(<ParticipantCard {...defaultProps} percentageComplete={0} />)
-    expect(screen.getByText('Alice')).toBeInTheDocument()
-  })
-
-  it('renders without crashing at percentageComplete 1', () => {
-    render(<ParticipantCard {...defaultProps} percentageComplete={1} />)
-    expect(screen.getByText('Alice')).toBeInTheDocument()
-  })
 })

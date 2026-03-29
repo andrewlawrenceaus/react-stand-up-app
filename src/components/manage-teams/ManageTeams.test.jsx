@@ -8,12 +8,18 @@ jest.mock('../../utils/db-utils', () => ({
   writeTeams: jest.fn().mockResolvedValue(undefined),
 }))
 
-const teams = { Alpha: ['Alice', 'Bob'], Beta: ['Charlie'] }
+const allParticipants = {
+  '1': { id: '1', name: 'Alice', photoUrl: '' },
+  '2': { id: '2', name: 'Bob', photoUrl: '' },
+  '3': { id: '3', name: 'Charlie', photoUrl: '' },
+}
+
+const teams = { Alpha: ['1', '2'], Beta: ['3'] }
 
 function renderManageTeams(props = {}) {
   return render(
     <MemoryRouter>
-      <ManageTeams teams={teams} {...props} />
+      <ManageTeams teams={teams} participants={allParticipants} {...props} />
     </MemoryRouter>
   )
 }

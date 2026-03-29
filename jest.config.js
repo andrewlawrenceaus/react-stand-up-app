@@ -14,5 +14,8 @@ module.exports = {
   transform: {
     '^.+\\.[jt]sx?$': 'babel-jest',
   },
+  transformIgnorePatterns: [
+    '/node_modules/(?!@mui/material/colors/)',
+  ],
   testMatch: ['**/*.test.[jt]s?(x)'],
 }

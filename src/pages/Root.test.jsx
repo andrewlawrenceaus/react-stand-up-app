@@ -12,10 +12,14 @@ jest.mock('firebase/auth', () => ({
 }))
 
 jest.mock('../utils/db-utils', () => ({
-  getTeams: jest.fn().mockResolvedValue({ Alpha: ['Alice'] }),
+  getTeamsAndParticipants: jest.fn().mockResolvedValue({
+    teams: { Alpha: ['1'] },
+    participants: { '1': { id: '1', name: 'Alice', photoUrl: '' } },
+  }),
+  migrateParticipantsIfNeeded: jest.fn().mockResolvedValue(undefined),
 }))
 
-import { getTeams } from '../utils/db-utils'
+import { getTeamsAndParticipants } from '../utils/db-utils'
 
 function renderRoot({ user = null, initialPath = '/' } = {}) {
   const router = createMemoryRouter(
@@ -63,9 +67,12 @@ describe('RootLayout', () => {
 })
 
 describe('loadStandUps', () => {
-  it('calls getTeams and returns the result', async () => {
+  it('calls getTeamsAndParticipants and returns teams and participants', async () => {
     const result = await loadStandUps()
-    expect(getTeams).toHaveBeenCalled()
-    expect(result).toEqual({ Alpha: ['Alice'] })
+    expect(getTeamsAndParticipants).toHaveBeenCalled()
+    expect(result).toEqual({
+      teams: { Alpha: ['1'] },
+      participants: { '1': { id: '1', name: 'Alice', photoUrl: '' } },
+    })
   })
 })

@@ -2,15 +2,21 @@ import { useLoaderData, useSearchParams } from 'react-router-dom';
 import RunStandUp from '../components/run-stand-up/RunStandUp';
 import SelectTeam from '../components/run-stand-up/SelectTeam';
 import MessageCard from '../components/run-stand-up/MessageCard';
+import '../components/run-stand-up/run-standup.css';
+
+function resolveTeamParticipants(teamIds, allParticipants) {
+  if (!teamIds || !Array.isArray(teamIds)) return [];
+  return teamIds.map(id => allParticipants[id]).filter(Boolean);
+}
 
 function RunStandUpPage() {
-  const teams = useLoaderData();
+  const { teams, participants } = useLoaderData();
   const teamNames = (Object.keys(teams).length > 0) ? Object.keys(teams) : null;
   const [searchParams] = useSearchParams();
 
   const generateRunStandUpComponent = () => {
     let selectedTeam = searchParams.get('team');
-    if (!selectedTeam && teamNames.length > 0){
+    if (!selectedTeam && teamNames && teamNames.length > 0){
       selectedTeam = teamNames[0];
     }
 
@@ -35,7 +41,8 @@ function RunStandUpPage() {
     }
 
     //If the selected team has no participants, prompt user to add them
-    if (!teams[selectedTeam] || teams[selectedTeam].length === 0) {
+    const resolvedParticipants = resolveTeamParticipants(teams[selectedTeam], participants);
+    if (!teams[selectedTeam] || resolvedParticipants.length === 0) {
       return (
         <MessageCard
           title="No Participants!"
@@ -46,7 +53,7 @@ function RunStandUpPage() {
     }
 
     return (
-      <RunStandUp team={selectedTeam} participants={teams[selectedTeam]} />
+      <RunStandUp team={selectedTeam} participants={resolvedParticipants} />
     );
   };
 

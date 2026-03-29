@@ -1,147 +1,162 @@
 import { useState } from 'react';
-import Typography from '@mui/material/Typography';
-import List from '@mui/material/List';
-import ListItem from '@mui/material/ListItem';
-import ListItemText from '@mui/material/ListItemText';
-import IconButton from '@mui/material/IconButton';
-import Grid from '@mui/material/Grid';
-import { Box, Button, Divider, TextField } from '@mui/material';
-import {
-  Delete as DeleteIcon,
-  Edit as EditIcon,
-  Close as CloseIcon,
-} from '@mui/icons-material';
-import { lightBlue } from '@mui/material/colors';
-import { Link } from 'react-router-dom';
-import useInput from '../../hooks/use-input';
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+import { Link as RouterLink } from 'react-router-dom';
+import InitialsAvatar from '../participants/InitialsAvatar';
 
-export default function TeamCard(props) {
-  const {
-    teamName,
-    participants,
-    addParticipant,
-    removeParticipant,
-    removeTeam
-  } = props;
-
+export default function TeamCard({
+  teamName,
+  participants,
+  allParticipants,
+  addParticipant,
+  removeParticipant,
+  removeTeam,
+  animationDelay = 0,
+}) {
   const [editMode, setEditMode] = useState(false);
-
-  const {
-    value: enteredName,
-    isValid: enteredNameIsValid,
-    hasError: nameInputHasError,
-    valueChangeHandler: nameChangeHandler,
-    inputBlurHandler: nameInputBlurHandler,
-    reset: resetNameInput,
-  } = useInput((value) => value.trim() !== '');
-
-  const editButtonHandler = () => {
-    setEditMode(!editMode);
-  };
+  const [selectedParticipantId, setSelectedParticipantId] = useState(null);
 
   const addParticipantHandler = () => {
-    if (enteredNameIsValid && !nameInputHasError) {
-      addParticipant(teamName, enteredName);
-      resetNameInput();
+    if (selectedParticipantId) {
+      addParticipant(teamName, selectedParticipantId);
+      setSelectedParticipantId(null);
     }
   };
 
-  const deleteParticipantHandler = (participant) => {
-    removeParticipant(
-      teamName,
-      participant
-    );
-  }
+  const availableParticipants = allParticipants
+    ? Object.values(allParticipants).filter(
+        (p) => !participants || !participants.includes(p.id)
+      )
+    : [];
 
-  const deleteTeamHandler = () => {
-    removeTeam(teamName)
-  }
+  const noParticipantsAtAll =
+    !allParticipants || Object.keys(allParticipants).length === 0;
 
   return (
-    <Grid item xs={6} align='center'>
-      <Box
-        sx={{
-          width: '100%',
-          maxWidth: 350,
-          border: '1px solid',
-          borderRadius: '16px',
-          borderColor: 'black',
-          m: '1rem'
-        }}
-      >
-        <Typography
-          sx={{ mt: 1, mb: 2, textAlign: 'center'}}
-          variant="h6"
-          component="div"
-        >
-          {teamName}
-        </Typography>
-        <div>
-          <Button component={Link} to={`/?team=${teamName}`}>
+    <div className="team-card" style={{ animationDelay: `${animationDelay}ms` }}>
+      <div className="team-card__header">
+        <h2 className="team-card__name">{teamName}</h2>
+        <div className="team-card__header-actions">
+          <RouterLink to={`/?team=${teamName}`} className="team-card__link">
             Start Stand-Up
-          </Button>
-          <Button sx={{ float: 'inline-end' }} onClick={editButtonHandler}>
-            {editMode ? <CloseIcon /> : <EditIcon />}
-          </Button>
+          </RouterLink>
+          <button
+            className="team-card__edit-btn"
+            onClick={() => setEditMode(!editMode)}
+            type="button"
+          >
+            {editMode ? '✕' : '✎'}
+          </button>
         </div>
-        <Divider />
-        <List sx={{ bgcolor: lightBlue }}>
-          {participants && participants.map((participant) => {
+      </div>
+
+      <ul className="team-card__list">
+        {participants &&
+          participants.map((participantId) => {
+            const p = allParticipants ? allParticipants[participantId] : null;
+            const name = p?.name || participantId;
             return (
-              <ListItem
-                key={participant}
-                secondaryAction={
-                  editMode && (
-                    <IconButton
-                      edge="end"
-                      aria-label="delete"
-                      onClick={() => deleteParticipantHandler(participant)
-                      }
-                    >
-                      <DeleteIcon />
-                    </IconButton>
-                  )
-                }
-                sx={{ bgcolor: lightBlue }}
-              >
-                <ListItemText primary={participant} />
-              </ListItem>
+              <li key={participantId} className="team-card__member">
+                {p?.photoUrl ? (
+                  <img
+                    src={p.photoUrl}
+                    alt={name}
+                    className="team-member-photo"
+                  />
+                ) : (
+                  <div
+                    className="team-member-avatar"
+                    style={{
+                      backgroundColor: getAvatarColor(name),
+                    }}
+                    aria-hidden="true"
+                  >
+                    {getInitials(name)}
+                  </div>
+                )}
+                <span className="team-card__member-name">{name}</span>
+                {editMode && (
+                  <button
+                    className="team-card__member-delete"
+                    aria-label="delete"
+                    type="button"
+                    onClick={() => removeParticipant(teamName, participantId)}
+                  >
+                    ✕
+                  </button>
+                )}
+              </li>
             );
           })}
-        </List>
-        <Divider />
-        {editMode && (
-          <div>
-            <div>
-              <TextField
-                id="name"
-                label="Name"
-                variant="outlined"
-                color="primary"
-                focused
-                onChange={nameChangeHandler}
-                value={enteredName}
-                onBlur={nameInputBlurHandler}
-                sx={{m: 1}}
-              ></TextField>
+      </ul>
+
+      {editMode && (
+        <div className="team-card__edit-panel">
+          {noParticipantsAtAll ? (
+            <p className="team-card__edit-msg">
+              No participants yet — add them on the{' '}
+              <RouterLink to="/participants">Participants page</RouterLink>
+            </p>
+          ) : availableParticipants.length === 0 ? (
+            <p className="team-card__edit-msg">
+              All participants are already in this team
+            </p>
+          ) : (
+            <div className="team-card__autocomplete">
+              <Autocomplete
+                options={availableParticipants}
+                getOptionLabel={(option) => option.name}
+                value={
+                  availableParticipants.find(
+                    (p) => p.id === selectedParticipantId
+                  ) || null
+                }
+                onChange={(_, newValue) =>
+                  setSelectedParticipantId(newValue ? newValue.id : null)
+                }
+                renderInput={(params) => (
+                  <TextField {...params} label="Add Participant" size="small" />
+                )}
+                size="small"
+              />
             </div>
-            <Divider />
-            <div>
-              <Button variant="outlined" onClick={addParticipantHandler} sx={{m: 1}}>
-                Add Participant
-              </Button>
-              <Button
-                variant="outlined"
-                color="error"
-                sx={{ float: 'inline-end', m:1}}
-                onClick={deleteTeamHandler}
-              >
-                Delete Team
-              </Button>
-            </div>
+          )}
+          <div className="team-card__edit-footer">
+            <button
+              className="team-card__add-btn"
+              onClick={addParticipantHandler}
+              disabled={!selectedParticipantId}
+              type="button"
+            >
+              Add Participant
+            </button>
+            <button
+              className="team-card__delete-btn"
+              onClick={() => removeTeam(teamName)}
+              type="button"
+            >
+              Delete Team
+            </button>
           </div>
-        )}
-      </Box>
-    </Grid>
+        </div>
+      )}
+    </div>
   );
+}
+
+const AVATAR_COLORS = [
+  '#C4637A', '#5E7B62', '#7B6EA0', '#5B86A0',
+  '#A07050', '#7A9088', '#A06070', '#4A7A6A',
+];
+
+function getAvatarColor(name) {
+  return AVATAR_COLORS[name.charCodeAt(0) % AVATAR_COLORS.length];
+}
+
+function getInitials(name) {
+  const words = name.trim().split(/\s+/);
+  if (words.length >= 2) {
+    return (words[0][0] + words[words.length - 1][0]).toUpperCase();
+  }
+  return words[0][0].toUpperCase();
 }

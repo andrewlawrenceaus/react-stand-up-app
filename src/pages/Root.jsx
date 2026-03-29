@@ -1,6 +1,6 @@
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
 import Header from '../components/header/Header';
-import { getTeams } from '../utils/db-utils';
+import { getTeamsAndParticipants, migrateParticipantsIfNeeded } from '../utils/db-utils';
 import { useContext } from 'react';
 import { AuthContext } from '../components/store/AuthProvider';
 
@@ -31,5 +31,8 @@ function RootLayout() {
 export default RootLayout;
 
 export async function loadStandUps() {
-  return await getTeams();
+  let { teams, participants } = await getTeamsAndParticipants();
+  const migrated = await migrateParticipantsIfNeeded(teams);
+  if (migrated) ({ teams, participants } = await getTeamsAndParticipants());
+  return { teams, participants };
 }
