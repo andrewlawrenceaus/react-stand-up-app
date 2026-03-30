@@ -554,6 +554,42 @@
   border: 1px solid #D8CCBF;
 }
 
+/* ---------- Item owner actions (edit/delete) ---------- */
+.retro-item__owner-actions {
+  display: flex;
+  gap: 0.2rem;
+  margin-left: auto;
+}
+
+.retro-item__owner-btn {
+  background: none;
+  border: none;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.65rem;
+  color: #9A918A;
+  cursor: pointer;
+  padding: 0.1rem 0.3rem;
+  transition: color 0.15s;
+}
+
+.retro-item__owner-btn:hover {
+  color: #1C1917;
+}
+
+.retro-item__owner-btn--delete {
+  color: #C4637A;
+}
+
+.retro-item__owner-btn--delete:hover {
+  color: #A84F66;
+}
+
+.retro-item__edit-input {
+  resize: vertical;
+  min-height: 48px;
+  margin-bottom: 0.35rem;
+}
+
 /* ---------- Add Item ---------- */
 .retro-add-item {
   padding: 0.75rem;

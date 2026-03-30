@@ -202,6 +202,15 @@ export async function addRetroItem(teamName, item) {
     await set(itemRef, item);
 }
 
+export async function updateRetroItem(teamName, itemId, text) {
+    const uid = await getUserUid();
+    if (!uid) return;
+    const itemRef = ref(db, `users/${uid}/retros/${teamName}/active/items/${itemId}`);
+    const snapshot = await get(itemRef);
+    if (!snapshot.exists()) return;
+    await set(itemRef, { ...snapshot.val(), text });
+}
+
 export async function removeRetroItem(teamName, itemId) {
     const uid = await getUserUid();
     if (!uid) return;
