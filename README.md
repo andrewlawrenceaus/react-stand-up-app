@@ -1,6 +1,6 @@
 # Stand-Up Duck
 
-A web app for running team stand-up meetings. Create teams, manage participants, and step through each person's update with a duck-themed interface.
+A web app for running team stand-up meetings and retrospectives. Create teams, manage participants, step through each person's update with a duck-themed interface, and run async-friendly retros with real-time collaboration.
 
 **Live app:** https://stand-up-duck.web.app
 
@@ -12,6 +12,7 @@ A web app for running team stand-up meetings. Create teams, manage participants,
 - Create and manage teams with named participants
 - Interactive stand-up runner — pass the duck to each participant in turn
 - Participants who aren't ready get requeued for the end
+- **Retrospectives** — run real-time retros with customisable categories, item voting, a countdown timer, and action item tracking
 - Data persists across sessions via Firebase Realtime Database
 
 ## Tech Stack
@@ -63,7 +64,7 @@ Firebase is mocked at the module level in all unit tests — no Firebase project
 
 ### E2E Tests (Playwright)
 
-End-to-end tests cover authentication, team management, and the full stand-up flow. The E2E build uses `vite.e2e.config.js`, which swaps the Firebase SDK for in-memory mocks backed by `localStorage`. No Firebase credentials are required.
+End-to-end tests cover authentication, team management, the full stand-up flow, and the retro feature. The E2E build uses `vite.e2e.config.js`, which swaps the Firebase SDK for in-memory mocks backed by `localStorage`. No Firebase credentials are required.
 
 ```bash
 # First time only — install browser binaries
@@ -119,6 +120,7 @@ src/
 │   ├── auth/           # Login/signup form
 │   ├── header/         # Navigation bar
 │   ├── manage-teams/   # Team and participant management UI
+│   ├── retro/          # Retrospective board, setup, timer, and item components
 │   ├── run-stand-up/   # Stand-up runner UI
 │   └── store/          # Auth context provider
 ├── hooks/              # useInput form validation hook
@@ -132,5 +134,6 @@ e2e/
 ├── fixtures/           # Playwright auth fixture (mock-injected user)
 ├── auth.spec.js
 ├── team-management.spec.js
-└── run-stand-up.spec.js
+├── run-stand-up.spec.js
+└── retro.spec.js
 ```
