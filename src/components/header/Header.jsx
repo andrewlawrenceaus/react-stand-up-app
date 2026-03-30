@@ -35,6 +35,9 @@ export default function Header() {
             <NavLink to="/" end className={navLinkClass}>
               Run Stand-Up
             </NavLink>
+            <NavLink to="retro" className={navLinkClass}>
+              Retro
+            </NavLink>
           </nav>
         )}
 

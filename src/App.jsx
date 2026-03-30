@@ -13,6 +13,7 @@ import AuthenticationPage, {
   action as authAction,
 } from './pages/Authentication';
 import ParticipantsPage from './pages/Participants';
+import RetroPage from './pages/Retro';
 import { getTeamsAndParticipants } from './utils/db-utils';
 import { AuthProvider } from './components/store/AuthProvider';
 
@@ -51,6 +52,11 @@ const router = createBrowserRouter([
         path: 'participants',
         element: <ParticipantsPage />,
         loader: async () => getTeamsAndParticipants(),
+      },
+      {
+        path: 'retro',
+        element: <RetroPage />,
+        loader: loadStandUps,
       },
       {
         path: 'auth',
