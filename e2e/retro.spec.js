@@ -79,9 +79,10 @@ test.describe('Retro', () => {
 
     test('shows default categories on setup screen', async ({ authenticatedPage: page }) => {
       await goToRetro(page)
-      await expect(page.getByDisplayValue("What went well")).toBeVisible()
-      await expect(page.getByDisplayValue("What didn't go well")).toBeVisible()
-      await expect(page.getByDisplayValue("What should we do differently")).toBeVisible()
+      const inputs = page.locator('input.retro-input--inline')
+      await expect(inputs.nth(0)).toHaveValue('What went well')
+      await expect(inputs.nth(1)).toHaveValue("What didn't go well")
+      await expect(inputs.nth(2)).toHaveValue('What should we do differently')
       await expect(page.getByText(/action items \(always included\)/i)).toBeVisible()
     })
 
@@ -89,13 +90,14 @@ test.describe('Retro', () => {
       await goToRetro(page)
       await page.getByPlaceholder(/add another category/i).fill('Shoutouts')
       await page.getByRole('button', { name: /^add$/i }).click()
-      await expect(page.getByDisplayValue('Shoutouts')).toBeVisible()
+      await expect(page.locator('input.retro-input--inline').last()).toHaveValue('Shoutouts')
     })
 
     test('can remove a category before starting', async ({ authenticatedPage: page }) => {
       await goToRetro(page)
       await page.getByRole('button', { name: /remove what went well/i }).click()
-      await expect(page.getByDisplayValue('What went well')).not.toBeVisible()
+      // Only 2 editable category inputs should remain (the removed one is gone)
+      await expect(page.locator('input.retro-input--inline')).toHaveCount(2)
     })
 
     test('can set a timer before starting', async ({ authenticatedPage: page }) => {
@@ -145,7 +147,7 @@ test.describe('Retro', () => {
       await expect(page.getByText('What went well')).toBeVisible()
       await expect(page.getByText("What didn't go well")).toBeVisible()
       await expect(page.getByText('What should we do differently')).toBeVisible()
-      await expect(page.getByText('Action Items')).toBeVisible()
+      await expect(page.getByRole('heading', { name: /action items/i })).toBeVisible()
     })
 
     test('can add an item to a category', async ({ authenticatedPage: page }) => {
