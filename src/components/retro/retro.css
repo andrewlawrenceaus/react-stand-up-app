@@ -1,0 +1,663 @@
+/* =============================================
+   Stand-Up Duck — Retro Board
+   Japanese Stationery theme
+   ============================================= */
+
+/* ---------- Loading ---------- */
+.retro-loading {
+  text-align: center;
+  padding: 4rem 2rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.85rem;
+  color: #9A918A;
+}
+
+/* ---------- Shared input ---------- */
+.retro-input {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  padding: 0.45rem 0.65rem;
+  border: 1px solid #D8CCBF;
+  border-radius: 1px;
+  background: #FDFBF7;
+  color: #1C1917;
+  outline: none;
+  transition: border-color 0.15s;
+  width: 100%;
+}
+
+.retro-input:focus {
+  border-color: #C4637A;
+}
+
+.retro-input--inline {
+  flex: 1;
+}
+
+/* ---------- Retro Setup ---------- */
+.retro-setup {
+  max-width: 520px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.retro-setup__card {
+  background: #FDFBF7;
+  border: 1px solid #D8CCBF;
+  padding: 2rem 1.75rem;
+  position: relative;
+  animation: retro-fade-in 0.3s ease backwards;
+}
+
+.retro-setup__card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 20px 20px 0;
+  border-color: transparent #F5F0E8 transparent transparent;
+  box-shadow: -1px 1px 0 #D8CCBF;
+  z-index: 1;
+}
+
+.retro-setup__title {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1C1917;
+  margin: 0 0 0.25rem;
+  letter-spacing: 0.02em;
+}
+
+.retro-setup__subtitle {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  color: #9A918A;
+  margin: 0 0 1.5rem;
+}
+
+.retro-setup__section-title {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.72rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #A89F96;
+  margin: 0 0 0.75rem;
+}
+
+.retro-setup__category-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.retro-setup__category-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.retro-setup__category-item--locked {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  color: #9A918A;
+  font-style: italic;
+  padding: 0.45rem 0.65rem;
+}
+
+.retro-setup__remove-btn {
+  background: none;
+  border: none;
+  font-size: 1.1rem;
+  color: #9A918A;
+  cursor: pointer;
+  padding: 0 0.25rem;
+  line-height: 1;
+}
+
+.retro-setup__remove-btn:hover {
+  color: #C4637A;
+}
+
+.retro-setup__add-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.retro-setup__timer {
+  margin-bottom: 1.5rem;
+}
+
+.retro-setup__timer-input {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.retro-setup__timer-input .retro-input {
+  width: 80px;
+}
+
+.retro-setup__timer-label {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  color: #9A918A;
+}
+
+.retro-setup__previous {
+  background: #F5F0E8;
+  border: 1px solid #D8CCBF;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.retro-setup__previous-label {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.8rem;
+  color: #7A7468;
+  margin: 0 0 0.5rem;
+}
+
+.retro-setup__toggle {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  color: #1C1917;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+}
+
+.retro-setup__start-btn {
+  width: 100%;
+  padding: 0.65rem;
+}
+
+/* ---------- Participant Select ---------- */
+.retro-participant-select {
+  max-width: 600px;
+  margin: 0 auto;
+  padding: 2rem;
+}
+
+.retro-participant-select__card {
+  background: #FDFBF7;
+  border: 1px solid #D8CCBF;
+  padding: 2rem 1.75rem;
+  position: relative;
+  animation: retro-fade-in 0.3s ease backwards;
+}
+
+.retro-participant-select__card::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 0;
+  height: 0;
+  border-style: solid;
+  border-width: 0 20px 20px 0;
+  border-color: transparent #F5F0E8 transparent transparent;
+  box-shadow: -1px 1px 0 #D8CCBF;
+  z-index: 1;
+}
+
+.retro-participant-select__title {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: 1.35rem;
+  font-weight: 700;
+  color: #1C1917;
+  margin: 0 0 0.25rem;
+  letter-spacing: 0.02em;
+  text-align: center;
+}
+
+.retro-participant-select__subtitle {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  color: #9A918A;
+  text-align: center;
+  margin: 0 0 1.5rem;
+}
+
+.retro-participant-select__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+  gap: 0.75rem;
+}
+
+.retro-participant-select__option {
+  background: #F5F0E8;
+  border: 1px solid #D8CCBF;
+  padding: 1rem 0.5rem;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  transition: border-color 0.15s, background 0.15s;
+}
+
+.retro-participant-select__option:hover {
+  border-color: #C4637A;
+  background: #FDFBF7;
+}
+
+.retro-participant-select__photo {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #D8CCBF;
+}
+
+.retro-participant-select__name {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 400;
+  color: #1C1917;
+  text-align: center;
+}
+
+/* ---------- Retro Board ---------- */
+.retro-board {
+  padding: 1rem 2rem 3rem;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+.retro-board__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid #D8CCBF;
+  margin-bottom: 0.75rem;
+  position: relative;
+}
+
+.retro-board__header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 0;
+  width: 48px;
+  height: 2px;
+  background: #C4637A;
+}
+
+.retro-board__identity {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  color: #7A7468;
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.retro-board__identity strong {
+  color: #1C1917;
+}
+
+.retro-board__change-btn {
+  background: none;
+  border: none;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.75rem;
+  color: #C4637A;
+  cursor: pointer;
+  padding: 0;
+  text-decoration: underline;
+}
+
+.retro-board__change-btn:hover {
+  color: #A84F66;
+}
+
+/* ---------- Board columns ---------- */
+.retro-board__columns {
+  display: flex;
+  gap: 1rem;
+  overflow-x: auto;
+  padding-bottom: 1rem;
+  align-items: flex-start;
+}
+
+.retro-board__add-category-btn {
+  background: none;
+  border: 1px dashed #D8CCBF;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.78rem;
+  color: #9A918A;
+  padding: 1rem;
+  cursor: pointer;
+  min-width: 200px;
+  transition: border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.retro-board__add-category-btn:hover {
+  border-color: #C4637A;
+  color: #C4637A;
+}
+
+.retro-board__add-category-form {
+  min-width: 200px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  background: #FDFBF7;
+  border: 1px solid #D8CCBF;
+  padding: 0.75rem;
+}
+
+.retro-board__add-category-actions {
+  display: flex;
+  gap: 0.4rem;
+}
+
+/* ---------- Category Column ---------- */
+.retro-column {
+  min-width: 280px;
+  max-width: 340px;
+  flex: 1;
+  flex-shrink: 0;
+  background: #FDFBF7;
+  border: 1px solid #D8CCBF;
+  display: flex;
+  flex-direction: column;
+  animation: retro-fade-in 0.3s ease backwards;
+}
+
+.retro-column__items {
+  padding: 0 0.75rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  flex: 1;
+  min-height: 60px;
+}
+
+/* ---------- Category Editor (column header) ---------- */
+.retro-category-editor {
+  padding: 0.75rem;
+  border-bottom: 1px solid #EDE5D8;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.5rem;
+}
+
+.retro-category-editor__name {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: #1C1917;
+  margin: 0;
+  cursor: pointer;
+  letter-spacing: 0.02em;
+}
+
+.retro-category-editor__name:hover {
+  color: #C4637A;
+}
+
+.retro-category-editor__lock {
+  font-size: 0.7rem;
+  margin-left: 0.25rem;
+}
+
+.retro-category-editor__input {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+  flex: 1;
+}
+
+.retro-category-editor__actions {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+  flex-shrink: 0;
+}
+
+.retro-category-editor__btn {
+  background: none;
+  border: none;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.7rem;
+  color: #9A918A;
+  cursor: pointer;
+  padding: 0.15rem 0.35rem;
+  transition: color 0.15s;
+}
+
+.retro-category-editor__btn:hover {
+  color: #1C1917;
+}
+
+.retro-category-editor__btn--delete {
+  color: #C4637A;
+}
+
+.retro-category-editor__btn--delete:hover {
+  color: #A84F66;
+}
+
+.retro-category-editor__confirm {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.7rem;
+  color: #9A918A;
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+/* ---------- Retro Item ---------- */
+.retro-item {
+  background: #F5F0E8;
+  border: 1px solid #EDE5D8;
+  padding: 0.6rem 0.75rem;
+  animation: retro-fade-in 0.25s ease backwards;
+}
+
+.retro-item__author {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 0.35rem;
+}
+
+.retro-item__author-photo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #D8CCBF;
+}
+
+.retro-item__author-name {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: #7A7468;
+}
+
+.retro-item__text {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  color: #1C1917;
+  line-height: 1.5;
+  margin: 0 0 0.35rem;
+}
+
+.retro-item__footer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.retro-item__agree-btn {
+  background: none;
+  border: 1px solid #D8CCBF;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.65rem;
+  color: #9A918A;
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: all 0.15s;
+}
+
+.retro-item__agree-btn:hover {
+  border-color: #C4637A;
+  color: #C4637A;
+}
+
+.retro-item__agree-btn--agreed {
+  background: #C4637A;
+  border-color: #C4637A;
+  color: #fff;
+}
+
+.retro-item__agree-btn--agreed:hover {
+  background: #A84F66;
+  border-color: #A84F66;
+  color: #fff;
+}
+
+.retro-item__agreed-list {
+  display: flex;
+  gap: 0.2rem;
+  flex-wrap: wrap;
+}
+
+.retro-item__agreed-avatar {
+  display: inline-flex;
+}
+
+.retro-item__agreed-photo {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #D8CCBF;
+}
+
+/* ---------- Add Item ---------- */
+.retro-add-item {
+  padding: 0.75rem;
+  display: flex;
+  gap: 0.4rem;
+  border-top: 1px solid #EDE5D8;
+}
+
+.retro-add-item__btn {
+  flex-shrink: 0;
+  padding: 0.45rem 0.75rem;
+}
+
+/* ---------- Timer ---------- */
+.retro-timer {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.retro-timer__display {
+  font-family: 'Shippori Mincho', 'Noto Serif JP', serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: #1C1917;
+  letter-spacing: 0.05em;
+  min-width: 60px;
+  text-align: center;
+}
+
+.retro-timer--expired .retro-timer__display {
+  color: #C4637A;
+  animation: retro-pulse 1s ease-in-out infinite;
+}
+
+.retro-timer__controls {
+  display: flex;
+  gap: 0.25rem;
+}
+
+.retro-timer__btn {
+  background: none;
+  border: 1px solid #D8CCBF;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.65rem;
+  color: #9A918A;
+  padding: 0.15rem 0.5rem;
+  cursor: pointer;
+  border-radius: 1px;
+  transition: color 0.15s, border-color 0.15s;
+}
+
+.retro-timer__btn:hover {
+  color: #1C1917;
+  border-color: #9A918A;
+}
+
+/* ---------- Actions bar ---------- */
+.retro-actions {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.5rem;
+  padding: 0.5rem 0;
+  margin-bottom: 0.5rem;
+}
+
+.retro-actions__confirm {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.82rem;
+  color: #7A7468;
+}
+
+/* ---------- Animations ---------- */
+@keyframes retro-fade-in {
+  from { opacity: 0; transform: translateY(6px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes retro-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.5; }
+}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 768px) {
+  .retro-board__columns {
+    flex-direction: column;
+  }
+
+  .retro-column {
+    min-width: 100%;
+    max-width: 100%;
+  }
+
+  .retro-board__header {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .retro-actions {
+    flex-wrap: wrap;
+  }
+}
