@@ -72,12 +72,21 @@ describe('AddRetroItem — submit', () => {
   it('generates a unique id for each item', async () => {
     const user = userEvent.setup()
     renderForm()
-    await user.type(screen.getByPlaceholderText('Add an item...'), 'Item one')
+
+    const input = screen.getByPlaceholderText('Add an item...')
+
+    await user.type(input, 'Item one')
     await user.click(screen.getByRole('button', { name: /add/i }))
-    expect(addRetroItem).toHaveBeenCalledWith(
-      TEAM,
-      expect.objectContaining({ id: expect.any(String) })
-    )
+
+    await user.type(input, 'Item two')
+    await user.click(screen.getByRole('button', { name: /add/i }))
+
+    const firstId = addRetroItem.mock.calls[0][1].id
+    const secondId = addRetroItem.mock.calls[1][1].id
+
+    expect(firstId).toEqual(expect.any(String))
+    expect(secondId).toEqual(expect.any(String))
+    expect(firstId).not.toBe(secondId)
   })
 
   it('clears the input after successful submission', async () => {
