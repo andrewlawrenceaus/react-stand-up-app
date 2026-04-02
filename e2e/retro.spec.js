@@ -41,6 +41,23 @@ test.describe('Retro', () => {
     }
   })
 
+  // Helper: drag a dnd-kit element (source locator) to the center of a target locator
+  async function dragColumn(page, source, target) {
+    const srcBox = await source.boundingBox()
+    const tgtBox = await target.boundingBox()
+    const sx = srcBox.x + srcBox.width / 2
+    const sy = srcBox.y + srcBox.height / 2
+    const tx = tgtBox.x + tgtBox.width / 2
+    const ty = tgtBox.y + tgtBox.height / 2
+    await page.mouse.move(sx, sy)
+    await page.mouse.down()
+    // Move slightly first to satisfy the 5px activation constraint
+    await page.mouse.move(sx + 8, sy, { steps: 3 })
+    // Then drag to the target
+    await page.mouse.move(tx, ty, { steps: 20 })
+    await page.mouse.up()
+  }
+
   // Helper: navigate to retro for the test team
   async function goToRetro(page) {
     await page.goto(`/retro?team=${encodeURIComponent(testTeamName)}`)
@@ -268,6 +285,49 @@ test.describe('Retro', () => {
       await page.getByRole('button', { name: /clear all \(keep action items\)/i }).click()
       await expect(page.getByText('Should be cleared')).not.toBeVisible()
       await expect(page.getByText('Keep this action')).toBeVisible()
+    })
+  })
+
+  test.describe('Column reordering', () => {
+    test.beforeEach(async ({ authenticatedPage: page }) => {
+      await startRetro(page)
+      await selectParticipant(page, 'Alice')
+    })
+
+    test.afterEach(async ({ authenticatedPage: page }) => {
+      await completeActiveRetro(page)
+    })
+
+    test('shows a drag handle on each column header', async ({ authenticatedPage: page }) => {
+      const handles = page.locator('[title="Drag to reorder"]')
+      // Default retro has 4 categories
+      await expect(handles).toHaveCount(4)
+    })
+
+    test('dragging a column reorders it visually', async ({ authenticatedPage: page }) => {
+      const columnHeaders = page.locator('.retro-category-editor__name')
+      const firstColumnName = await columnHeaders.first().textContent()
+      const secondColumnName = await columnHeaders.nth(1).textContent()
+
+      const firstHandle = page.locator('[title="Drag to reorder"]').first()
+      const secondColumn = page.locator('.retro-column').nth(1)
+      await dragColumn(page, firstHandle, secondColumn)
+
+      await expect(columnHeaders.first()).toHaveText(secondColumnName)
+      await expect(columnHeaders.nth(1)).toHaveText(firstColumnName)
+    })
+
+    test('reordered column order persists after page reload', async ({ authenticatedPage: page }) => {
+      const columnHeaders = page.locator('.retro-category-editor__name')
+      const secondColumnName = await columnHeaders.nth(1).textContent()
+
+      const secondHandle = page.locator('[title="Drag to reorder"]').nth(1)
+      const firstColumn = page.locator('.retro-column').first()
+      await dragColumn(page, secondHandle, firstColumn)
+      await expect(columnHeaders.first()).toHaveText(secondColumnName)
+
+      await page.reload()
+      await expect(page.locator('.retro-category-editor__name').first()).toHaveText(secondColumnName)
     })
   })
 })

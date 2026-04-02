@@ -463,6 +463,33 @@
   gap: 0.25rem;
 }
 
+/* ---------- Drag Handle ---------- */
+.retro-category-editor__drag-handle {
+  cursor: grab;
+  color: #C4B9AE;
+  font-size: 1rem;
+  line-height: 1;
+  padding: 0 0 0 0.15rem;
+  flex-shrink: 0;
+  user-select: none;
+  touch-action: none;
+  transition: color 0.15s;
+}
+
+.retro-category-editor__drag-handle:hover {
+  color: #9A918A;
+}
+
+.retro-category-editor__drag-handle:active {
+  cursor: grabbing;
+}
+
+.retro-column--dragging {
+  opacity: 0.45;
+  border-color: #C4637A;
+  box-shadow: 0 0 0 1px #C4637A;
+}
+
 /* ---------- Retro Item ---------- */
 .retro-item {
   background: #F5F0E8;
@@ -695,5 +722,9 @@
 
   .retro-actions {
     flex-wrap: wrap;
+  }
+
+  .retro-category-editor__drag-handle {
+    display: none;
   }
 }
