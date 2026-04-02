@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { updateRetroCategory, removeRetroCategory, clearItemsByCategory } from '../../utils/db-utils';
 
-export default function RetroCategoryEditor({ teamName, category, itemCount }) {
+export default function RetroCategoryEditor({ teamName, category, itemCount, dragHandleListeners, dragHandleAttributes }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editName, setEditName] = useState(category.name);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -80,6 +80,14 @@ export default function RetroCategoryEditor({ teamName, category, itemCount }) {
             <button className="retro-category-editor__btn" onClick={() => setShowDeleteConfirm(false)}>No</button>
           </span>
         )}
+        <span
+          className="retro-category-editor__drag-handle"
+          {...dragHandleListeners}
+          {...dragHandleAttributes}
+          title="Drag to reorder"
+        >
+          ⠿
+        </span>
       </div>
     </div>
   );
