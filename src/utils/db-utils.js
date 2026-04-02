@@ -175,6 +175,17 @@ export async function updateRetroCategory(teamName, categoryId, updates) {
     await set(catRef, { ...snapshot.val(), ...updates });
 }
 
+export async function reorderRetroCategories(teamName, orderedIds) {
+    const uid = await getUserUid();
+    if (!uid) return;
+    const userRef = ref(db, `users/${uid}`);
+    const updates = {};
+    orderedIds.forEach((id, index) => {
+        updates[`retros/${teamName}/active/categories/${id}/order`] = index;
+    });
+    await update(userRef, updates);
+}
+
 export async function removeRetroCategory(teamName, categoryId) {
     const uid = await getUserUid();
     if (!uid) return;

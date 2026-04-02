@@ -32,6 +32,7 @@ import {
   clearAllItemsExceptCategory,
   getPreviousRetro,
   subscribeToActiveRetro,
+  reorderRetroCategories,
 } from './db-utils'
 
 const UID = 'test-uid'
@@ -313,5 +314,35 @@ describe('subscribeToActiveRetro', () => {
     expect(onValue).not.toHaveBeenCalled()
     expect(callback).not.toHaveBeenCalled()
     expect(typeof unsubscribe).toBe('function')
+  })
+})
+
+// ─── reorderRetroCategories ───────────────────────────────────────────────────
+
+describe('reorderRetroCategories', () => {
+  it('batch-updates the order field for each category in the given order', async () => {
+    await reorderRetroCategories(TEAM, ['cat-c', 'cat-a', 'cat-b'])
+    expect(update).toHaveBeenCalledWith(
+      { path: `users/${UID}` },
+      {
+        [`retros/${TEAM}/active/categories/cat-c/order`]: 0,
+        [`retros/${TEAM}/active/categories/cat-a/order`]: 1,
+        [`retros/${TEAM}/active/categories/cat-b/order`]: 2,
+      }
+    )
+  })
+
+  it('handles a single category with order 0', async () => {
+    await reorderRetroCategories(TEAM, ['cat-only'])
+    expect(update).toHaveBeenCalledWith(
+      { path: `users/${UID}` },
+      { [`retros/${TEAM}/active/categories/cat-only/order`]: 0 }
+    )
+  })
+
+  it('does nothing when not authenticated', async () => {
+    auth.currentUser = null
+    await reorderRetroCategories(TEAM, ['cat-a', 'cat-b'])
+    expect(update).not.toHaveBeenCalled()
   })
 })
