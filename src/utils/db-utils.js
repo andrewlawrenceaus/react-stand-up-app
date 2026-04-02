@@ -2,8 +2,14 @@ import { get, ref, set, onValue, update } from 'firebase/database';
 import { uploadBytes, getDownloadURL, ref as storageRef } from 'firebase/storage';
 import { auth, db, storage } from './firebase';
 
+async function resolveUID(ownerUID) {
+    if (ownerUID) return ownerUID;
+    await auth.authStateReady();
+    return auth.currentUser?.uid ?? null;
+}
+
 export async function writeTeams(teams) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (uid) {
         const teamsRef = ref(db, `users/${uid}/teams`);
         set(teamsRef, teams);
@@ -12,9 +18,9 @@ export async function writeTeams(teams) {
     }
 }
 
-export async function getTeams() {
+export async function getTeams(ownerUID) {
     let data = {};
-    const uid = await getUserUid();
+    const uid = await resolveUID(ownerUID);
     if (uid) {
         const teamsRef = ref(db, `users/${uid}/teams`);
         await get(teamsRef).then((snapshot) => {
@@ -31,15 +37,9 @@ export async function getTeams() {
     return data;
 }
 
-async function getUserUid() {
-    await auth.authStateReady();
-    const user = auth.currentUser;
-    return user ? user.uid : null;
-}
-
-export async function getParticipants() {
+export async function getParticipants(ownerUID) {
     let data = {};
-    const uid = await getUserUid();
+    const uid = await resolveUID(ownerUID);
     if (uid) {
         const participantsRef = ref(db, `users/${uid}/participants`);
         await get(participantsRef).then((snapshot) => {
@@ -56,7 +56,7 @@ export async function getParticipants() {
 }
 
 export async function writeParticipants(participants) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (uid) {
         const participantsRef = ref(db, `users/${uid}/participants`);
         set(participantsRef, participants);
@@ -65,13 +65,13 @@ export async function writeParticipants(participants) {
     }
 }
 
-export async function getTeamsAndParticipants() {
-    const [teams, participants] = await Promise.all([getTeams(), getParticipants()]);
+export async function getTeamsAndParticipants(ownerUID) {
+    const [teams, participants] = await Promise.all([getTeams(ownerUID), getParticipants(ownerUID)]);
     return { teams, participants };
 }
 
-export async function uploadParticipantPhoto(participantId, file) {
-    const uid = await getUserUid();
+export async function uploadParticipantPhoto(participantId, file, ownerUID) {
+    const uid = await resolveUID(ownerUID);
     const photoRef = storageRef(storage, `participants/${uid}/${participantId}/photo`);
     await uploadBytes(photoRef, file);
     return getDownloadURL(photoRef);
@@ -80,7 +80,7 @@ export async function uploadParticipantPhoto(participantId, file) {
 export async function migrateParticipantsIfNeeded(teams) {
     if (!teams || Object.keys(teams).length === 0) return false;
 
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (!uid) return false;
 
     const participantsRef = ref(db, `users/${uid}/participants`);
@@ -116,8 +116,8 @@ export async function migrateParticipantsIfNeeded(teams) {
 
 // --- Retro Functions ---
 
-export function subscribeToActiveRetro(teamName, callback) {
-    const uid = auth.currentUser?.uid;
+export function subscribeToActiveRetro(teamName, callback, ownerUID) {
+    const uid = ownerUID || auth.currentUser?.uid;
     if (!uid) {
         console.warn('Attempting to subscribe to retro while not logged in!');
         return () => {};
@@ -129,7 +129,7 @@ export function subscribeToActiveRetro(teamName, callback) {
 }
 
 export async function createRetro(teamName, { categories, timerDuration }) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (!uid) return;
     const activeRef = ref(db, `users/${uid}/retros/${teamName}/active`);
     await set(activeRef, {
@@ -142,7 +142,7 @@ export async function createRetro(teamName, { categories, timerDuration }) {
 }
 
 export async function completeRetro(teamName) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (!uid) return;
     const activeRef = ref(db, `users/${uid}/retros/${teamName}/active`);
     const snapshot = await get(activeRef);
@@ -160,14 +160,14 @@ export async function completeRetro(teamName) {
 }
 
 export async function addRetroCategory(teamName, category) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (!uid) return;
     const catRef = ref(db, `users/${uid}/retros/${teamName}/active/categories/${category.id}`);
     await set(catRef, category);
 }
 
 export async function updateRetroCategory(teamName, categoryId, updates) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (!uid) return;
     const catRef = ref(db, `users/${uid}/retros/${teamName}/active/categories/${categoryId}`);
     const snapshot = await get(catRef);
@@ -176,7 +176,7 @@ export async function updateRetroCategory(teamName, categoryId, updates) {
 }
 
 export async function reorderRetroCategories(teamName, orderedIds) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (!uid) return;
     const userRef = ref(db, `users/${uid}`);
     const updates = {};
@@ -187,7 +187,7 @@ export async function reorderRetroCategories(teamName, orderedIds) {
 }
 
 export async function removeRetroCategory(teamName, categoryId) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (!uid) return;
     const userRef = ref(db, `users/${uid}`);
     const itemsRef = ref(db, `users/${uid}/retros/${teamName}/active/items`);
@@ -206,15 +206,15 @@ export async function removeRetroCategory(teamName, categoryId) {
     await update(userRef, updates);
 }
 
-export async function addRetroItem(teamName, item) {
-    const uid = await getUserUid();
+export async function addRetroItem(teamName, item, ownerUID) {
+    const uid = await resolveUID(ownerUID);
     if (!uid) return;
     const itemRef = ref(db, `users/${uid}/retros/${teamName}/active/items/${item.id}`);
     await set(itemRef, item);
 }
 
-export async function updateRetroItem(teamName, itemId, text) {
-    const uid = await getUserUid();
+export async function updateRetroItem(teamName, itemId, text, ownerUID) {
+    const uid = await resolveUID(ownerUID);
     if (!uid) return;
     const itemRef = ref(db, `users/${uid}/retros/${teamName}/active/items/${itemId}`);
     const snapshot = await get(itemRef);
@@ -222,15 +222,15 @@ export async function updateRetroItem(teamName, itemId, text) {
     await set(itemRef, { ...snapshot.val(), text });
 }
 
-export async function removeRetroItem(teamName, itemId) {
-    const uid = await getUserUid();
+export async function removeRetroItem(teamName, itemId, ownerUID) {
+    const uid = await resolveUID(ownerUID);
     if (!uid) return;
     const itemRef = ref(db, `users/${uid}/retros/${teamName}/active/items/${itemId}`);
     await set(itemRef, null);
 }
 
 export async function clearItemsByCategory(teamName, categoryId) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (!uid) return;
     const itemsRef = ref(db, `users/${uid}/retros/${teamName}/active/items`);
     const snapshot = await get(itemsRef);
@@ -249,7 +249,7 @@ export async function clearItemsByCategory(teamName, categoryId) {
 }
 
 export async function clearAllItemsExceptCategory(teamName, protectedCategoryId) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (!uid) return;
     const itemsRef = ref(db, `users/${uid}/retros/${teamName}/active/items`);
     const snapshot = await get(itemsRef);
@@ -267,8 +267,8 @@ export async function clearAllItemsExceptCategory(teamName, protectedCategoryId)
     }
 }
 
-export async function toggleAgree(teamName, itemId, participantId) {
-    const uid = await getUserUid();
+export async function toggleAgree(teamName, itemId, participantId, ownerUID) {
+    const uid = await resolveUID(ownerUID);
     if (!uid) return;
     const agreeRef = ref(db, `users/${uid}/retros/${teamName}/active/items/${itemId}/agreedBy/${participantId}`);
     const snapshot = await get(agreeRef);
@@ -276,7 +276,7 @@ export async function toggleAgree(teamName, itemId, participantId) {
 }
 
 export async function updateRetroTimer(teamName, timerUpdates) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (!uid) return;
     const activeRef = ref(db, `users/${uid}/retros/${teamName}/active`);
     const snapshot = await get(activeRef);
@@ -290,7 +290,7 @@ export async function updateRetroTimer(teamName, timerUpdates) {
 }
 
 export async function getPreviousRetro(teamName) {
-    const uid = await getUserUid();
+    const uid = await resolveUID();
     if (!uid) return null;
     const historyRef = ref(db, `users/${uid}/retros/${teamName}/history`);
     const snapshot = await get(historyRef);

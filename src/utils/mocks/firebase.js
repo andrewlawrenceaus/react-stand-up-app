@@ -29,7 +29,12 @@ export const auth = {
   },
   // Private helpers used by the firebase/auth mock
   _signIn(email) {
-    currentUser = { uid: `mock-uid-${email.replace(/\W/g, '')}`, email }
+    currentUser = { uid: `mock-uid-${email.replace(/\W/g, '')}`, email, isAnonymous: false }
+    listeners.forEach((cb) => cb(currentUser))
+    return Promise.resolve({ user: currentUser })
+  },
+  _signInAnonymously() {
+    currentUser = { uid: `anon-uid-${Date.now()}`, isAnonymous: true }
     listeners.forEach((cb) => cb(currentUser))
     return Promise.resolve({ user: currentUser })
   },

@@ -1,12 +1,25 @@
 import { render, screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import RunStandUp from './RunStandUp'
+import { AuthContext } from '../store/AuthProvider'
+
+jest.mock('../../utils/db-utils-tokens', () => ({
+  generateAllInviteTokens: jest.fn().mockResolvedValue([]),
+}))
 
 const participants = [
   { id: '1', name: 'Alice', photoUrl: '' },
   { id: '2', name: 'Bob', photoUrl: '' },
   { id: '3', name: 'Charlie', photoUrl: '' },
 ]
+
+function renderStandUp() {
+  return render(
+    <AuthContext.Provider value={{ user: { uid: 'test-uid' }, isParticipant: false, participantSession: null, sessionLoading: false }}>
+      <RunStandUp team="Alpha" participants={participants} />
+    </AuthContext.Provider>
+  )
+}
 
 beforeEach(() => {
   // Make Math.random deterministic: always picks index 0
@@ -19,25 +32,25 @@ afterEach(() => {
 
 describe('RunStandUp', () => {
   it('renders the team name heading', () => {
-    render(<RunStandUp team="Alpha" participants={participants} />)
+    renderStandUp()
     expect(screen.getByText('Alpha Stand Up')).toBeInTheDocument()
   })
 
   it('shows Start Stand Up button in Ready state', () => {
-    render(<RunStandUp team="Alpha" participants={participants} />)
+    renderStandUp()
     expect(screen.getByRole('button', { name: /start stand up/i })).toBeInTheDocument()
   })
 
   it('transitions to In Progress after clicking Start Stand Up', async () => {
     const user = userEvent.setup()
-    render(<RunStandUp team="Alpha" participants={participants} />)
+    renderStandUp()
     await user.click(screen.getByRole('button', { name: /start stand up/i }))
     expect(screen.getByRole('button', { name: /pass the duck/i })).toBeInTheDocument()
   })
 
   it('shows first participant after starting (with mocked random)', async () => {
     const user = userEvent.setup()
-    render(<RunStandUp team="Alpha" participants={participants} />)
+    renderStandUp()
     await user.click(screen.getByRole('button', { name: /start stand up/i }))
     // With Math.random = 0, splice(0, 1) always picks index 0, resulting in original order
     expect(screen.getByText('Alice')).toBeInTheDocument()
@@ -45,7 +58,7 @@ describe('RunStandUp', () => {
 
   it('Pass the Duck removes current participant and shows next', async () => {
     const user = userEvent.setup()
-    render(<RunStandUp team="Alpha" participants={participants} />)
+    renderStandUp()
     await user.click(screen.getByRole('button', { name: /start stand up/i }))
     expect(screen.getByText('Alice')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /pass the duck/i }))
@@ -54,7 +67,7 @@ describe('RunStandUp', () => {
 
   it('Not Ready moves current participant to end of queue', async () => {
     const user = userEvent.setup()
-    render(<RunStandUp team="Alpha" participants={participants} />)
+    renderStandUp()
     await user.click(screen.getByRole('button', { name: /start stand up/i }))
     expect(screen.getByText('Alice')).toBeInTheDocument()
     await user.click(screen.getByRole('button', { name: /not ready/i }))
@@ -64,7 +77,7 @@ describe('RunStandUp', () => {
 
   it('transitions to Complete after all participants pass', async () => {
     const user = userEvent.setup()
-    render(<RunStandUp team="Alpha" participants={participants} />)
+    renderStandUp()
     await user.click(screen.getByRole('button', { name: /start stand up/i }))
     for (let i = 0; i < participants.length; i++) {
       await user.click(screen.getByRole('button', { name: /pass the duck/i }))
@@ -74,12 +87,17 @@ describe('RunStandUp', () => {
 
   it('Reset Stand Up returns to Ready state', async () => {
     const user = userEvent.setup()
-    render(<RunStandUp team="Alpha" participants={participants} />)
+    renderStandUp()
     await user.click(screen.getByRole('button', { name: /start stand up/i }))
     for (let i = 0; i < participants.length; i++) {
       await user.click(screen.getByRole('button', { name: /pass the duck/i }))
     }
     await user.click(screen.getByRole('button', { name: /reset stand up/i }))
     expect(screen.getByRole('button', { name: /start stand up/i })).toBeInTheDocument()
+  })
+
+  it('shows Share Links button', () => {
+    renderStandUp()
+    expect(screen.getByRole('button', { name: /share links/i })).toBeInTheDocument()
   })
 })

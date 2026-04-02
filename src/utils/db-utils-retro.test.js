@@ -86,6 +86,14 @@ describe('addRetroItem', () => {
     )
   })
 
+  it('uses ownerUID param when provided', async () => {
+    await addRetroItem(TEAM, item, 'other-owner-uid')
+    expect(set).toHaveBeenCalledWith(
+      { path: `users/other-owner-uid/retros/${TEAM}/active/items/${item.id}` },
+      item
+    )
+  })
+
   it('does nothing when not authenticated', async () => {
     auth.currentUser = null
     await addRetroItem(TEAM, item)
@@ -144,6 +152,15 @@ describe('toggleAgree', () => {
     expect(set).toHaveBeenCalledWith(
       { path: `users/${UID}/retros/${TEAM}/active/items/item-1/agreedBy/p2` },
       null
+    )
+  })
+
+  it('uses ownerUID param when provided', async () => {
+    get.mockResolvedValue({ exists: () => false })
+    await toggleAgree(TEAM, 'item-1', 'p2', 'other-owner-uid')
+    expect(set).toHaveBeenCalledWith(
+      { path: `users/other-owner-uid/retros/${TEAM}/active/items/item-1/agreedBy/p2` },
+      true
     )
   })
 })
@@ -305,6 +322,18 @@ describe('subscribeToActiveRetro', () => {
     onValue.mockReturnValue(unsubscribe)
     const result = subscribeToActiveRetro(TEAM, jest.fn())
     expect(result).toBe(unsubscribe)
+  })
+
+  it('uses ownerUID param when provided', () => {
+    onValue.mockImplementation((_ref, cb) => {
+      cb({ exists: () => false, val: () => null })
+      return jest.fn()
+    })
+    subscribeToActiveRetro(TEAM, jest.fn(), 'other-owner-uid')
+    expect(ref).toHaveBeenCalledWith(
+      expect.anything(),
+      `users/other-owner-uid/retros/${TEAM}/active`
+    )
   })
 
   it('returns a no-op and does not call onValue when not authenticated', () => {

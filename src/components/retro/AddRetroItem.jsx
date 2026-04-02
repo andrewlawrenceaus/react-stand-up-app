@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { addRetroItem } from '../../utils/db-utils';
 
-export default function AddRetroItem({ teamName, categoryId, currentParticipantId }) {
+export default function AddRetroItem({ teamName, categoryId, currentParticipantId, ownerUID }) {
   const [text, setText] = useState('');
 
   const handleSubmit = async (e) => {
@@ -14,7 +14,7 @@ export default function AddRetroItem({ teamName, categoryId, currentParticipantI
       text: trimmed,
       authorId: currentParticipantId,
       createdAt: Date.now(),
-    });
+    }, ownerUID);
     setText('');
   };
 

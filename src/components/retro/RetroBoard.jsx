@@ -20,25 +20,27 @@ function clearSessionParticipant(teamName) {
   sessionStorage.removeItem(`retro-participant-${teamName}`);
 }
 
-export default function RetroBoard({ teamName, participants }) {
+export default function RetroBoard({ teamName, participants, isParticipant = false, participantId, ownerUID }) {
   const [retroState, setRetroState] = useState(undefined);
   const [selectedParticipantId, setSelectedParticipantId] = useState(
-    () => getSessionParticipant(teamName)
+    () => isParticipant ? participantId : getSessionParticipant(teamName)
   );
 
   useEffect(() => {
     setRetroState(undefined);
-    const stored = getSessionParticipant(teamName);
-    setSelectedParticipantId(stored);
+    if (!isParticipant) {
+      const stored = getSessionParticipant(teamName);
+      setSelectedParticipantId(stored);
+    }
     const unsubscribe = subscribeToActiveRetro(teamName, (data) => {
       setRetroState(data);
-    });
+    }, ownerUID);
     return unsubscribe;
-  }, [teamName]);
+  }, [teamName, isParticipant, ownerUID]);
 
-  const handleSelectParticipant = useCallback((participantId) => {
-    setSessionParticipant(teamName, participantId);
-    setSelectedParticipantId(participantId);
+  const handleSelectParticipant = useCallback((id) => {
+    setSessionParticipant(teamName, id);
+    setSelectedParticipantId(id);
   }, [teamName]);
 
   const handleChangeParticipant = useCallback(() => {
@@ -56,8 +58,15 @@ export default function RetroBoard({ teamName, participants }) {
     return <div className="retro-loading">Loading...</div>;
   }
 
-  // No active retro — show setup
+  // No active retro
   if (!retroState) {
+    if (isParticipant) {
+      return (
+        <div className="retro-waiting">
+          Waiting for the team lead to start the retro…
+        </div>
+      );
+    }
     return <RetroSetup teamName={teamName} participants={participants} />;
   }
 
@@ -66,6 +75,14 @@ export default function RetroBoard({ teamName, participants }) {
   const isValidSelection = selectedParticipantId && validParticipantIds.includes(selectedParticipantId);
 
   if (!isValidSelection) {
+    if (isParticipant) {
+      // Participant ID not in team — shouldn't happen in normal flow
+      return (
+        <div className="retro-waiting">
+          Your participant profile was not found in this team.
+        </div>
+      );
+    }
     return (
       <RetroParticipantSelect
         participants={participants}
@@ -101,19 +118,22 @@ export default function RetroBoard({ teamName, participants }) {
       <div className="retro-board__header">
         <div className="retro-board__identity">
           You are: <strong>{currentParticipant.name}</strong>
-          <button
-            className="retro-board__change-btn"
-            onClick={handleChangeParticipant}
-          >
-            Change
-          </button>
+          {!isParticipant && (
+            <button
+              className="retro-board__change-btn"
+              onClick={handleChangeParticipant}
+            >
+              Change
+            </button>
+          )}
         </div>
-        <RetroTimer teamName={teamName} retroState={retroState} />
+        <RetroTimer teamName={teamName} retroState={retroState} isParticipant={isParticipant} />
       </div>
 
       <RetroActions
         teamName={teamName}
         protectedCategoryId={protectedCategory?.id}
+        isParticipant={isParticipant}
       />
 
       <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
@@ -128,9 +148,11 @@ export default function RetroBoard({ teamName, participants }) {
                 participants={participants}
                 currentParticipantId={selectedParticipantId}
                 categoryCount={categories.length}
+                isParticipant={isParticipant}
+                ownerUID={ownerUID}
               />
             ))}
-            <AddCategoryButton teamName={teamName} nextOrder={categories.length} />
+            {!isParticipant && <AddCategoryButton teamName={teamName} nextOrder={categories.length} />}
           </div>
         </SortableContext>
       </DndContext>

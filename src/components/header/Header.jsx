@@ -14,10 +14,35 @@ export default function Header() {
     navigate('/');
   };
 
+  const handleLeave = async () => {
+    await signOut(auth);
+    navigate('/auth?mode=login');
+  };
+
   const navLinkClass = ({ isActive }) =>
     isActive
       ? 'site-header__link site-header__link--active'
       : 'site-header__link';
+
+  if (authCtx.isParticipant) {
+    return (
+      <header className="site-header">
+        <div className="site-header__inner">
+          <span className="site-header__logo">Stand-Up Duck</span>
+          <nav className="site-header__nav">
+            <NavLink to="retro" className={navLinkClass}>
+              Retro
+            </NavLink>
+          </nav>
+          <div className="site-header__actions">
+            <button className="site-header__auth-btn" onClick={handleLeave}>
+              Leave
+            </button>
+          </div>
+        </div>
+      </header>
+    );
+  }
 
   return (
     <header className="site-header">

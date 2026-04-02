@@ -8,10 +8,13 @@ export default function ParticipantListItem({
   onDelete,
   onPhotoChange = () => {},
   onPhotoRemove = () => {},
+  onGenerateToken = () => {},
+  onRevokeToken = () => {},
   animationDelay = 0,
 }) {
   const [isUploading, setIsUploading] = useState(false);
   const [fileSizeError, setFileSizeError] = useState(false);
+  const [linkCopied, setLinkCopied] = useState(false);
   const fileInputRef = useRef(null);
 
   const handleFileChange = async (event) => {
@@ -31,6 +34,13 @@ export default function ParticipantListItem({
       setIsUploading(false);
       if (fileInputRef.current) fileInputRef.current.value = '';
     }
+  };
+
+  const handleCopyLink = async () => {
+    const link = `${window.location.origin}/join/${participant.inviteToken}`;
+    await navigator.clipboard.writeText(link);
+    setLinkCopied(true);
+    setTimeout(() => setLinkCopied(false), 2000);
   };
 
   return (
@@ -90,6 +100,35 @@ export default function ParticipantListItem({
       {fileSizeError && (
         <span className="add-form-size-error">Max 5 MB.</span>
       )}
+
+      <div className="crew-card__invite">
+        {participant.inviteToken ? (
+          <>
+            <button
+              className="crew-card__invite-btn"
+              type="button"
+              onClick={handleCopyLink}
+            >
+              {linkCopied ? 'Copied!' : 'Copy Link'}
+            </button>
+            <button
+              className="crew-card__invite-btn crew-card__invite-btn--revoke"
+              type="button"
+              onClick={() => onRevokeToken(participant.id, participant.inviteToken)}
+            >
+              Revoke
+            </button>
+          </>
+        ) : (
+          <button
+            className="crew-card__invite-btn"
+            type="button"
+            onClick={() => onGenerateToken(participant.id)}
+          >
+            Generate Link
+          </button>
+        )}
+      </div>
     </div>
   );
 }

@@ -65,7 +65,8 @@ describe('AddRetroItem — submit', () => {
         categoryId: CATEGORY_ID,
         text: 'Great teamwork',
         authorId: PARTICIPANT_ID,
-      })
+      }),
+      undefined
     )
   })
 

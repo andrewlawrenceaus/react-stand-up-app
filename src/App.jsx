@@ -14,6 +14,7 @@ import AuthenticationPage, {
 } from './pages/Authentication';
 import ParticipantsPage from './pages/Participants';
 import RetroPage from './pages/Retro';
+import JoinPage from './pages/JoinPage';
 import { getTeamsAndParticipants } from './utils/db-utils';
 import { AuthProvider } from './components/store/AuthProvider';
 
@@ -32,6 +33,10 @@ import { AuthProvider } from './components/store/AuthProvider';
 12. Update teams state to subscribe for DB updates
 */
 const router = createBrowserRouter([
+  {
+    path: '/join/:token',
+    element: <JoinPage />,
+  },
   {
     path: '/',
     id: 'root',

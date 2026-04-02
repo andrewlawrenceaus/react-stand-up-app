@@ -11,8 +11,8 @@ import { updateRetroTimer } from '../../utils/db-utils'
 const TEAM = 'Alpha'
 const NOW = 1_000_000_000_000
 
-function renderTimer(retroState) {
-  return render(<RetroTimer teamName={TEAM} retroState={retroState} />)
+function renderTimer(retroState, isParticipant = false) {
+  return render(<RetroTimer teamName={TEAM} retroState={retroState} isParticipant={isParticipant} />)
 }
 
 beforeEach(() => {
@@ -96,6 +96,27 @@ describe('RetroTimer — running', () => {
   })
 })
 
+describe('RetroTimer — participant mode', () => {
+  const retroState = { timerDuration: 600, timerStartedAt: null }
+
+  it('shows the timer display', () => {
+    renderTimer(retroState, true)
+    expect(screen.getByText('10:00')).toBeInTheDocument()
+  })
+
+  it('does not show Start button for participants', () => {
+    renderTimer(retroState, true)
+    expect(screen.queryByRole('button', { name: /start/i })).not.toBeInTheDocument()
+  })
+
+  it('does not show Pause or Reset buttons for participants when running', () => {
+    const runningState = { timerDuration: 600, timerStartedAt: NOW - 60_000 }
+    renderTimer(runningState, true)
+    expect(screen.queryByRole('button', { name: /pause/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /reset/i })).not.toBeInTheDocument()
+  })
+})
+
 describe('RetroTimer — expired', () => {
   // Started 700 seconds ago, 600-second duration → expired by 100 seconds
   const retroState = { timerDuration: 600, timerStartedAt: NOW - 700_000 }
@@ -129,5 +150,26 @@ describe('RetroTimer — expired', () => {
     renderTimer(retroState)
     await user.click(screen.getByRole('button', { name: /reset/i }))
     expect(updateRetroTimer).toHaveBeenCalledWith(TEAM, { timerStartedAt: null })
+  })
+})
+
+describe('RetroTimer — participant mode', () => {
+  const retroState = { timerDuration: 600, timerStartedAt: null }
+
+  it('shows the timer display', () => {
+    renderTimer(retroState, true)
+    expect(screen.getByText('10:00')).toBeInTheDocument()
+  })
+
+  it('does not show Start button for participants', () => {
+    renderTimer(retroState, true)
+    expect(screen.queryByRole('button', { name: /start/i })).not.toBeInTheDocument()
+  })
+
+  it('does not show Pause or Reset buttons for participants when running', () => {
+    const runningState = { timerDuration: 600, timerStartedAt: NOW - 60_000 }
+    renderTimer(runningState, true)
+    expect(screen.queryByRole('button', { name: /pause/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /reset/i })).not.toBeInTheDocument()
   })
 })

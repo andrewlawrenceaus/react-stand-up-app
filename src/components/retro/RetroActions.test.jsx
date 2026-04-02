@@ -12,8 +12,8 @@ import { completeRetro, clearAllItemsExceptCategory } from '../../utils/db-utils
 const TEAM = 'Alpha'
 const PROTECTED_CATEGORY_ID = 'cat-action'
 
-function renderActions({ protectedCategoryId = PROTECTED_CATEGORY_ID } = {}) {
-  return render(<RetroActions teamName={TEAM} protectedCategoryId={protectedCategoryId} />)
+function renderActions({ protectedCategoryId = PROTECTED_CATEGORY_ID, isParticipant = false } = {}) {
+  return render(<RetroActions teamName={TEAM} protectedCategoryId={protectedCategoryId} isParticipant={isParticipant} />)
 }
 
 beforeEach(() => {
@@ -71,5 +71,22 @@ describe('RetroActions — clear all', () => {
     renderActions()
     await user.click(screen.getByRole('button', { name: /clear all/i }))
     expect(clearAllItemsExceptCategory).toHaveBeenCalledWith(TEAM, PROTECTED_CATEGORY_ID)
+  })
+})
+
+describe('RetroActions — participant mode', () => {
+  it('renders nothing when isParticipant is true', () => {
+    const { container } = renderActions({ isParticipant: true })
+    expect(container).toBeEmptyDOMElement()
+  })
+
+  it('does not show Complete Retro button for participants', () => {
+    renderActions({ isParticipant: true })
+    expect(screen.queryByRole('button', { name: /complete retro/i })).not.toBeInTheDocument()
+  })
+
+  it('does not show Clear All button for participants', () => {
+    renderActions({ isParticipant: true })
+    expect(screen.queryByRole('button', { name: /clear all/i })).not.toBeInTheDocument()
   })
 })

@@ -23,3 +23,7 @@ export function createUserWithEmailAndPassword(_auth, email) {
 export function onAuthStateChanged(_auth, callback) {
   return auth.onAuthStateChanged(callback)
 }
+
+export function signInAnonymously() {
+  return auth._signInAnonymously()
+}

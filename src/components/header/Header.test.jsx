@@ -12,9 +12,9 @@ jest.mock('firebase/auth', () => ({
   signOut: jest.fn().mockResolvedValue(undefined),
 }))
 
-function renderHeader({ user = null } = {}) {
+function renderHeader({ user = null, isParticipant = false } = {}) {
   return render(
-    <AuthContext.Provider value={{ user }}>
+    <AuthContext.Provider value={{ user, isParticipant, participantSession: null, sessionLoading: false }}>
       <MemoryRouter>
         <Header />
       </MemoryRouter>
@@ -22,7 +22,7 @@ function renderHeader({ user = null } = {}) {
   )
 }
 
-describe('Header', () => {
+describe('Header — team lead', () => {
   it('renders the app title "Stand-Up Duck"', () => {
     renderHeader()
     expect(screen.getByText('Stand-Up Duck')).toBeInTheDocument()
@@ -55,6 +55,31 @@ describe('Header', () => {
     const { signOut } = require('firebase/auth')
     renderHeader({ user: { uid: 'test-uid' } })
     await user.click(screen.getByRole('button', { name: /log out/i }))
+    expect(signOut).toHaveBeenCalled()
+  })
+})
+
+describe('Header — participant', () => {
+  it('shows only the Retro nav link', () => {
+    renderHeader({ user: { uid: 'anon', isAnonymous: true }, isParticipant: true })
+    expect(screen.getByRole('link', { name: /retro/i })).toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /manage teams/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /participants/i })).not.toBeInTheDocument()
+    expect(screen.queryByRole('link', { name: /run stand-up/i })).not.toBeInTheDocument()
+  })
+
+  it('shows a Leave button instead of Log Out', () => {
+    renderHeader({ user: { uid: 'anon', isAnonymous: true }, isParticipant: true })
+    expect(screen.getByRole('button', { name: /leave/i })).toBeInTheDocument()
+    expect(screen.queryByRole('button', { name: /log out/i })).not.toBeInTheDocument()
+  })
+
+  it('calls signOut when Leave is clicked', async () => {
+    const user = userEvent.setup()
+    const { signOut } = require('firebase/auth')
+    jest.clearAllMocks()
+    renderHeader({ user: { uid: 'anon', isAnonymous: true }, isParticipant: true })
+    await user.click(screen.getByRole('button', { name: /leave/i }))
     expect(signOut).toHaveBeenCalled()
   })
 })

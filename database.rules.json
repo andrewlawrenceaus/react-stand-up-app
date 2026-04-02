@@ -1,0 +1,44 @@
+{
+  "rules": {
+    "users": {
+      "$uid": {
+        "teams": {
+          ".read": "auth != null && (auth.uid == $uid || root.child('participantSessions').child(auth.uid).child('ownerUID').val() == $uid)",
+          ".write": "auth != null && auth.uid == $uid && !auth.token.firebase.sign_in_provider.matches('anonymous')"
+        },
+        "participants": {
+          ".read": "auth != null && (auth.uid == $uid || root.child('participantSessions').child(auth.uid).child('ownerUID').val() == $uid)",
+          ".write": "auth != null && auth.uid == $uid && !auth.token.firebase.sign_in_provider.matches('anonymous')"
+        },
+        "retros": {
+          ".read": "auth != null && (auth.uid == $uid || root.child('participantSessions').child(auth.uid).child('ownerUID').val() == $uid)",
+          "$teamName": {
+            "active": {
+              "items": {
+                ".write": "auth != null && (auth.uid == $uid || root.child('participantSessions').child(auth.uid).child('ownerUID').val() == $uid)"
+              },
+              "$other": {
+                ".write": "auth != null && auth.uid == $uid"
+              }
+            },
+            "history": {
+              ".write": "auth != null && auth.uid == $uid"
+            }
+          }
+        }
+      }
+    },
+    "participantTokens": {
+      ".read": true,
+      "$token": {
+        ".write": "auth != null && !auth.token.firebase.sign_in_provider.matches('anonymous') && auth.uid == newData.child('ownerUID').val()"
+      }
+    },
+    "participantSessions": {
+      "$anonymousUID": {
+        ".read": "auth != null && auth.uid == $anonymousUID",
+        ".write": "auth != null && auth.uid == $anonymousUID && newData.hasChildren(['ownerUID', 'participantId', 'token']) && root.child('participantTokens').child(newData.child('token').val()).child('ownerUID').val() == newData.child('ownerUID').val() && root.child('participantTokens').child(newData.child('token').val()).child('participantId').val() == newData.child('participantId').val()"
+      }
+    }
+  }
+}

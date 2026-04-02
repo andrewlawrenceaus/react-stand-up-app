@@ -48,6 +48,18 @@ function renderBoard() {
   return render(<RetroBoard teamName={TEAM} participants={participants} />)
 }
 
+function renderParticipantBoard(participantId = 'p1') {
+  return render(
+    <RetroBoard
+      teamName={TEAM}
+      participants={participants}
+      isParticipant={true}
+      participantId={participantId}
+      ownerUID="owner-uid"
+    />
+  )
+}
+
 beforeEach(() => {
   jest.clearAllMocks()
   sessionStorage.clear()
@@ -129,5 +141,47 @@ describe('RetroBoard — active board', () => {
     await user.click(screen.getByRole('button', { name: /change/i }))
     expect(screen.getByText('Who are you?')).toBeInTheDocument()
     expect(sessionStorage.getItem(`retro-participant-${TEAM}`)).toBeNull()
+  })
+})
+
+describe('RetroBoard — participant mode (no active retro)', () => {
+  it('shows Waiting message instead of RetroSetup', () => {
+    mockSubscribe(null)
+    renderParticipantBoard()
+    expect(screen.getByText(/waiting for the team lead/i)).toBeInTheDocument()
+    expect(screen.queryByText('Start a Retro')).not.toBeInTheDocument()
+  })
+})
+
+describe('RetroBoard — participant mode (active retro)', () => {
+  beforeEach(() => {
+    mockSubscribe(activeRetroState)
+  })
+
+  it('auto-selects the participant without showing Who are you?', () => {
+    renderParticipantBoard('p1')
+    expect(screen.queryByText('Who are you?')).not.toBeInTheDocument()
+    expect(screen.getByText('Alice')).toBeInTheDocument()
+  })
+
+  it('does not show the Change button for participants', () => {
+    renderParticipantBoard('p1')
+    expect(screen.queryByRole('button', { name: /change/i })).not.toBeInTheDocument()
+  })
+
+  it('does not show the Add Category button for participants', () => {
+    renderParticipantBoard('p1')
+    expect(screen.queryByRole('button', { name: /add category/i })).not.toBeInTheDocument()
+  })
+
+  it('does not show the Complete Retro button for participants', () => {
+    renderParticipantBoard('p1')
+    expect(screen.queryByRole('button', { name: /complete retro/i })).not.toBeInTheDocument()
+  })
+
+  it('renders category columns', () => {
+    renderParticipantBoard('p1')
+    expect(screen.getByText('What went well')).toBeInTheDocument()
+    expect(screen.getByText('Action Items')).toBeInTheDocument()
   })
 })

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { completeRetro, clearAllItemsExceptCategory } from '../../utils/db-utils';
 
-export default function RetroActions({ teamName, protectedCategoryId }) {
+export default function RetroActions({ teamName, protectedCategoryId, isParticipant }) {
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
 
   const handleComplete = async () => {
@@ -14,6 +14,8 @@ export default function RetroActions({ teamName, protectedCategoryId }) {
       await clearAllItemsExceptCategory(teamName, protectedCategoryId);
     }
   };
+
+  if (isParticipant) return null;
 
   return (
     <div className="retro-actions">

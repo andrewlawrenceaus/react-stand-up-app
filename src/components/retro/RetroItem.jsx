@@ -2,7 +2,7 @@ import { useState } from 'react';
 import InitialsAvatar from '../participants/InitialsAvatar';
 import { toggleAgree, updateRetroItem, removeRetroItem } from '../../utils/db-utils';
 
-export default function RetroItem({ teamName, item, participants, currentParticipantId }) {
+export default function RetroItem({ teamName, item, participants, currentParticipantId, ownerUID }) {
   const [isEditing, setIsEditing] = useState(false);
   const [editText, setEditText] = useState(item.text);
   const [showDeleteConfirm, setShowDeleteConfirm] = useState(false);
@@ -16,13 +16,13 @@ export default function RetroItem({ teamName, item, participants, currentPartici
   const isAuthor = item.authorId === currentParticipantId;
 
   const handleToggleAgree = () => {
-    toggleAgree(teamName, item.id, currentParticipantId);
+    toggleAgree(teamName, item.id, currentParticipantId, ownerUID);
   };
 
   const handleEditSave = async () => {
     const trimmed = editText.trim();
     if (trimmed && trimmed !== item.text) {
-      await updateRetroItem(teamName, item.id, trimmed);
+      await updateRetroItem(teamName, item.id, trimmed, ownerUID);
     }
     setIsEditing(false);
   };
@@ -36,7 +36,7 @@ export default function RetroItem({ teamName, item, participants, currentPartici
   };
 
   const handleDelete = () => {
-    removeRetroItem(teamName, item.id);
+    removeRetroItem(teamName, item.id, ownerUID);
   };
 
   return (

@@ -101,7 +101,7 @@ describe('RetroItem — edit', () => {
     const textarea = screen.getByRole('textbox')
     await user.clear(textarea)
     await user.type(textarea, 'Updated text{Enter}')
-    expect(updateRetroItem).toHaveBeenCalledWith(TEAM, 'item-1', 'Updated text')
+    expect(updateRetroItem).toHaveBeenCalledWith(TEAM, 'item-1', 'Updated text', undefined)
   })
 
   it('pressing Escape cancels editing without saving', async () => {
@@ -139,7 +139,7 @@ describe('RetroItem — delete', () => {
     renderItem()
     await user.click(screen.getByRole('button', { name: /delete item/i }))
     await user.click(screen.getByRole('button', { name: /confirm delete/i }))
-    expect(removeRetroItem).toHaveBeenCalledWith(TEAM, 'item-1')
+    expect(removeRetroItem).toHaveBeenCalledWith(TEAM, 'item-1', undefined)
   })
 
   it('cancelling delete does not call removeRetroItem', async () => {
@@ -165,7 +165,7 @@ describe('RetroItem — agree', () => {
     const user = userEvent.setup()
     renderItem({ currentParticipantId: OTHER_ID })
     await user.click(screen.getByRole('button', { name: /agree/i }))
-    expect(toggleAgree).toHaveBeenCalledWith(TEAM, 'item-1', OTHER_ID)
+    expect(toggleAgree).toHaveBeenCalledWith(TEAM, 'item-1', OTHER_ID, undefined)
   })
 
   it('shows "Agreed" when current participant has already agreed', () => {

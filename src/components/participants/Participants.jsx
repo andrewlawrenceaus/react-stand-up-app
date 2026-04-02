@@ -1,11 +1,14 @@
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import AddParticipant from './AddParticipant';
 import ParticipantListItem from './ParticipantListItem';
 import { writeParticipants } from '../../utils/db-utils';
+import { generateInviteToken, revokeInviteToken } from '../../utils/db-utils-tokens';
+import { AuthContext } from '../store/AuthProvider';
 import './participants.css';
 
 export default function Participants({ initialParticipants }) {
   const [participants, setParticipants] = useState(initialParticipants || {});
+  const { user } = useContext(AuthContext);
 
   const handleAdd = async (participant) => {
     const updatedParticipants = { ...participants, [participant.id]: participant };
@@ -30,6 +33,22 @@ export default function Participants({ initialParticipants }) {
     const updated = { ...participants, [participantId]: { ...participants[participantId], photoUrl: '' } };
     setParticipants(updated);
     await writeParticipants(updated);
+  };
+
+  const handleGenerateToken = async (participantId) => {
+    const token = await generateInviteToken(user.uid, participantId);
+    setParticipants(prev => ({
+      ...prev,
+      [participantId]: { ...prev[participantId], inviteToken: token },
+    }));
+  };
+
+  const handleRevokeToken = async (participantId, token) => {
+    await revokeInviteToken(user.uid, participantId, token);
+    setParticipants(prev => ({
+      ...prev,
+      [participantId]: { ...prev[participantId], inviteToken: null },
+    }));
   };
 
   const participantList = Object.values(participants);
@@ -58,6 +77,8 @@ export default function Participants({ initialParticipants }) {
                 onDelete={handleDelete}
                 onPhotoChange={handlePhotoChange}
                 onPhotoRemove={handlePhotoRemove}
+                onGenerateToken={handleGenerateToken}
+                onRevokeToken={handleRevokeToken}
                 animationDelay={index * 40}
               />
             ))}

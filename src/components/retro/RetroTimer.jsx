@@ -7,7 +7,7 @@ function formatTime(seconds) {
   return `${String(mins).padStart(2, '0')}:${String(secs).padStart(2, '0')}`;
 }
 
-export default function RetroTimer({ teamName, retroState }) {
+export default function RetroTimer({ teamName, retroState, isParticipant }) {
   const { timerDuration, timerStartedAt } = retroState;
   const [now, setNow] = useState(Date.now());
 
@@ -52,20 +52,22 @@ export default function RetroTimer({ teamName, retroState }) {
       <span className="retro-timer__display">
         {isExpired ? "Time's up!" : formatTime(timerStartedAt ? remaining : timerDuration)}
       </span>
-      <div className="retro-timer__controls">
-        {!timerStartedAt && !isExpired && (
-          <button className="retro-timer__btn" onClick={handleStart}>Start</button>
-        )}
-        {isRunning && (
-          <button className="retro-timer__btn" onClick={handlePause}>Pause</button>
-        )}
-        {isExpired && (
-          <button className="retro-timer__btn" onClick={handleExtend}>+5 min</button>
-        )}
-        {(timerStartedAt || isExpired) && (
-          <button className="retro-timer__btn" onClick={handleReset}>Reset</button>
-        )}
-      </div>
+      {!isParticipant && (
+        <div className="retro-timer__controls">
+          {!timerStartedAt && !isExpired && (
+            <button className="retro-timer__btn" onClick={handleStart}>Start</button>
+          )}
+          {isRunning && (
+            <button className="retro-timer__btn" onClick={handlePause}>Pause</button>
+          )}
+          {isExpired && (
+            <button className="retro-timer__btn" onClick={handleExtend}>+5 min</button>
+          )}
+          {(timerStartedAt || isExpired) && (
+            <button className="retro-timer__btn" onClick={handleReset}>Reset</button>
+          )}
+        </div>
+      )}
     </div>
   );
 }

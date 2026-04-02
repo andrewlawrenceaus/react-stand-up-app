@@ -10,6 +10,8 @@ export default function RetroCategoryColumn({
   items,
   participants,
   currentParticipantId,
+  isParticipant,
+  ownerUID,
 }) {
   const sortedItems = [...items].sort((a, b) => a.createdAt - b.createdAt);
   const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: category.id });
@@ -37,6 +39,7 @@ export default function RetroCategoryColumn({
             item={item}
             participants={participants}
             currentParticipantId={currentParticipantId}
+            ownerUID={ownerUID}
           />
         ))}
       </div>
@@ -45,6 +48,7 @@ export default function RetroCategoryColumn({
         teamName={teamName}
         categoryId={category.id}
         currentParticipantId={currentParticipantId}
+        ownerUID={ownerUID}
       />
     </div>
   );
