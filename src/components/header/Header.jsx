@@ -38,6 +38,9 @@ export default function Header() {
             <NavLink to="retro" className={navLinkClass}>
               Retro
             </NavLink>
+            <NavLink to="pick-representative" className={navLinkClass}>
+              Pick Rep
+            </NavLink>
           </nav>
         )}
 

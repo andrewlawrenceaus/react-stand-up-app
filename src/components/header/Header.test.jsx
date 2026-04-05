@@ -45,6 +45,16 @@ describe('Header', () => {
     expect(screen.getByRole('link', { name: /run stand-up/i })).toBeInTheDocument()
   })
 
+  it('shows Pick Rep link when authenticated', () => {
+    renderHeader({ user: { uid: 'test-uid' } })
+    expect(screen.getByRole('link', { name: /pick rep/i })).toBeInTheDocument()
+  })
+
+  it('does not show Pick Rep link when unauthenticated', () => {
+    renderHeader({ user: null })
+    expect(screen.queryByRole('link', { name: /pick rep/i })).not.toBeInTheDocument()
+  })
+
   it('shows Log Out button when authenticated', () => {
     renderHeader({ user: { uid: 'test-uid' } })
     expect(screen.getByRole('button', { name: /log out/i })).toBeInTheDocument()

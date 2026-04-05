@@ -2,12 +2,8 @@ import { useLoaderData, useSearchParams } from 'react-router-dom';
 import RunStandUp from '../components/run-stand-up/RunStandUp';
 import SelectTeam from '../components/run-stand-up/SelectTeam';
 import MessageCard from '../components/run-stand-up/MessageCard';
+import { resolveTeamParticipants } from '../utils/team-utils';
 import '../components/run-stand-up/run-standup.css';
-
-function resolveTeamParticipants(teamIds, allParticipants) {
-  if (!teamIds || !Array.isArray(teamIds)) return [];
-  return teamIds.map(id => allParticipants[id]).filter(Boolean);
-}
 
 function RunStandUpPage() {
   const { teams, participants } = useLoaderData();
