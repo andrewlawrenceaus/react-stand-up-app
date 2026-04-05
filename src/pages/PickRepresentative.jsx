@@ -1,14 +1,17 @@
+import { useState } from 'react';
 import { useLoaderData, useSearchParams } from 'react-router-dom';
 import SelectTeam from '../components/run-stand-up/SelectTeam';
 import MessageCard from '../components/run-stand-up/MessageCard';
-import RetroBoard from '../components/retro/RetroBoard';
+import SpinningWheel from '../components/pick-representative/SpinningWheel';
+import WinnerDisplay from '../components/pick-representative/WinnerDisplay';
 import { resolveTeamParticipants } from '../utils/team-utils';
-import '../components/retro/retro.css';
+import '../components/pick-representative/pick-representative.css';
 
-export default function RetroPage() {
+export default function PickRepresentativePage() {
   const { teams, participants } = useLoaderData();
   const teamNames = Object.keys(teams).length > 0 ? Object.keys(teams) : null;
   const [searchParams] = useSearchParams();
+  const [winner, setWinner] = useState(null);
 
   let selectedTeam = searchParams.get('team');
   if (!selectedTeam && teamNames && teamNames.length > 0) {
@@ -18,6 +21,14 @@ export default function RetroPage() {
   const resolvedParticipants = selectedTeam
     ? resolveTeamParticipants(teams[selectedTeam], participants)
     : [];
+
+  const handleSpinComplete = (selected) => {
+    setWinner(selected);
+  };
+
+  const handleReset = () => {
+    setWinner(null);
+  };
 
   if (!teamNames) {
     return (
@@ -34,7 +45,7 @@ export default function RetroPage() {
         <SelectTeam teams={teamNames} />
         <MessageCard
           title="Select Team"
-          message="Select a team to start a retro!"
+          message="Select a team to pick a representative!"
         />
       </>
     );
@@ -55,7 +66,21 @@ export default function RetroPage() {
   return (
     <>
       <SelectTeam teams={teamNames} />
-      <RetroBoard teamName={selectedTeam} participants={resolvedParticipants} />
+      <div className="pick-rep__page">
+        <div className="pick-rep__inner">
+          <div className="standup-header">
+            <h2 className="standup-header__title">Pick a Rep</h2>
+          </div>
+          {winner ? (
+            <WinnerDisplay winner={winner} onReset={handleReset} />
+          ) : (
+            <SpinningWheel
+              participants={resolvedParticipants}
+              onSpinComplete={handleSpinComplete}
+            />
+          )}
+        </div>
+      </div>
     </>
   );
 }

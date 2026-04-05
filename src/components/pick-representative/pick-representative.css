@@ -1,0 +1,51 @@
+/* =============================================
+   Stand-Up Duck — Pick Representative
+   Japanese Stationery theme
+   ============================================= */
+
+/* ---------- Page shell ---------- */
+.pick-rep__page {
+  padding: 3rem 2rem 5rem;
+}
+
+.pick-rep__inner {
+  max-width: 520px;
+  margin: 0 auto;
+}
+
+/* ---------- Wheel area ---------- */
+.pick-rep__wheel-area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
+  margin-top: 1rem;
+}
+
+.pick-rep__canvas {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+
+.pick-rep__spin-btn {
+  font-size: 0.9rem;
+  padding: 0.65rem 2.5rem;
+}
+
+.pick-rep__spin-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* ---------- Winner card ---------- */
+.pick-rep__winner {
+  max-width: 320px;
+  margin: 0 auto;
+  animation: winner-reveal 0.45s ease backwards;
+}
+
+@keyframes winner-reveal {
+  from { opacity: 0; transform: scale(0.92) translateY(12px); }
+  to   { opacity: 1; transform: scale(1) translateY(0); }
+}

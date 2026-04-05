@@ -14,6 +14,7 @@ import AuthenticationPage, {
 } from './pages/Authentication';
 import ParticipantsPage from './pages/Participants';
 import RetroPage from './pages/Retro';
+import PickRepresentativePage from './pages/PickRepresentative';
 import { getTeamsAndParticipants } from './utils/db-utils';
 import { AuthProvider } from './components/store/AuthProvider';
 
@@ -56,6 +57,11 @@ const router = createBrowserRouter([
       {
         path: 'retro',
         element: <RetroPage />,
+        loader: loadStandUps,
+      },
+      {
+        path: 'pick-representative',
+        element: <PickRepresentativePage />,
         loader: loadStandUps,
       },
       {
