@@ -102,6 +102,93 @@ describe('RetroBoard — participant selection', () => {
   })
 })
 
+const retroWithItems = {
+  ...activeRetroState,
+  categories: {
+    'cat-1': { id: 'cat-1', name: 'What went well', order: 0, isProtected: false },
+    'cat-2': { id: 'cat-2', name: 'What to improve', order: 1, isProtected: false },
+    'cat-action': { id: 'cat-action', name: 'Action Items', order: 2, isProtected: true },
+  },
+  items: {
+    'item-1': { id: 'item-1', categoryId: 'cat-1', text: 'Alice item', authorId: 'p1', createdAt: 1 },
+    'item-2': { id: 'item-2', categoryId: 'cat-1', text: 'Bob item', authorId: 'p2', createdAt: 2 },
+  },
+}
+
+describe('RetroBoard — participant filter', () => {
+  beforeEach(() => {
+    sessionStorage.setItem(`retro-participant-${TEAM}`, 'p1')
+    mockSubscribe(retroWithItems)
+  })
+
+  it('shows the filter dropdown with "All participants" as default', () => {
+    renderBoard()
+    const select = screen.getByRole('combobox', { name: /filter/i })
+    expect(select).toBeInTheDocument()
+    expect(select).toHaveValue('')
+  })
+
+  it('shows all items when no filter is applied', () => {
+    renderBoard()
+    expect(screen.getByText('Alice item')).toBeInTheDocument()
+    expect(screen.getByText('Bob item')).toBeInTheDocument()
+  })
+
+  it('filters to only the selected participant items', async () => {
+    const user = userEvent.setup()
+    renderBoard()
+    await user.selectOptions(screen.getByRole('combobox', { name: /filter/i }), 'p2')
+    expect(screen.queryByText('Alice item')).not.toBeInTheDocument()
+    expect(screen.getByText('Bob item')).toBeInTheDocument()
+  })
+
+  it('restores all items when "All participants" is selected', async () => {
+    const user = userEvent.setup()
+    renderBoard()
+    await user.selectOptions(screen.getByRole('combobox', { name: /filter/i }), 'p2')
+    await user.selectOptions(screen.getByRole('combobox', { name: /filter/i }), '')
+    expect(screen.getByText('Alice item')).toBeInTheDocument()
+    expect(screen.getByText('Bob item')).toBeInTheDocument()
+  })
+
+  it('filters across multiple categories', async () => {
+    const user = userEvent.setup()
+    mockSubscribe({
+      ...retroWithItems,
+      items: {
+        'item-1': { id: 'item-1', categoryId: 'cat-1', text: 'Alice cat1', authorId: 'p1', createdAt: 1 },
+        'item-2': { id: 'item-2', categoryId: 'cat-2', text: 'Alice cat2', authorId: 'p1', createdAt: 2 },
+        'item-3': { id: 'item-3', categoryId: 'cat-1', text: 'Bob cat1', authorId: 'p2', createdAt: 3 },
+      },
+    })
+    renderBoard()
+    await user.selectOptions(screen.getByRole('combobox', { name: /filter/i }), 'p1')
+    expect(screen.getByText('Alice cat1')).toBeInTheDocument()
+    expect(screen.getByText('Alice cat2')).toBeInTheDocument()
+    expect(screen.queryByText('Bob cat1')).not.toBeInTheDocument()
+  })
+
+  it('only shows items authored by the participant, not items they agreed with', async () => {
+    const user = userEvent.setup()
+    mockSubscribe({
+      ...retroWithItems,
+      items: {
+        'item-1': {
+          id: 'item-1', categoryId: 'cat-1', text: 'Alice item', authorId: 'p1',
+          createdAt: 1, agreedBy: { p2: true },
+        },
+      },
+    })
+    renderBoard()
+    // Filter by Bob — should not see Alice's item even though Bob agreed with it
+    await user.selectOptions(screen.getByRole('combobox', { name: /filter/i }), 'p2')
+    expect(screen.queryByText('Alice item')).not.toBeInTheDocument()
+    // Filter by Alice — should see her item
+    await user.selectOptions(screen.getByRole('combobox', { name: /filter/i }), 'p1')
+    expect(screen.getByText('Alice item')).toBeInTheDocument()
+  })
+})
+
 describe('RetroBoard — active board', () => {
   beforeEach(() => {
     sessionStorage.setItem(`retro-participant-${TEAM}`, 'p1')

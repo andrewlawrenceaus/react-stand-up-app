@@ -157,7 +157,7 @@ test.describe('Retro', () => {
       await startRetro(page)
       await selectParticipant(page, 'Alice')
       await expect(page.getByText(/you are:/i)).toBeVisible()
-      await expect(page.locator('.retro-board__identity').getByText('Alice')).toBeVisible()
+      await expect(page.locator('.retro-board__identity strong')).toHaveText('Alice')
     })
   })
 
@@ -292,6 +292,66 @@ test.describe('Retro', () => {
       await page.getByRole('button', { name: /clear all \(keep action items\)/i }).click()
       await expect(page.getByText('Should be cleared')).not.toBeVisible()
       await expect(page.getByText('Keep this action')).toBeVisible()
+    })
+  })
+
+  test.describe('Filter by Participant', () => {
+    test.beforeEach(async ({ authenticatedPage: page }) => {
+      await startRetro(page)
+      await selectParticipant(page, 'Alice')
+    })
+
+    test.afterEach(async ({ authenticatedPage: page }) => {
+      await completeActiveRetro(page)
+    })
+
+    test('filter dropdown is visible on the retro board', async ({ authenticatedPage: page }) => {
+      await expect(page.getByRole('combobox', { name: /filter/i })).toBeVisible()
+    })
+
+    test('filtering by participant shows only their items', async ({ authenticatedPage: page }) => {
+      // Alice adds an item
+      const inputs = page.getByPlaceholder(/add an item/i)
+      await inputs.first().fill('Alice\'s idea')
+      await page.getByRole('button', { name: /^add$/i }).first().click()
+      await expect(page.getByText('Alice\'s idea')).toBeVisible()
+
+      // Switch to Bob and add an item
+      await page.getByRole('button', { name: /change/i }).click()
+      await selectParticipant(page, 'Bob')
+      await inputs.first().fill('Bob\'s idea')
+      await page.getByRole('button', { name: /^add$/i }).first().click()
+      await expect(page.getByText('Bob\'s idea')).toBeVisible()
+
+      // Filter by Alice — only Alice's item visible
+      await page.getByRole('combobox', { name: /filter/i }).selectOption('Alice')
+      await expect(page.getByText('Alice\'s idea')).toBeVisible()
+      await expect(page.getByText('Bob\'s idea')).not.toBeVisible()
+
+      // Filter by Bob — only Bob's item visible
+      await page.getByRole('combobox', { name: /filter/i }).selectOption('Bob')
+      await expect(page.getByText('Bob\'s idea')).toBeVisible()
+      await expect(page.getByText('Alice\'s idea')).not.toBeVisible()
+    })
+
+    test('"All participants" shows all items', async ({ authenticatedPage: page }) => {
+      // Alice adds an item
+      const inputs = page.getByPlaceholder(/add an item/i)
+      await inputs.first().fill('Alice\'s idea')
+      await page.getByRole('button', { name: /^add$/i }).first().click()
+
+      // Switch to Bob and add an item
+      await page.getByRole('button', { name: /change/i }).click()
+      await selectParticipant(page, 'Bob')
+      await inputs.first().fill('Bob\'s idea')
+      await page.getByRole('button', { name: /^add$/i }).first().click()
+
+      // Filter by Alice, then clear filter
+      await page.getByRole('combobox', { name: /filter/i }).selectOption('Alice')
+      await expect(page.getByText('Bob\'s idea')).not.toBeVisible()
+      await page.getByRole('combobox', { name: /filter/i }).selectOption('')
+      await expect(page.getByText('Alice\'s idea')).toBeVisible()
+      await expect(page.getByText('Bob\'s idea')).toBeVisible()
     })
   })
 
