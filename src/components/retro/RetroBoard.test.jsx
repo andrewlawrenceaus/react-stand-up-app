@@ -10,6 +10,7 @@ jest.mock('../../utils/db-utils', () => ({
   updateRetroItem: jest.fn().mockResolvedValue(undefined),
   removeRetroItem: jest.fn(),
   toggleAgree: jest.fn(),
+  toggleFinished: jest.fn().mockResolvedValue(undefined),
   updateRetroCategory: jest.fn().mockResolvedValue(undefined),
   removeRetroCategory: jest.fn().mockResolvedValue(undefined),
   clearItemsByCategory: jest.fn().mockResolvedValue(undefined),

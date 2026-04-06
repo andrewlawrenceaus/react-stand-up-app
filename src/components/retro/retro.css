@@ -713,6 +713,11 @@
   margin-bottom: 0.5rem;
 }
 
+.retro-actions > .duck-btn--primary {
+  min-width: 120px;
+  flex: none;
+}
+
 .retro-actions__confirm {
   display: flex;
   align-items: center;
@@ -720,6 +725,116 @@
   font-family: 'Noto Sans JP', sans-serif;
   font-size: 0.82rem;
   color: #7A7468;
+}
+
+.retro-actions__finished-btn {
+  border: 1px solid #5E7B62;
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.78rem;
+  color: #fff;
+  background: #5E7B62;
+  padding: 0.35rem 0.75rem;
+  cursor: pointer;
+  transition: all 0.15s;
+  min-width: 120px;
+}
+
+.retro-actions__finished-btn:hover {
+  background: #4A6650;
+  border-color: #4A6650;
+}
+
+.retro-actions__finished-btn--active {
+  background: #3D5442;
+  border-color: #3D5442;
+  color: #fff;
+}
+
+.retro-actions__finished-btn--active:hover {
+  background: #2E3F31;
+  border-color: #2E3F31;
+  color: #fff;
+}
+
+/* ---------- Board content layout (columns + sidebar) ---------- */
+.retro-board__content {
+  display: flex;
+  gap: 1rem;
+  align-items: flex-start;
+}
+
+.retro-board__content .retro-board__columns {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ---------- Participant Sidebar ---------- */
+.retro-sidebar {
+  flex-shrink: 0;
+  width: 160px;
+  background: #FDFBF7;
+  border: 1px solid #D8CCBF;
+  padding: 0.75rem;
+}
+
+.retro-sidebar__title {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.65rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #A89F96;
+  margin: 0 0 0.65rem;
+}
+
+.retro-sidebar__list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.retro-sidebar__item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.retro-sidebar__avatar {
+  flex-shrink: 0;
+  display: flex;
+}
+
+.retro-sidebar__photo {
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid #D8CCBF;
+}
+
+.retro-sidebar__name {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.75rem;
+  color: #7A7468;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.retro-sidebar__item--finished .retro-sidebar__name {
+  color: #1C1917;
+}
+
+.retro-sidebar__tick {
+  font-size: 0.75rem;
+  color: #5E7B62;
+  font-weight: 600;
+  flex-shrink: 0;
 }
 
 /* ---------- Animations ---------- */

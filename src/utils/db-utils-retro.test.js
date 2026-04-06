@@ -26,6 +26,7 @@ import {
   updateRetroItem,
   removeRetroItem,
   toggleAgree,
+  toggleFinished,
   updateRetroTimer,
   completeRetro,
   clearItemsByCategory,
@@ -344,5 +345,33 @@ describe('reorderRetroCategories', () => {
     auth.currentUser = null
     await reorderRetroCategories(TEAM, ['cat-a', 'cat-b'])
     expect(update).not.toHaveBeenCalled()
+  })
+})
+
+// ─── toggleFinished ───────────────────────────────────────────────────────────
+
+describe('toggleFinished', () => {
+  it('sets to true when participant has not finished', async () => {
+    get.mockResolvedValue({ exists: () => false })
+    await toggleFinished(TEAM, 'p1')
+    expect(set).toHaveBeenCalledWith(
+      { path: `users/${UID}/retros/${TEAM}/active/finishedParticipants/p1` },
+      true
+    )
+  })
+
+  it('sets to null (removes) when participant has already finished', async () => {
+    get.mockResolvedValue({ exists: () => true })
+    await toggleFinished(TEAM, 'p1')
+    expect(set).toHaveBeenCalledWith(
+      { path: `users/${UID}/retros/${TEAM}/active/finishedParticipants/p1` },
+      null
+    )
+  })
+
+  it('does nothing when not authenticated', async () => {
+    auth.currentUser = null
+    await toggleFinished(TEAM, 'p1')
+    expect(set).not.toHaveBeenCalled()
   })
 })
