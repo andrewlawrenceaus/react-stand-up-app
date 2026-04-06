@@ -25,6 +25,7 @@ export default function RetroBoard({ teamName, participants }) {
   const [selectedParticipantId, setSelectedParticipantId] = useState(
     () => getSessionParticipant(teamName)
   );
+  const [filterParticipantId, setFilterParticipantId] = useState(null);
 
   useEffect(() => {
     setRetroState(undefined);
@@ -80,9 +81,12 @@ export default function RetroBoard({ teamName, participants }) {
   const categories = retroState.categories
     ? Object.values(retroState.categories).sort((a, b) => a.order - b.order)
     : [];
-  const items = retroState.items && typeof retroState.items === 'object'
+  const allItems = retroState.items && typeof retroState.items === 'object'
     ? Object.values(retroState.items)
     : [];
+  const items = filterParticipantId
+    ? allItems.filter(item => item.authorId === filterParticipantId)
+    : allItems;
 
   // Find the protected (Action Items) category
   const protectedCategory = categories.find(c => c.isProtected);
@@ -107,6 +111,22 @@ export default function RetroBoard({ teamName, participants }) {
           >
             Change
           </button>
+        </div>
+        <div className="retro-board__filter">
+          <label className="retro-board__filter-label" htmlFor="retro-participant-filter">
+            Filter:
+          </label>
+          <select
+            id="retro-participant-filter"
+            className="retro-board__filter-select"
+            value={filterParticipantId ?? ''}
+            onChange={e => setFilterParticipantId(e.target.value || null)}
+          >
+            <option value="">All participants</option>
+            {participants.map(p => (
+              <option key={p.id} value={p.id}>{p.name}</option>
+            ))}
+          </select>
         </div>
         <RetroTimer teamName={teamName} retroState={retroState} />
       </div>
