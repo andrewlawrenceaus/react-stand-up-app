@@ -10,6 +10,7 @@ jest.mock('../../utils/db-utils', () => ({
   updateRetroItem: jest.fn().mockResolvedValue(undefined),
   removeRetroItem: jest.fn(),
   toggleAgree: jest.fn(),
+  toggleFinished: jest.fn().mockResolvedValue(undefined),
   updateRetroCategory: jest.fn().mockResolvedValue(undefined),
   removeRetroCategory: jest.fn().mockResolvedValue(undefined),
   clearItemsByCategory: jest.fn().mockResolvedValue(undefined),
@@ -89,7 +90,7 @@ describe('RetroBoard — participant selection', () => {
     renderBoard()
     await user.click(screen.getByRole('button', { name: /alice/i }))
     expect(screen.getByText(/you are/i)).toBeInTheDocument()
-    expect(screen.getByText('Alice')).toBeInTheDocument()
+    expect(screen.getAllByText('Alice').length).toBeGreaterThan(0)
   })
 
   it('restores participant from sessionStorage on mount', () => {
@@ -97,7 +98,7 @@ describe('RetroBoard — participant selection', () => {
     mockSubscribe(activeRetroState)
     renderBoard()
     expect(screen.queryByText('Who are you?')).not.toBeInTheDocument()
-    expect(screen.getByText('Alice')).toBeInTheDocument()
+    expect(screen.getAllByText('Alice').length).toBeGreaterThan(0)
   })
 })
 

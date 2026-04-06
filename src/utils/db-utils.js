@@ -275,6 +275,14 @@ export async function toggleAgree(teamName, itemId, participantId) {
     await set(agreeRef, snapshot.exists() ? null : true);
 }
 
+export async function toggleFinished(teamName, participantId) {
+    const uid = await getUserUid();
+    if (!uid) return;
+    const finishedRef = ref(db, `users/${uid}/retros/${teamName}/active/finishedParticipants/${participantId}`);
+    const snapshot = await get(finishedRef);
+    await set(finishedRef, snapshot.exists() ? null : true);
+}
+
 export async function updateRetroTimer(teamName, timerUpdates) {
     const uid = await getUserUid();
     if (!uid) return;

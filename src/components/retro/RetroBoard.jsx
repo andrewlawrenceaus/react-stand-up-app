@@ -7,6 +7,7 @@ import RetroParticipantSelect from './RetroParticipantSelect';
 import RetroCategoryColumn from './RetroCategoryColumn';
 import RetroTimer from './RetroTimer';
 import RetroActions from './RetroActions';
+import RetroParticipantSidebar from './RetroParticipantSidebar';
 
 function getSessionParticipant(teamName) {
   return sessionStorage.getItem(`retro-participant-${teamName}`);
@@ -87,6 +88,8 @@ export default function RetroBoard({ teamName, participants }) {
   // Find the protected (Action Items) category
   const protectedCategory = categories.find(c => c.isProtected);
 
+  const finishedParticipants = retroState.finishedParticipants || {};
+
   const handleDragEnd = async ({ active, over }) => {
     if (!over || active.id === over.id) return;
     const oldIndex = categories.findIndex(c => c.id === active.id);
@@ -114,26 +117,36 @@ export default function RetroBoard({ teamName, participants }) {
       <RetroActions
         teamName={teamName}
         protectedCategoryId={protectedCategory?.id}
+        participants={participants}
+        finishedParticipants={finishedParticipants}
+        currentParticipantId={selectedParticipantId}
       />
 
-      <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
-        <SortableContext items={categories.map(c => c.id)} strategy={horizontalListSortingStrategy}>
-          <div className="retro-board__columns">
-            {categories.map((category) => (
-              <RetroCategoryColumn
-                key={category.id}
-                teamName={teamName}
-                category={category}
-                items={items.filter(item => item.categoryId === category.id)}
-                participants={participants}
-                currentParticipantId={selectedParticipantId}
-                categoryCount={categories.length}
-              />
-            ))}
-            <AddCategoryButton teamName={teamName} nextOrder={categories.length} />
-          </div>
-        </SortableContext>
-      </DndContext>
+      <div className="retro-board__content">
+        <DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={handleDragEnd}>
+          <SortableContext items={categories.map(c => c.id)} strategy={horizontalListSortingStrategy}>
+            <div className="retro-board__columns">
+              {categories.map((category) => (
+                <RetroCategoryColumn
+                  key={category.id}
+                  teamName={teamName}
+                  category={category}
+                  items={items.filter(item => item.categoryId === category.id)}
+                  participants={participants}
+                  currentParticipantId={selectedParticipantId}
+                  categoryCount={categories.length}
+                />
+              ))}
+              <AddCategoryButton teamName={teamName} nextOrder={categories.length} />
+            </div>
+          </SortableContext>
+        </DndContext>
+
+        <RetroParticipantSidebar
+          participants={participants}
+          finishedParticipants={finishedParticipants}
+        />
+      </div>
     </div>
   );
 }

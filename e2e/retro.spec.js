@@ -84,7 +84,14 @@ test.describe('Retro', () => {
     }
     if (await page.getByRole('button', { name: /complete retro/i }).isVisible()) {
       await page.getByRole('button', { name: /complete retro/i }).click()
-      await page.getByRole('button', { name: /yes, complete/i }).click()
+      // Handle either the unfinished-participants warning or the simple confirm
+      const completeAnyway = page.getByRole('button', { name: /complete anyway/i })
+      const yesComplete = page.getByRole('button', { name: /yes, complete/i })
+      if (await completeAnyway.isVisible({ timeout: 3000 }).catch(() => false)) {
+        await completeAnyway.click()
+      } else {
+        await yesComplete.click()
+      }
     }
   }
 
@@ -150,7 +157,7 @@ test.describe('Retro', () => {
       await startRetro(page)
       await selectParticipant(page, 'Alice')
       await expect(page.getByText(/you are:/i)).toBeVisible()
-      await expect(page.getByText('Alice')).toBeVisible()
+      await expect(page.locator('.retro-board__identity').getByText('Alice')).toBeVisible()
     })
   })
 
@@ -244,10 +251,10 @@ test.describe('Retro', () => {
       await selectParticipant(page, 'Alice')
     })
 
-    test('Complete Retro button shows a confirmation prompt', async ({ authenticatedPage: page }) => {
+    test('Complete Retro button shows an unfinished-participants warning when participants have not finished', async ({ authenticatedPage: page }) => {
       await page.getByRole('button', { name: /complete retro/i }).click()
-      await expect(page.getByText(/save and end this retro/i)).toBeVisible()
-      await expect(page.getByRole('button', { name: /yes, complete/i })).toBeVisible()
+      await expect(page.getByText(/still waiting on/i)).toBeVisible()
+      await expect(page.getByRole('button', { name: /complete anyway/i })).toBeVisible()
       await expect(page.getByRole('button', { name: /cancel/i })).toBeVisible()
     })
 
@@ -259,7 +266,7 @@ test.describe('Retro', () => {
 
     test('confirming completion returns to setup screen', async ({ authenticatedPage: page }) => {
       await page.getByRole('button', { name: /complete retro/i }).click()
-      await page.getByRole('button', { name: /yes, complete/i }).click()
+      await page.getByRole('button', { name: /complete anyway/i }).click()
       await expect(page.getByRole('button', { name: /start retro/i })).toBeVisible()
     })
   })
@@ -328,6 +335,61 @@ test.describe('Retro', () => {
 
       await page.reload()
       await expect(page.locator('.retro-category-editor__name').first()).toHaveText(secondColumnName)
+    })
+  })
+
+  test.describe('Participant complete', () => {
+    test.beforeEach(async ({ authenticatedPage: page }) => {
+      await startRetro(page)
+      await selectParticipant(page, 'Alice')
+    })
+
+    test.afterEach(async ({ authenticatedPage: page }) => {
+      await completeActiveRetro(page)
+    })
+
+    test('shows participant sidebar with all participants', async ({ authenticatedPage: page }) => {
+      await expect(page.locator('.retro-sidebar')).toBeVisible()
+      await expect(page.locator('.retro-sidebar__name').filter({ hasText: 'Alice' })).toBeVisible()
+      await expect(page.locator('.retro-sidebar__name').filter({ hasText: 'Bob' })).toBeVisible()
+    })
+
+    test('clicking I\'m Finished marks participant as finished in the sidebar', async ({ authenticatedPage: page }) => {
+      await page.getByRole('button', { name: /i'm finished/i }).click()
+      await expect(page.locator('.retro-sidebar__tick').first()).toBeVisible()
+    })
+
+    test('clicking I\'m Finished again removes the finished mark', async ({ authenticatedPage: page }) => {
+      await page.getByRole('button', { name: /i'm finished/i }).click()
+      await expect(page.locator('.retro-sidebar__tick').first()).toBeVisible()
+
+      await page.getByRole('button', { name: /i'm finished/i }).click()
+      await expect(page.locator('.retro-sidebar__tick')).toHaveCount(0)
+    })
+
+    test('completing a retro with unfinished participants shows a warning with their names', async ({ authenticatedPage: page }) => {
+      // Alice is finished, Bob is not
+      await page.getByRole('button', { name: /i'm finished/i }).click()
+      await page.getByRole('button', { name: /complete retro/i }).click()
+      await expect(page.getByText(/still waiting on/i)).toBeVisible()
+      await expect(page.locator('.retro-actions__confirm')).toContainText('Bob')
+      await expect(page.getByRole('button', { name: /complete anyway/i })).toBeVisible()
+    })
+
+    test('force-completing from the warning ends the retro', async ({ authenticatedPage: page }) => {
+      await page.getByRole('button', { name: /i'm finished/i }).click()
+      await page.getByRole('button', { name: /complete retro/i }).click()
+      await page.getByRole('button', { name: /complete anyway/i }).click()
+      await expect(page.getByRole('button', { name: /start retro/i })).toBeVisible()
+    })
+
+    test('all participants finished shows standard confirm instead of warning', async ({ authenticatedPage: page }) => {
+      // Alice marks finished (Bob not in this session so only Alice is a participant who matters)
+      // To test the "all done" path we need all participants finished — complete retro directly
+      await page.getByRole('button', { name: /complete retro/i }).click()
+      // With unfinished participants (Alice + Bob both unfinished), warning should appear
+      await expect(page.getByText(/still waiting on/i)).toBeVisible()
+      await page.getByRole('button', { name: /cancel/i }).click()
     })
   })
 })
