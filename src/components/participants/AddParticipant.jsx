@@ -1,11 +1,13 @@
 import { useRef, useState } from 'react';
 import useInput from '../../hooks/use-input';
 import { uploadParticipantPhoto } from '../../utils/db-utils';
+import { resizeImage } from '../../utils/image-utils';
 import { MAX_FILE_SIZE } from './constants';
 
 export default function AddParticipant({ onAdd }) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [isUploading, setIsUploading] = useState(false);
+  const [isProcessing, setIsProcessing] = useState(false);
   const [fileSizeError, setFileSizeError] = useState(false);
   const fileInputRef = useRef(null);
 
@@ -18,15 +20,22 @@ export default function AddParticipant({ onAdd }) {
     reset: resetNameInput,
   } = useInput((value) => value.trim() !== '');
 
-  const fileChangeHandler = (event) => {
+  const fileChangeHandler = async (event) => {
     const file = event.target.files[0] || null;
-    if (file && file.size > MAX_FILE_SIZE) {
-      setFileSizeError(true);
-      setSelectedFile(null);
-      if (fileInputRef.current) fileInputRef.current.value = '';
+    setFileSizeError(false);
+    if (file) {
+      setIsProcessing(true);
+      const resized = await resizeImage(file);
+      setIsProcessing(false);
+      if (resized.size > MAX_FILE_SIZE) {
+        setFileSizeError(true);
+        setSelectedFile(null);
+        if (fileInputRef.current) fileInputRef.current.value = '';
+      } else {
+        setSelectedFile(resized);
+      }
     } else {
-      setFileSizeError(false);
-      setSelectedFile(file);
+      setSelectedFile(null);
     }
   };
 
@@ -101,10 +110,10 @@ export default function AddParticipant({ onAdd }) {
         <button
           className="add-form-submit"
           onClick={addParticipantHandler}
-          disabled={isUploading || !enteredNameIsValid}
+          disabled={isUploading || isProcessing || !enteredNameIsValid}
           type="button"
         >
-          {isUploading ? 'Uploading…' : 'Add Participant'}
+          {isUploading ? 'Uploading…' : isProcessing ? 'Processing…' : 'Add Participant'}
         </button>
       </div>
     </div>
