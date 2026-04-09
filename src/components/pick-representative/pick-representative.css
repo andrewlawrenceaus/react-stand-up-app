@@ -5,7 +5,12 @@
 
 /* ---------- Page shell ---------- */
 .pick-rep__page {
-  padding: 3rem 2rem 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: calc(100vh - 62px);
+  padding: 2rem;
 }
 
 .pick-rep__inner {
@@ -19,7 +24,6 @@
   flex-direction: column;
   align-items: center;
   gap: 1.5rem;
-  margin-top: 1rem;
 }
 
 .pick-rep__canvas {
@@ -48,4 +52,22 @@
 @keyframes winner-reveal {
   from { opacity: 0; transform: scale(0.92) translateY(12px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
+}
+
+.pick-rep__legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  justify-content: center;
+  margin-top: 0.5rem;
+}
+
+.pick-rep__legend-item {
+  font-family: 'Noto Sans JP', sans-serif;
+  font-size: 0.75rem;
+  color: #7A7468;
+  background: #FDFBF7;
+  border: 1px solid #D8CCBF;
+  padding: 0.2rem 0.625rem;
+  border-radius: 1px;
 }

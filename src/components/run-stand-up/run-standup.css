@@ -118,6 +118,8 @@
   display: block;
   border-bottom: 1px solid #EDE5D8;
   filter: sepia(12%) saturate(90%);
+  max-height: 280px;
+  object-position: center;
 }
 
 .duck-card__content {
@@ -165,7 +167,7 @@
   font-family: 'Noto Sans JP', sans-serif;
   font-size: 0.85rem;
   font-weight: 300;
-  color: #9A918A;
+  color: #7A7468;
   letter-spacing: 0.04em;
   text-align: center;
 }
@@ -179,8 +181,8 @@
 }
 
 .duck-card__progress-dot {
-  width: 5px;
-  height: 5px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #D8CCBF;
 }
@@ -224,6 +226,11 @@
   background: transparent;
   color: #9A918A;
   border: 1px solid #D8CCBF;
+}
+
+.duck-card__actions .duck-btn--secondary {
+  flex: 1;
+  text-align: center;
 }
 
 .duck-btn--secondary:hover {

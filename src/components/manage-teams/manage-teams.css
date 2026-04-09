@@ -68,6 +68,7 @@
   flex-direction: column;
   position: relative;
   animation: card-fade-in 0.3s ease backwards;
+  min-height: 220px;
 }
 
 /* Corner fold */
@@ -140,15 +141,18 @@
   background: transparent;
   border: 1px solid #D8CCBF;
   border-radius: 1px;
-  padding: 0.25rem 0.5rem;
+  padding: 0.3rem 0.625rem;
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;
   line-height: 1.4;
+  min-width: 28px;
+  text-align: center;
 }
 
 .team-card__edit-btn:hover {
   color: #1C1917;
   border-color: #9A918A;
+  background: rgba(196, 99, 122, 0.06);
 }
 
 /* ---------- Participant list ---------- */
@@ -287,14 +291,14 @@
 
 /* ---------- Avatar variants for team member rows ---------- */
 .team-member-avatar {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.7rem;
+  font-size: 0.75rem;
   font-weight: 500;
   color: #fff;
   flex-shrink: 0;
@@ -303,8 +307,8 @@
 }
 
 .team-member-photo {
-  width: 34px;
-  height: 34px;
+  width: 38px;
+  height: 38px;
   border-radius: 50%;
   object-fit: cover;
   display: block;
@@ -315,7 +319,8 @@
 /* ---------- Add team card ---------- */
 .add-team-card {
   background: #FDFBF7;
-  border: 1px dashed #C5BAA5;
+  border: 1px solid #D8CCBF;
+  border-left: 2px solid #C4637A;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -403,6 +408,6 @@
 }
 
 .add-team-submit:disabled {
-  opacity: 0.3;
+  opacity: 0.45;
   cursor: not-allowed;
 }

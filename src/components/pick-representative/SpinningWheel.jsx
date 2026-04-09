@@ -90,8 +90,8 @@ export default function SpinningWheel({ participants, onSpinComplete }) {
     const pointerSize = 16;
     ctx.beginPath();
     ctx.moveTo(cx, cy - WHEEL_RADIUS - pointerSize + 4);
-    ctx.lineTo(cx - pointerSize * 0.6, cy - WHEEL_RADIUS - pointerSize - 6);
-    ctx.lineTo(cx + pointerSize * 0.6, cy - WHEEL_RADIUS - pointerSize - 6);
+    ctx.lineTo(cx - 10, cy - WHEEL_RADIUS - pointerSize - 14);
+    ctx.lineTo(cx + 10, cy - WHEEL_RADIUS - pointerSize - 14);
     ctx.closePath();
     ctx.fillStyle = POINTER_COLOR;
     ctx.fill();
@@ -177,6 +177,13 @@ export default function SpinningWheel({ participants, onSpinComplete }) {
         height={CANVAS_SIZE}
         className="pick-rep__canvas"
       />
+      <div className="pick-rep__legend">
+        {participants.map(p => (
+          <span key={p.id} className="pick-rep__legend-item">
+            {p.name}
+          </span>
+        ))}
+      </div>
       <button
         className="duck-btn duck-btn--primary pick-rep__spin-btn"
         onClick={spin}
