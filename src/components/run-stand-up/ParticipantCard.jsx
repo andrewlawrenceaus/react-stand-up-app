@@ -28,6 +28,7 @@ export default function ParticipantCard({
           </div>
         )}
         <p className="duck-card__name">{attendee.name}</p>
+        <span className="duck-card__subtitle">{done + 1} of {total}</span>
       </div>
 
       {total > 0 && (
