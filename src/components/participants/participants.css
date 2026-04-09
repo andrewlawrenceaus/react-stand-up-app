@@ -7,7 +7,7 @@
 
 /* ---------- Page shell ---------- */
 .crew-page {
-  min-height: calc(100vh - 58px);
+  min-height: calc(100vh - 62px);
   background: #F5F0E8;
   /* Subtle washi texture via layered noise gradient */
   background-image:
@@ -62,8 +62,8 @@
 .crew-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
-  gap: 1px; /* hair-line grid lines */
-  background: #D8CCBF; /* the gaps are just the background showing through */
+  gap: 0;
+  background: transparent;
   border: 1px solid #D8CCBF;
   margin-top: 2.5rem;
 }
@@ -80,6 +80,8 @@
   transition: background 0.18s;
   animation: card-fade-in 0.3s ease backwards;
   cursor: default;
+  border-right: 1px solid #D8CCBF;
+  border-bottom: 1px solid #D8CCBF;
 }
 
 .crew-card:hover {
@@ -377,9 +379,9 @@
   letter-spacing: 0.05em;
   color: #9A918A;
   background: transparent;
-  border: 1px solid #D8CCBF;
+  border: 1px dashed #D8CCBF;
   border-radius: 1px;
-  padding: 0.3rem 0.75rem;
+  padding: 0.35rem 0.85rem;
   cursor: pointer;
   transition: color 0.15s, border-color 0.15s;
   white-space: nowrap;
@@ -434,6 +436,6 @@
 }
 
 .add-form-submit:disabled {
-  opacity: 0.3;
+  opacity: 0.45;
   cursor: not-allowed;
 }
