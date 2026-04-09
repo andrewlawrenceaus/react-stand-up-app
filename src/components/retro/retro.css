@@ -406,6 +406,7 @@
   display: flex;
   flex-direction: column;
   animation: retro-fade-in 0.3s ease backwards;
+  min-height: 400px;
 }
 
 .retro-column__items {
@@ -414,17 +415,17 @@
   flex-direction: column;
   gap: 0.5rem;
   flex: 1;
-  min-height: 60px;
+  min-height: 200px;
 }
 
 /* ---------- Category Editor (column header) ---------- */
 .retro-category-editor {
-  padding: 0.75rem;
+  padding: 0.875rem 1rem;
   border-bottom: 1px solid #EDE5D8;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 0.5rem;
+  gap: 0.625rem;
 }
 
 .retro-category-editor__name {
@@ -567,9 +568,9 @@
   background: none;
   border: 1px solid #D8CCBF;
   font-family: 'Noto Sans JP', sans-serif;
-  font-size: 0.65rem;
+  font-size: 0.72rem;
   color: #9A918A;
-  padding: 0.15rem 0.5rem;
+  padding: 0.2rem 0.6rem;
   cursor: pointer;
   border-radius: 1px;
   transition: all 0.15s;
@@ -709,8 +710,11 @@
   align-items: center;
   justify-content: flex-end;
   gap: 0.5rem;
-  padding: 0.5rem 0;
+  padding: 0.625rem 1rem;
   margin-bottom: 0.5rem;
+  background: #FDFBF7;
+  border: 1px solid #D8CCBF;
+  border-radius: 1px;
 }
 
 .retro-actions > .duck-btn--primary {
@@ -772,9 +776,10 @@
 .retro-sidebar {
   flex-shrink: 0;
   width: 160px;
-  background: #FDFBF7;
+  background: #FAF6EF;
   border: 1px solid #D8CCBF;
   padding: 0.75rem;
+  border-left: 2px solid #C4637A;
 }
 
 .retro-sidebar__title {
