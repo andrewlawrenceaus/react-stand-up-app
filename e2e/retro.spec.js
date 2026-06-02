@@ -288,8 +288,9 @@ test.describe('Retro', () => {
       await page.getByRole('button', { name: /^add$/i }).last().click()
       await expect(page.getByText('Keep this action')).toBeVisible()
 
-      // Clear all (keeping action items)
+      // Clear all (keeping action items) — confirm the dialog
       await page.getByRole('button', { name: /clear all \(keep action items\)/i }).click()
+      await page.getByRole('button', { name: /yes, clear all/i }).click()
       await expect(page.getByText('Should be cleared')).not.toBeVisible()
       await expect(page.getByText('Keep this action')).toBeVisible()
     })

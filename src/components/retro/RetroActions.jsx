@@ -10,6 +10,7 @@ export default function RetroActions({
 }) {
   const [showCompleteConfirm, setShowCompleteConfirm] = useState(false);
   const [showUnfinishedWarning, setShowUnfinishedWarning] = useState(false);
+  const [showClearConfirm, setShowClearConfirm] = useState(false);
 
   const isFinished = !!finishedParticipants[currentParticipantId];
   const unfinishedParticipants = participants.filter((p) => !finishedParticipants[p.id]);
@@ -36,15 +37,31 @@ export default function RetroActions({
   const handleClearAll = async () => {
     if (protectedCategoryId) {
       await clearAllItemsExceptCategory(teamName, protectedCategoryId);
+      setShowClearConfirm(false);
     }
   };
 
   return (
     <div className="retro-actions">
       {protectedCategoryId && (
-        <button className="duck-btn duck-btn--secondary" onClick={handleClearAll}>
-          Clear All (keep Action Items)
-        </button>
+        !showClearConfirm ? (
+          <button className="duck-btn duck-btn--secondary" onClick={() => setShowClearConfirm(true)}>
+            Clear All (keep Action Items)
+          </button>
+        ) : (
+          <span className="retro-actions__confirm">
+            <span>Clear all items except Action Items?</span>
+            <button className="duck-btn duck-btn--primary" onClick={handleClearAll}>
+              Yes, Clear All
+            </button>
+            <button
+              className="duck-btn duck-btn--secondary"
+              onClick={() => setShowClearConfirm(false)}
+            >
+              Cancel
+            </button>
+          </span>
+        )
       )}
 
       <button

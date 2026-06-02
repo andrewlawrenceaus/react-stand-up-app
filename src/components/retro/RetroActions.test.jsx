@@ -135,10 +135,29 @@ describe("RetroActions — I'm Finished toggle", () => {
 })
 
 describe('RetroActions — clear all', () => {
-  it('clicking Clear All calls clearAllItemsExceptCategory with team and protected category', async () => {
+  it('clicking Clear All shows a confirmation dialog', async () => {
     const user = userEvent.setup()
     renderActions()
     await user.click(screen.getByRole('button', { name: /clear all/i }))
+    expect(screen.getByText(/clear all items except action items/i)).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /yes, clear all/i })).toBeInTheDocument()
+    expect(screen.getByRole('button', { name: /cancel/i })).toBeInTheDocument()
+  })
+
+  it('confirming calls clearAllItemsExceptCategory with team and protected category', async () => {
+    const user = userEvent.setup()
+    renderActions()
+    await user.click(screen.getByRole('button', { name: /clear all/i }))
+    await user.click(screen.getByRole('button', { name: /yes, clear all/i }))
     expect(clearAllItemsExceptCategory).toHaveBeenCalledWith(TEAM, PROTECTED_CATEGORY_ID)
+  })
+
+  it('canceling hides confirmation and does not call clearAllItemsExceptCategory', async () => {
+    const user = userEvent.setup()
+    renderActions()
+    await user.click(screen.getByRole('button', { name: /clear all/i }))
+    await user.click(screen.getByRole('button', { name: /cancel/i }))
+    expect(clearAllItemsExceptCategory).not.toHaveBeenCalled()
+    expect(screen.getByRole('button', { name: /clear all/i })).toBeInTheDocument()
   })
 })
