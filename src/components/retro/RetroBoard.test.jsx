@@ -168,7 +168,7 @@ describe('RetroBoard — participant filter', () => {
     expect(screen.queryByText('Bob cat1')).not.toBeInTheDocument()
   })
 
-  it('only shows items authored by the participant, not items they agreed with', async () => {
+  it('shows items the participant agreed with, in addition to items they authored', async () => {
     const user = userEvent.setup()
     mockSubscribe({
       ...retroWithItems,
@@ -180,10 +180,10 @@ describe('RetroBoard — participant filter', () => {
       },
     })
     renderBoard()
-    // Filter by Bob — should not see Alice's item even though Bob agreed with it
+    // Filter by Bob — should see Alice's item because Bob agreed with it
     await user.selectOptions(screen.getByRole('combobox', { name: /filter/i }), 'p2')
-    expect(screen.queryByText('Alice item')).not.toBeInTheDocument()
-    // Filter by Alice — should see her item
+    expect(screen.getByText('Alice item')).toBeInTheDocument()
+    // Filter by Alice — should see her item as author
     await user.selectOptions(screen.getByRole('combobox', { name: /filter/i }), 'p1')
     expect(screen.getByText('Alice item')).toBeInTheDocument()
   })
