@@ -231,6 +231,18 @@
   border-color: #9A918A;
 }
 
+.duck-btn--destructive {
+  background: transparent;
+  color: #A04F38;
+  border: 1px solid #C8846E;
+}
+
+.duck-btn--destructive:hover {
+  background: #FEF2EC;
+  color: #7A3321;
+  border-color: #A04F38;
+}
+
 /* ---------- Message card ---------- */
 .message-card {
   background: #FDFBF7;

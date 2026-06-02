@@ -45,7 +45,7 @@ export default function RetroActions({
     <div className="retro-actions">
       {protectedCategoryId && (
         !showClearConfirm ? (
-          <button className="duck-btn duck-btn--secondary" onClick={() => setShowClearConfirm(true)}>
+          <button className="duck-btn duck-btn--destructive" onClick={() => setShowClearConfirm(true)}>
             Clear All (keep Action Items)
           </button>
         ) : (
