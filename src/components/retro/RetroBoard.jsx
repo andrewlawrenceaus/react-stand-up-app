@@ -86,7 +86,10 @@ export default function RetroBoard({ teamName, participants }) {
     ? Object.values(retroState.items)
     : [];
   const items = filterParticipantId
-    ? allItems.filter(item => item.authorId === filterParticipantId)
+    ? allItems.filter(item =>
+        item.authorId === filterParticipantId ||
+        item.agreedBy?.[filterParticipantId]
+      )
     : allItems;
 
   // Find the protected (Action Items) category
